@@ -402,7 +402,15 @@ Subtle shadows.
 
 Large spacing.
 
-Professional typography.
+Professional typography:
+
+- Headings (h1–h4): Space Grotesk — geometric, distinctive, tech-forward.
+- Body text: Inter.
+- Numbers / dates / code-like labels: JetBrains Mono.
+
+Do not fall back to a single sans-serif for both headings and body —
+the Space Grotesk / Inter pairing is a deliberate contrast and should
+be kept.
 
 ---
 

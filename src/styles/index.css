@@ -10,6 +10,13 @@ body {
   @apply bg-background text-text-primary font-sans antialiased;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  @apply font-display;
+}
+
 ::selection {
   @apply bg-accent/40 text-text-primary;
 }
