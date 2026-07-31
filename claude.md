@@ -1,0 +1,484 @@
+# Mrama Institute for Quantum Information and Intelligence
+
+## Objective
+
+Build a professional, production-ready website for the **Mrama Institute for Quantum Information and Intelligence**.
+
+This website represents an **independent research institute** dedicated to quantum computing, quantum information science, artificial intelligence, and intelligent optimization.
+
+The website should resemble the official websites of internationally recognized research organizations.
+
+Reference design language:
+
+- IBM Research
+- MIT CSAIL
+- Microsoft Research
+- Google DeepMind
+- OpenAI
+
+Do NOT build a personal portfolio website.
+
+Do NOT build a startup landing page.
+
+Do NOT build a template-style website.
+
+The overall impression should be:
+
+- Academic
+- Premium
+- Modern
+- Minimal
+- Elegant
+- Trustworthy
+- Technology-focused
+
+---
+
+# Deployment Requirement (Very Important)
+
+The project **must be deployable directly to GitHub Pages**.
+
+GitHub username:
+
+easonyang001
+
+Repository:
+
+easonyag001.github.io
+
+Deployment URL:
+
+https://easonyang001.github.io
+
+The repository is a **GitHub User Pages repository**, therefore configure Vite with:
+
+```js
+base: "/"
+```
+
+Do NOT configure:
+
+```js
+base: "/repository-name/"
+```
+
+The project must include a working GitHub Actions workflow that automatically deploys the website after every push to the `main` branch.
+
+The user should only need to run:
+
+```bash
+git add .
+git commit -m "update"
+git push
+```
+
+GitHub should handle the deployment automatically.
+
+---
+
+# Technology Stack
+
+Use:
+
+- React
+- Vite
+- JavaScript
+- Tailwind CSS
+- Framer Motion
+- Lucide React
+
+The project should be lightweight and production-ready.
+
+It must successfully execute:
+
+```bash
+npm install
+npm run dev
+npm run build
+```
+
+without errors.
+
+---
+
+# GitHub Actions
+
+Create:
+
+```
+.github/workflows/deploy.yml
+```
+
+Use the latest official GitHub Pages deployment workflow.
+
+The deployment should automatically publish the `dist` folder.
+
+No manual deployment scripts.
+
+No gh-pages branch.
+
+---
+
+# Folder Structure
+
+```
+src/
+
+components/
+    Navbar
+    Hero
+    About
+    Research
+    Projects
+    Publications
+    People
+    News
+    Contact
+    Footer
+
+assets/
+
+data/
+
+styles/
+
+App.jsx
+main.jsx
+```
+
+Separate reusable components.
+
+Keep code clean.
+
+---
+
+# Website Structure
+
+## Navigation
+
+Sticky navigation bar.
+
+Left:
+
+MRAMA
+
+Right:
+
+- Home
+- Research
+- Projects
+- Publications
+- People
+- News
+- Contact
+
+GitHub icon.
+
+Smooth scrolling.
+
+---
+
+## Hero Section
+
+Large fullscreen hero.
+
+Title
+
+Mrama Institute
+
+Subtitle
+
+for Quantum Information and Intelligence
+
+Description
+
+Advancing Quantum Information,
+Artificial Intelligence,
+and Intelligent Optimization.
+
+Buttons
+
+- Explore Research
+- Publications
+
+Background
+
+Very subtle animated particles.
+
+Soft glowing grid.
+
+Modern scientific atmosphere.
+
+---
+
+## About
+
+Title
+
+About the Institute
+
+Content
+
+Mrama Institute for Quantum Information and Intelligence is an independent research initiative dedicated to advancing quantum information science, quantum machine learning, intelligent optimization, and hybrid quantum-classical computing.
+
+Mission
+
+Bridge theoretical research with practical engineering applications.
+
+---
+
+## Research
+
+Display responsive cards.
+
+Research Areas
+
+- Quantum Information
+- Quantum Machine Learning
+- Quantum Optimization
+- Quantum Annealing
+- Hybrid Quantum-Classical Computing
+- Artificial Intelligence
+- Operations Research
+
+Each card should contain
+
+- icon
+- title
+- description
+
+Hover animation.
+
+---
+
+## Projects
+
+Cards.
+
+Projects
+
+AED Placement Optimization
+
+Quantum Diet Optimization
+
+Hybrid Quantum Solver
+
+Quantum Portfolio Optimization
+
+Each project contains
+
+- status badge
+- short description
+- technology tags
+- Read More button
+
+---
+
+## Publications
+
+Timeline layout.
+
+Publication cards.
+
+Each publication contains
+
+- title
+- conference
+- year
+- abstract
+- PDF button
+- DOI button
+- BibTeX button
+
+Sample data is acceptable.
+
+---
+
+## People
+
+Professional profile cards.
+
+Founder
+
+Jia-Zhen Yang
+
+Research Interests
+
+- Quantum Machine Learning
+- Quantum Optimization
+- Quantum Annealing
+- Artificial Intelligence
+- Operations Research
+
+Design should allow adding future members easily.
+
+---
+
+## News
+
+Timeline.
+
+Sample news.
+
+Examples
+
+Website launched
+
+Research accepted
+
+Conference presentation
+
+Publication released
+
+---
+
+## Contact
+
+Professional contact section.
+
+Display
+
+Email
+
+GitHub
+
+Location
+
+Simple contact form.
+
+Frontend only.
+
+No backend.
+
+---
+
+## Footer
+
+Logo
+
+MRAMA
+
+Institute name
+
+Copyright
+
+© 2026 Mrama Institute
+
+All rights reserved.
+
+---
+
+# Design Language
+
+Dark mode.
+
+Background
+
+#020617
+
+Cards
+
+#0F172A
+
+Accent
+
+#2563EB
+
+Text
+
+#F8FAFC
+
+Secondary text
+
+#94A3B8
+
+Rounded corners.
+
+Glass effect.
+
+Subtle shadows.
+
+Large spacing.
+
+Professional typography.
+
+---
+
+# Animations
+
+Use Framer Motion.
+
+Only subtle animations.
+
+Examples
+
+- fade in
+- slide up
+- card hover
+- navbar transition
+
+No flashy effects.
+
+---
+
+# Responsive
+
+Must work on
+
+Desktop
+
+Tablet
+
+Mobile
+
+---
+
+# Accessibility
+
+Semantic HTML.
+
+Keyboard accessible.
+
+Proper heading hierarchy.
+
+Good color contrast.
+
+---
+
+# Performance
+
+Lazy load where appropriate.
+
+Optimize images.
+
+Minimize bundle size.
+
+---
+
+# SEO
+
+Include
+
+- title
+- description
+- Open Graph tags
+- favicon
+- robots.txt
+- sitemap.xml
+
+---
+
+# Deliverables
+
+Claude Code should generate a **complete, production-ready project**.
+
+The project must include:
+
+- all React source code
+- Tailwind configuration
+- Vite configuration
+- package.json
+- GitHub Actions deployment workflow
+- README.md with setup instructions
+
+The final result should be a website that feels like the official homepage of a world-class quantum research institute and can be deployed immediately to GitHub Pages by pushing to the `main` branch.

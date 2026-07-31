@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-text-primary font-sans antialiased;
+}
+
+::selection {
+  @apply bg-accent/40 text-text-primary;
+}
+
+.section-container {
+  @apply mx-auto w-full max-w-7xl px-6 py-24 md:px-10 lg:px-16;
+}
+
+.section-heading {
+  @apply text-3xl font-semibold tracking-tight text-text-primary md:text-4xl;
+}
+
+.glass-card {
+  @apply rounded-2xl border border-white/5 bg-surface/60 backdrop-blur-sm;
+}
+
+.grid-bg {
+  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}

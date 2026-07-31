@@ -1,0 +1,47 @@
+export const publications = [
+  {
+    title: "Quantum Annealing Approaches to Facility Placement Optimization",
+    conference: "IEEE Quantum Week",
+    year: "2026",
+    abstract:
+      "We present a quantum annealing formulation for large-scale facility placement problems, demonstrating competitive solution quality against classical heuristics on real-world urban datasets.",
+    pdfUrl: "#",
+    doiUrl: "#",
+    bibtex: `@inproceedings{mrama2026facility,
+  title     = {Quantum Annealing Approaches to Facility Placement Optimization},
+  author    = {Yang, Jia-Zhen},
+  booktitle = {IEEE Quantum Week},
+  year      = {2026}
+}`,
+  },
+  {
+    title: "Hybrid Quantum-Classical Solvers for Constrained Nutritional Planning",
+    conference: "International Conference on Quantum Computing and Engineering (QCE)",
+    year: "2025",
+    abstract:
+      "This work introduces a hybrid solver architecture for diet optimization under nutritional and budget constraints, combining QUBO formulations with classical refinement.",
+    pdfUrl: "#",
+    doiUrl: "#",
+    bibtex: `@inproceedings{mrama2025diet,
+  title     = {Hybrid Quantum-Classical Solvers for Constrained Nutritional Planning},
+  author    = {Yang, Jia-Zhen},
+  booktitle = {QCE},
+  year      = {2025}
+}`,
+  },
+  {
+    title: "Toward Quantum-Enhanced Portfolio Optimization Under Realistic Constraints",
+    conference: "Quantum Machine Intelligence Workshop",
+    year: "2025",
+    abstract:
+      "We evaluate variational quantum algorithms for portfolio optimization, incorporating transaction costs and sector diversification constraints into the objective function.",
+    pdfUrl: "#",
+    doiUrl: "#",
+    bibtex: `@inproceedings{mrama2025portfolio,
+  title     = {Toward Quantum-Enhanced Portfolio Optimization Under Realistic Constraints},
+  author    = {Yang, Jia-Zhen},
+  booktitle = {Quantum Machine Intelligence Workshop},
+  year      = {2025}
+}`,
+  },
+];
