@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import SplitText from "./reactbits/SplitText.jsx";
+import DecryptedText from "./reactbits/DecryptedText.jsx";
+import ShinyText from "./reactbits/ShinyText.jsx";
 
 function QuantumOrbital() {
   return (
@@ -61,27 +64,17 @@ export default function Hero() {
           className="eyebrow justify-center"
         >
           <span className="eyebrow-rule" />
-          Independent Research Institute
+          <ShinyText text="Independent Research Institute" speed={4} />
           <span className="eyebrow-rule" />
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-          className="mt-6 text-6xl font-semibold tracking-tight text-text-primary md:text-7xl lg:text-8xl"
-        >
-          Mrama Institute
-        </motion.h1>
+        <h1 className="mt-6 text-6xl font-semibold tracking-tight text-text-primary md:text-7xl lg:text-8xl">
+          <SplitText text="Mrama Institute" splitBy="chars" staggerDelay={0.03} delay={0.1} />
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-          className="mt-5 text-lg font-medium text-accent md:text-2xl"
-        >
-          for Quantum Information and Intelligence
-        </motion.p>
+        <p className="mt-5 text-lg font-medium text-accent md:text-2xl">
+          <DecryptedText text="for Quantum Information and Intelligence" revealDelay={700} speed={28} />
+        </p>
 
         <motion.p
           initial={{ opacity: 0, y: 24 }}

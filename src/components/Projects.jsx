@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { projects } from "../data/projects.js";
 import SectionHeading from "./SectionHeading.jsx";
+import SpotlightCard from "./reactbits/SpotlightCard.jsx";
 
 const statusColors = {
   Ongoing: "bg-emerald-500/10 text-emerald-400",
@@ -27,42 +28,46 @@ export default function Projects() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: i * 0.05, ease: "easeOut" }}
             whileHover={{ y: -6 }}
-            className="glass-card flex flex-col p-6 hover:border-accent/30 hover:shadow-card-hover"
           >
-            <div className="flex items-center justify-between gap-4">
-              <h3 className="text-lg font-semibold text-text-primary">
-                {project.title}
-              </h3>
-              <span
-                className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
-                  statusColors[project.status] ?? "bg-white/5 text-text-secondary"
-                }`}
-              >
-                {project.status}
-              </span>
-            </div>
-
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
-              {project.description}
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
+            <SpotlightCard
+              className="glass-card h-full p-6 hover:border-accent/30 hover:shadow-card-hover"
+              contentClassName="flex h-full flex-col"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-lg font-semibold text-text-primary">
+                  {project.title}
+                </h3>
                 <span
-                  key={tag}
-                  className="rounded-full border border-line px-3 py-1 text-xs text-text-secondary"
+                  className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
+                    statusColors[project.status] ?? "bg-white/5 text-text-secondary"
+                  }`}
                 >
-                  {tag}
+                  {project.status}
                 </span>
-              ))}
-            </div>
+              </div>
 
-            <button className="group mt-6 flex items-center gap-1.5 self-start text-sm font-semibold text-accent">
-              Read More
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                &rarr;
-              </span>
-            </button>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
+                {project.description}
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-line px-3 py-1 text-xs text-text-secondary"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <button className="group mt-6 flex items-center gap-1.5 self-start text-sm font-semibold text-accent">
+                Read More
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  &rarr;
+                </span>
+              </button>
+            </SpotlightCard>
           </motion.div>
         ))}
       </div>

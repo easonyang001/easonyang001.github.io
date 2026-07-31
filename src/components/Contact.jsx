@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Github, MapPin } from "lucide-react";
 import SectionHeading from "./SectionHeading.jsx";
+import SpotlightCard from "./reactbits/SpotlightCard.jsx";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -67,54 +68,59 @@ export default function Contact() {
           </div>
         </motion.div>
 
-        <motion.form
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          onSubmit={handleSubmit}
-          className="glass-card space-y-4 p-6"
         >
-          <div>
-            <label htmlFor="name" className="text-xs font-medium text-text-secondary">
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              required
-              className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="text-xs font-medium text-text-secondary">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
-            />
-          </div>
-          <div>
-            <label htmlFor="message" className="text-xs font-medium text-text-secondary">
-              Message
-            </label>
-            <textarea
-              id="message"
-              rows={4}
-              required
-              className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-text-primary transition-transform duration-300 hover:scale-[1.02]"
+          <SpotlightCard
+            as="form"
+            onSubmit={handleSubmit}
+            className="glass-card p-6"
+            contentClassName="space-y-4"
           >
-            {submitted ? "Message Sent" : "Send Message"}
-          </button>
-        </motion.form>
+            <div>
+              <label htmlFor="name" className="text-xs font-medium text-text-secondary">
+                Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                required
+                className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="text-xs font-medium text-text-secondary">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="text-xs font-medium text-text-secondary">
+                Message
+              </label>
+              <textarea
+                id="message"
+                rows={4}
+                required
+                className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-text-primary transition-transform duration-300 hover:scale-[1.02]"
+            >
+              {submitted ? "Message Sent" : "Send Message"}
+            </button>
+          </SpotlightCard>
+        </motion.div>
       </div>
     </section>
   );

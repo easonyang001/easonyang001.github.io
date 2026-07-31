@@ -43,10 +43,15 @@ export default {
           from: { transform: "rotate(360deg)" },
           to: { transform: "rotate(0deg)" },
         },
+        shine: {
+          from: { backgroundPosition: "200% 0" },
+          to: { backgroundPosition: "-200% 0" },
+        },
       },
       animation: {
         "spin-slow": "spin-slow 40s linear infinite",
         "spin-slow-reverse": "spin-slow-reverse 55s linear infinite",
+        shine: "shine 3s linear infinite",
       },
     },
   },

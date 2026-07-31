@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FileText, Link2, Quote } from "lucide-react";
 import { publications } from "../data/publications.js";
 import SectionHeading from "./SectionHeading.jsx";
+import SpotlightCard from "./reactbits/SpotlightCard.jsx";
 
 export default function Publications() {
   const [copiedIndex, setCopiedIndex] = useState(null);
@@ -33,7 +34,7 @@ export default function Publications() {
           >
             <span className="absolute -left-[2.35rem] top-1.5 h-3 w-3 rounded-full border-2 border-background bg-accent shadow-glow" />
 
-            <div className="glass-card p-6 hover:border-accent/30">
+            <SpotlightCard className="glass-card p-6 hover:border-accent/30">
               <div className="flex flex-wrap items-center gap-3 font-mono text-xs font-medium text-text-secondary">
                 <span className="text-accent">{pub.year}</span>
                 <span>&middot;</span>
@@ -68,7 +69,7 @@ export default function Publications() {
                   {copiedIndex === i ? "Copied!" : "BibTeX"}
                 </button>
               </div>
-            </div>
+            </SpotlightCard>
           </motion.div>
         ))}
       </div>
