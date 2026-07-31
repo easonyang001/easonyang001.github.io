@@ -1,0 +1,8 @@
+import { copyFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const distDir = resolve(__dirname, "../dist");
+
+copyFileSync(resolve(distDir, "index.html"), resolve(distDir, "404.html"));

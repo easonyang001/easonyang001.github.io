@@ -1,0 +1,59 @@
+name: Weekly arXiv Digest
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run digest fetch
+        run: npm run digest
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Determine week label
+        if: steps.changes.outputs.changed == 'true'
+        id: week
+        run: |
+          WEEK=$(head -n1 digest-summary.md | sed 's/## Digest //')
+          echo "label=$WEEK" >> "$GITHUB_OUTPUT"
+
+      # This step only ever creates a new branch + pull request. It never
+      # pushes to main — unreviewed digest content must not deploy directly.
+      - name: Open pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "digest: ${{ steps.week.outputs.label }}"
+          title: "digest: ${{ steps.week.outputs.label }}"
+          body-path: digest-summary.md
+          branch: "digest/${{ steps.week.outputs.label }}"
+          add-paths: |
+            src/data/digest/*.ts
+            data/digest/seen-ids.json
+          delete-branch: true
