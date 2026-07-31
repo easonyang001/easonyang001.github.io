@@ -160,7 +160,7 @@ Sticky navigation bar.
 
 Left:
 
-MRAMA
+Logo mark — liquid chrome "MRAMA" wordmark image (`public/brand/logo.png`), not plain text.
 
 Right:
 
@@ -354,9 +354,7 @@ No backend.
 
 ## Footer
 
-Logo
-
-MRAMA
+Logo mark — same liquid chrome "MRAMA" wordmark image as the navbar (`public/brand/logo.png`).
 
 Institute name
 
@@ -401,6 +399,19 @@ Subtle shadows.
 Large spacing.
 
 Professional typography.
+
+---
+
+# Brand Assets
+
+Logo: `public/brand/logo.png` — liquid chrome 3D "MRAMA" wordmark on a
+near-black background. This is the site's only logo mark; do not
+reintroduce a text-only or vector wordmark in the navbar or footer.
+
+The image has a solid dark background (not transparent), which blends
+with the site's dark theme. If a transparent-background or square-crop
+variant is ever produced, replace `logo.png` in place so the navbar and
+footer picks it up automatically.
 
 ---
 

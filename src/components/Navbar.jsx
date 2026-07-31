@@ -12,33 +12,6 @@ const links = [
   { label: "Contact", href: "#contact" },
 ];
 
-function LogoMark() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 44 44" fill="none" className="shrink-0">
-      <circle cx="22" cy="22" r="3.5" fill="#2563EB" />
-      <ellipse cx="22" cy="22" rx="18" ry="7.5" stroke="#2563EB" strokeWidth="1.6" />
-      <ellipse
-        cx="22"
-        cy="22"
-        rx="18"
-        ry="7.5"
-        stroke="#2563EB"
-        strokeWidth="1.6"
-        transform="rotate(60 22 22)"
-      />
-      <ellipse
-        cx="22"
-        cy="22"
-        rx="18"
-        ry="7.5"
-        stroke="#2563EB"
-        strokeWidth="1.6"
-        transform="rotate(120 22 22)"
-      />
-    </svg>
-  );
-}
-
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -86,9 +59,8 @@ export default function Navbar() {
           scrolled ? "py-4" : "py-6"
         }`}
       >
-        <a href="#home" className="flex items-center gap-2.5 text-base font-bold tracking-widest text-text-primary">
-          <LogoMark />
-          MRAMA
+        <a href="#home" className="flex items-center">
+          <img src="/brand/logo.png" alt="Mrama Institute" className="h-7 w-auto md:h-8" />
         </a>
 
         <div className="hidden items-center gap-1 md:flex">
