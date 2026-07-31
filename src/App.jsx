@@ -1,6 +1,6 @@
+import { MotionConfig } from "framer-motion";
 import Navbar from "./components/Navbar.jsx";
 import Hero from "./components/Hero.jsx";
-import Stats from "./components/Stats.jsx";
 import About from "./components/About.jsx";
 import Research from "./components/Research.jsx";
 import Projects from "./components/Projects.jsx";
@@ -12,21 +12,21 @@ import Footer from "./components/Footer.jsx";
 
 export default function App() {
   return (
-    <div className="relative min-h-screen bg-background">
-      <div className="noise-overlay" />
-      <Navbar />
-      <main>
-        <Hero />
-        <Stats />
-        <About />
-        <Research />
-        <Projects />
-        <Publications />
-        <People />
-        <News />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-screen bg-background">
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Research />
+          <Projects />
+          <Publications />
+          <People />
+          <News />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </MotionConfig>
   );
 }

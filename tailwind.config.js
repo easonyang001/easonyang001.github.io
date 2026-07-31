@@ -6,12 +6,17 @@ export default {
       colors: {
         background: "#020617",
         surface: "#0F172A",
-        line: "rgba(148, 163, 184, 0.12)",
+        "surface-raised": "#131C31",
+        border: "#1E293B",
+        "border-strong": "#334155",
         accent: "#8B5CF6",
+        "accent-hover": "#A78BFA",
+        "accent-subtle": "rgba(139, 92, 246, 0.12)",
         accent2: "#D946EF",
         text: {
           primary: "#F8FAFC",
           secondary: "#94A3B8",
+          muted: "#64748B",
         },
       },
       fontFamily: {
@@ -19,42 +24,26 @@ export default {
         display: ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
-      letterSpacing: {
-        widest2: "0.25em",
+      fontSize: {
+        h1: ["40px", { lineHeight: "1.05", letterSpacing: "-0.02em", fontWeight: "500" }],
+        "h1-lg": ["60px", { lineHeight: "1.05", letterSpacing: "-0.02em", fontWeight: "500" }],
+        h2: ["30px", { lineHeight: "1.15", letterSpacing: "-0.015em", fontWeight: "500" }],
+        "h2-lg": ["36px", { lineHeight: "1.15", letterSpacing: "-0.015em", fontWeight: "500" }],
+        h3: ["20px", { lineHeight: "1.30", letterSpacing: "-0.01em", fontWeight: "500" }],
+        h4: ["16px", { lineHeight: "1.40", fontWeight: "500" }],
+        "body-lg": ["17px", { lineHeight: "1.60" }],
+        "body-lg-lg": ["18px", { lineHeight: "1.60" }],
+        body: ["16px", { lineHeight: "1.65" }],
+        small: ["14px", { lineHeight: "1.50" }],
+        "mono-label": ["12px", { lineHeight: "1.40", letterSpacing: "0.08em", fontWeight: "500" }],
       },
-      boxShadow: {
-        glow: "0 0 60px rgba(139, 92, 246, 0.25)",
-        card: "0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 48px -24px rgba(0,0,0,0.65)",
-        "card-hover":
-          "0 1px 0 rgba(255,255,255,0.06) inset, 0 32px 64px -24px rgba(139,92,246,0.28)",
+      maxWidth: {
+        content: "1200px",
+        prose: "720px",
       },
       backgroundImage: {
         grid:
-          "linear-gradient(to right, rgba(148,163,184,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.07) 1px, transparent 1px)",
-        noise:
-          "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")",
-        "radial-glow":
-          "radial-gradient(circle at center, rgba(139,92,246,0.38) 0%, rgba(139,92,246,0) 70%)",
-        "accent-gradient": "linear-gradient(90deg, #8B5CF6 0%, #D946EF 100%)",
-      },
-      keyframes: {
-        "spin-slow": {
-          from: { transform: "rotate(0deg)" },
-          to: { transform: "rotate(360deg)" },
-        },
-        "spin-slow-reverse": {
-          from: { transform: "rotate(360deg)" },
-          to: { transform: "rotate(0deg)" },
-        },
-        shine: {
-          from: { backgroundPosition: "200% 0" },
-          to: { backgroundPosition: "-200% 0" },
-        },
-      },
-      animation: {
-        "spin-slow": "spin-slow 40s linear infinite",
-        "spin-slow-reverse": "spin-slow-reverse 55s linear infinite",
-        shine: "shine 3s linear infinite",
+          "linear-gradient(to right, rgba(148,163,184,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.04) 1px, transparent 1px)",
       },
     },
   },

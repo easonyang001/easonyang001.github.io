@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  @apply bg-background text-text-primary font-sans antialiased;
+  @apply bg-background text-text-primary font-sans text-body antialiased;
 }
 
 h1,
@@ -22,19 +22,15 @@ h4 {
 }
 
 .section-container {
-  @apply relative mx-auto w-full max-w-7xl px-6 py-28 md:px-10 md:py-36 lg:px-16;
-}
-
-.section-heading {
-  @apply text-3xl font-semibold tracking-tight text-text-primary md:text-4xl;
+  @apply relative mx-auto w-full max-w-content px-6 py-20 md:px-12 md:py-32;
 }
 
 .eyebrow {
-  @apply flex items-center gap-3 text-xs font-semibold uppercase tracking-widest2 text-accent;
+  @apply flex items-center gap-3 font-mono text-mono-label uppercase text-accent;
 }
 
 .eyebrow-index {
-  @apply font-mono text-xs font-normal tracking-normal text-accent/60;
+  @apply text-accent/60;
 }
 
 .eyebrow-rule {
@@ -42,21 +38,27 @@ h4 {
 }
 
 .glass-card {
-  @apply relative rounded-2xl border border-line bg-surface/60 shadow-card backdrop-blur-sm transition-all duration-300;
+  @apply relative rounded-lg border border-border bg-surface transition-colors duration-150;
 }
 
-.glass-card::before {
-  content: "";
-  @apply pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent;
+.glass-card:hover {
+  @apply border-border-strong bg-surface-raised;
 }
 
 .grid-bg {
-  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 100%);
 }
 
-.noise-overlay {
-  @apply pointer-events-none fixed inset-0 z-[1] bg-noise;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
