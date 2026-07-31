@@ -7,19 +7,19 @@ export const news = [
   },
   {
     date: "2026-05-14",
-    title: "Research Accepted",
+    title: "[SAMPLE] Research Accepted",
     description:
       "Our work on quantum annealing approaches to facility placement optimization was accepted for presentation at IEEE Quantum Week.",
   },
   {
     date: "2026-02-20",
-    title: "Conference Presentation",
+    title: "[SAMPLE] Conference Presentation",
     description:
       "Presented hybrid quantum-classical solver research at the Quantum Machine Intelligence Workshop.",
   },
   {
     date: "2025-11-03",
-    title: "Publication Released",
+    title: "[SAMPLE] Publication Released",
     description:
       "Published new findings on hybrid quantum-classical solvers for constrained nutritional planning.",
   },

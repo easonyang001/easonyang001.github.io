@@ -1,6 +1,6 @@
 export const publications = [
   {
-    title: "Quantum Annealing Approaches to Facility Placement Optimization",
+    title: "[SAMPLE] Quantum Annealing Approaches to Facility Placement Optimization",
     conference: "IEEE Quantum Week",
     year: "2026",
     abstract:
@@ -8,14 +8,14 @@ export const publications = [
     pdfUrl: "#",
     doiUrl: "#",
     bibtex: `@inproceedings{mrama2026facility,
-  title     = {Quantum Annealing Approaches to Facility Placement Optimization},
+  title     = {[SAMPLE] Quantum Annealing Approaches to Facility Placement Optimization},
   author    = {Yang, Jia-Zhen},
   booktitle = {IEEE Quantum Week},
   year      = {2026}
 }`,
   },
   {
-    title: "Hybrid Quantum-Classical Solvers for Constrained Nutritional Planning",
+    title: "[SAMPLE] Hybrid Quantum-Classical Solvers for Constrained Nutritional Planning",
     conference: "International Conference on Quantum Computing and Engineering (QCE)",
     year: "2025",
     abstract:
@@ -23,14 +23,14 @@ export const publications = [
     pdfUrl: "#",
     doiUrl: "#",
     bibtex: `@inproceedings{mrama2025diet,
-  title     = {Hybrid Quantum-Classical Solvers for Constrained Nutritional Planning},
+  title     = {[SAMPLE] Hybrid Quantum-Classical Solvers for Constrained Nutritional Planning},
   author    = {Yang, Jia-Zhen},
   booktitle = {QCE},
   year      = {2025}
 }`,
   },
   {
-    title: "Toward Quantum-Enhanced Portfolio Optimization Under Realistic Constraints",
+    title: "[SAMPLE] Toward Quantum-Enhanced Portfolio Optimization Under Realistic Constraints",
     conference: "Quantum Machine Intelligence Workshop",
     year: "2025",
     abstract:
@@ -38,7 +38,7 @@ export const publications = [
     pdfUrl: "#",
     doiUrl: "#",
     bibtex: `@inproceedings{mrama2025portfolio,
-  title     = {Toward Quantum-Enhanced Portfolio Optimization Under Realistic Constraints},
+  title     = {[SAMPLE] Toward Quantum-Enhanced Portfolio Optimization Under Realistic Constraints},
   author    = {Yang, Jia-Zhen},
   booktitle = {Quantum Machine Intelligence Workshop},
   year      = {2025}
