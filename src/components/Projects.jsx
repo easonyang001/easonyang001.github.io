@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { projects } from "../data/projects.js";
+import SectionHeading from "./SectionHeading.jsx";
 
 const statusColors = {
   Ongoing: "bg-emerald-500/10 text-emerald-400",
@@ -9,18 +10,15 @@ const statusColors = {
 
 export default function Projects() {
   return (
-    <section id="projects" className="section-container">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="section-heading"
-      >
-        Projects
-      </motion.h2>
+    <section id="projects" className="section-container border-t border-line">
+      <SectionHeading
+        index="02"
+        eyebrow="Projects"
+        title="Projects"
+        description="Applied research initiatives translating quantum and optimization theory into working systems."
+      />
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2">
+      <div className="mt-14 grid gap-6 sm:grid-cols-2">
         {projects.map((project, i) => (
           <motion.div
             key={project.title}
@@ -29,14 +27,14 @@ export default function Projects() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: i * 0.05, ease: "easeOut" }}
             whileHover={{ y: -6 }}
-            className="glass-card flex flex-col p-6 transition-shadow hover:shadow-glow"
+            className="glass-card flex flex-col p-6 hover:border-accent/30 hover:shadow-card-hover"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
               <h3 className="text-lg font-semibold text-text-primary">
                 {project.title}
               </h3>
               <span
-                className={`rounded-full px-3 py-1 text-xs font-medium ${
+                className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
                   statusColors[project.status] ?? "bg-white/5 text-text-secondary"
                 }`}
               >
@@ -52,15 +50,18 @@ export default function Projects() {
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-white/10 px-3 py-1 text-xs text-text-secondary"
+                  className="rounded-full border border-line px-3 py-1 text-xs text-text-secondary"
                 >
                   {tag}
                 </span>
               ))}
             </div>
 
-            <button className="mt-6 self-start text-sm font-semibold text-accent transition-colors hover:text-accent/80">
-              Read More &rarr;
+            <button className="group mt-6 flex items-center gap-1.5 self-start text-sm font-semibold text-accent">
+              Read More
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                &rarr;
+              </span>
             </button>
           </motion.div>
         ))}

@@ -15,19 +15,41 @@ body {
 }
 
 .section-container {
-  @apply mx-auto w-full max-w-7xl px-6 py-24 md:px-10 lg:px-16;
+  @apply relative mx-auto w-full max-w-7xl px-6 py-28 md:px-10 md:py-36 lg:px-16;
 }
 
 .section-heading {
   @apply text-3xl font-semibold tracking-tight text-text-primary md:text-4xl;
 }
 
+.eyebrow {
+  @apply flex items-center gap-3 text-xs font-semibold uppercase tracking-widest2 text-accent;
+}
+
+.eyebrow-index {
+  @apply font-mono text-xs font-normal tracking-normal text-accent/60;
+}
+
+.eyebrow-rule {
+  @apply h-px w-8 bg-accent/40;
+}
+
 .glass-card {
-  @apply rounded-2xl border border-white/5 bg-surface/60 backdrop-blur-sm;
+  @apply relative rounded-2xl border border-line bg-surface/60 shadow-card backdrop-blur-sm transition-all duration-300;
+}
+
+.glass-card::before {
+  content: "";
+  @apply pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent;
 }
 
 .grid-bg {
-  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
   background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 100%);
+}
+
+.noise-overlay {
+  @apply pointer-events-none fixed inset-0 z-[1] bg-noise;
 }

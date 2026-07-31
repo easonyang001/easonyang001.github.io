@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Github, MapPin } from "lucide-react";
+import SectionHeading from "./SectionHeading.jsx";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -11,18 +12,10 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="section-container">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="section-heading"
-      >
-        Contact
-      </motion.h2>
+    <section id="contact" className="section-container border-t border-line">
+      <SectionHeading index="06" eyebrow="Contact" title="Contact" />
 
-      <div className="mt-12 grid gap-10 md:grid-cols-2">
+      <div className="mt-14 grid gap-10 md:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +47,7 @@ export default function Contact() {
                 href="https://github.com/easonyang001"
                 target="_blank"
                 rel="noreferrer"
-                className="text-text-primary hover:text-accent"
+                className="text-text-primary transition-colors hover:text-accent"
               >
                 github.com/easonyang001
               </a>
@@ -90,7 +83,7 @@ export default function Contact() {
               id="name"
               type="text"
               required
-              className="mt-1 w-full rounded-lg border border-white/10 bg-background/60 px-4 py-2 text-sm text-text-primary outline-none focus:border-accent"
+              className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
             />
           </div>
           <div>
@@ -101,7 +94,7 @@ export default function Contact() {
               id="email"
               type="email"
               required
-              className="mt-1 w-full rounded-lg border border-white/10 bg-background/60 px-4 py-2 text-sm text-text-primary outline-none focus:border-accent"
+              className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
             />
           </div>
           <div>
@@ -112,12 +105,12 @@ export default function Contact() {
               id="message"
               rows={4}
               required
-              className="mt-1 w-full rounded-lg border border-white/10 bg-background/60 px-4 py-2 text-sm text-text-primary outline-none focus:border-accent"
+              className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
             />
           </div>
           <button
             type="submit"
-            className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-text-primary transition-transform hover:scale-[1.02]"
+            className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-text-primary transition-transform duration-300 hover:scale-[1.02]"
           >
             {submitted ? "Message Sent" : "Send Message"}
           </button>
