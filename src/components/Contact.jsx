@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Mail, Github, MapPin } from "lucide-react";
 import SectionHeading from "./SectionHeading.jsx";
 import SpotlightCard from "./reactbits/SpotlightCard.jsx";
+import ClickSpark from "./reactbits/ClickSpark.jsx";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -113,12 +114,14 @@ export default function Contact() {
                 className="mt-1 w-full rounded-lg border border-line bg-background/60 px-4 py-2 text-sm text-text-primary outline-none transition-colors duration-300 focus:border-accent focus:ring-1 focus:ring-accent/40"
               />
             </div>
-            <button
-              type="submit"
-              className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-text-primary transition-transform duration-300 hover:scale-[1.02]"
-            >
-              {submitted ? "Message Sent" : "Send Message"}
-            </button>
+            <ClickSpark className="block">
+              <button
+                type="submit"
+                className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-text-primary transition-transform duration-300 hover:scale-[1.02]"
+              >
+                {submitted ? "Message Sent" : "Send Message"}
+              </button>
+            </ClickSpark>
           </SpotlightCard>
         </motion.div>
       </div>

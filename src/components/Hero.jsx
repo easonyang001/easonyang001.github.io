@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import SplitText from "./reactbits/SplitText.jsx";
 import DecryptedText from "./reactbits/DecryptedText.jsx";
 import ShinyText from "./reactbits/ShinyText.jsx";
+import Particles from "./reactbits/Particles.jsx";
+import Magnetic from "./reactbits/Magnetic.jsx";
+import ClickSpark from "./reactbits/ClickSpark.jsx";
 
 function QuantumOrbital() {
   return (
@@ -9,20 +12,20 @@ function QuantumOrbital() {
       <div className="absolute inset-0 rounded-full bg-radial-glow blur-2xl" />
 
       <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full animate-spin-slow">
-        <ellipse cx="200" cy="200" rx="180" ry="70" stroke="#2563EB" strokeOpacity="0.35" strokeWidth="1" fill="none" />
+        <ellipse cx="200" cy="200" rx="180" ry="70" stroke="#8B5CF6" strokeOpacity="0.35" strokeWidth="1" fill="none" />
         <ellipse
           cx="200"
           cy="200"
           rx="180"
           ry="70"
-          stroke="#2563EB"
+          stroke="#8B5CF6"
           strokeOpacity="0.35"
           strokeWidth="1"
           fill="none"
           transform="rotate(60 200 200)"
         />
-        <circle cx="380" cy="200" r="3" fill="#2563EB" />
-        <circle cx="20" cy="200" r="3" fill="#2563EB" />
+        <circle cx="380" cy="200" r="3" fill="#8B5CF6" />
+        <circle cx="20" cy="200" r="3" fill="#8B5CF6" />
       </svg>
 
       <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full animate-spin-slow-reverse">
@@ -52,6 +55,9 @@ export default function Hero() {
       id="home"
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background"
     >
+      <div className="absolute inset-0 opacity-70">
+        <Particles />
+      </div>
       <div className="grid-bg absolute inset-0" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
       <QuantumOrbital />
@@ -92,19 +98,25 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <a
-            href="#research"
-            className="group relative overflow-hidden rounded-full bg-accent px-8 py-3 text-sm font-semibold text-text-primary shadow-glow transition-transform duration-300 hover:scale-[1.03]"
-          >
-            <span className="relative z-10">Explore Research</span>
-            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-          </a>
-          <a
-            href="#publications"
-            className="rounded-full border border-line bg-surface/60 px-8 py-3 text-sm font-semibold text-text-primary backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:border-accent/50"
-          >
-            Publications
-          </a>
+          <Magnetic strength={0.4}>
+            <ClickSpark>
+              <a
+                href="#research"
+                className="group relative block overflow-hidden rounded-full bg-accent px-8 py-3 text-sm font-semibold text-text-primary shadow-glow transition-transform duration-300 hover:scale-[1.03]"
+              >
+                <span className="relative z-10">Explore Research</span>
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              </a>
+            </ClickSpark>
+          </Magnetic>
+          <Magnetic strength={0.4}>
+            <a
+              href="#publications"
+              className="block rounded-full border border-line bg-surface/60 px-8 py-3 text-sm font-semibold text-text-primary backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:border-accent/50"
+            >
+              Publications
+            </a>
+          </Magnetic>
         </motion.div>
       </div>
 

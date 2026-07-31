@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import CountUp from "./reactbits/CountUp.jsx";
+import GradientText from "./reactbits/GradientText.jsx";
 import { researchAreas } from "../data/research.js";
 import { projects } from "../data/projects.js";
 import { publications } from "../data/publications.js";
@@ -24,8 +25,8 @@ export default function Stats() {
             transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
             className="text-center md:text-left"
           >
-            <p className="font-mono text-4xl font-semibold text-text-primary md:text-5xl">
-              {stat.isYear ? stat.value : <CountUp end={stat.value} />}
+            <p className="font-mono text-4xl font-semibold md:text-5xl">
+              <GradientText>{stat.isYear ? stat.value : <CountUp end={stat.value} />}</GradientText>
             </p>
             <p className="mt-2 text-xs font-medium uppercase tracking-widest2 text-text-secondary">
               {stat.label}

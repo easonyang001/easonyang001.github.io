@@ -8,7 +8,7 @@ export default function SpotlightCard({
   children,
   className = "",
   contentClassName = "",
-  spotlightColor = "rgba(37, 99, 235, 0.22)",
+  spotlightColor = "rgba(139, 92, 246, 0.25)",
   as: Tag = "div",
   ...rest
 }) {

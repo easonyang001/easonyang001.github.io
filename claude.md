@@ -380,7 +380,11 @@ Cards
 
 Accent
 
-#2563EB
+#8B5CF6 (violet). Do not use blue as the accent color.
+
+Secondary accent (for gradients only, paired with the accent above)
+
+#D946EF (fuchsia)
 
 Text
 
@@ -399,6 +403,39 @@ Subtle shadows.
 Large spacing.
 
 Professional typography.
+
+---
+
+# Motion / Interaction Library
+
+The site makes heavy use of hand-built ReactBits-style effect
+components, kept dependency-free (Framer Motion + Tailwind + Canvas
+only — no GSAP, OGL, or Three.js) so the project stays lightweight and
+builds cleanly on GitHub Actions. They live in
+`src/components/reactbits/` and are used throughout, not just in the
+hero:
+
+- `SplitText` — word/char reveal, used for the hero title and every
+  section heading.
+- `DecryptedText` — scramble-to-reveal text, used for the hero subtitle.
+- `ShinyText` — animated light sweep across text, used for eyebrow
+  labels.
+- `GradientText` — animated violet-to-fuchsia gradient fill, used for
+  the stats numbers.
+- `SpotlightCard` — cursor-tracking radial glow, used on Research,
+  Projects, Publications, People cards and the contact form.
+- `TiltedCard` — cursor-driven 3D tilt, wraps the Research, Projects,
+  and People card grids (composed with `SpotlightCard`).
+- `Magnetic` — pulls an element toward the cursor, used on the hero
+  CTA buttons.
+- `ClickSpark` — particle burst on click, used on the hero CTA, the
+  BibTeX copy button, and the contact form submit button.
+- `Particles` — lightweight canvas constellation background (drifting
+  dots + connecting lines), layered behind the hero.
+
+When adding new sections or components, prefer reusing or extending
+these primitives over introducing a new one-off animation, and prefer
+adding a new primitive over pulling in an animation library.
 
 ---
 

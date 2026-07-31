@@ -7,7 +7,8 @@ export default {
         background: "#020617",
         surface: "#0F172A",
         line: "rgba(148, 163, 184, 0.12)",
-        accent: "#2563EB",
+        accent: "#8B5CF6",
+        accent2: "#D946EF",
         text: {
           primary: "#F8FAFC",
           secondary: "#94A3B8",
@@ -21,10 +22,10 @@ export default {
         widest2: "0.25em",
       },
       boxShadow: {
-        glow: "0 0 60px rgba(37, 99, 235, 0.22)",
+        glow: "0 0 60px rgba(139, 92, 246, 0.25)",
         card: "0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 48px -24px rgba(0,0,0,0.65)",
         "card-hover":
-          "0 1px 0 rgba(255,255,255,0.06) inset, 0 32px 64px -24px rgba(37,99,235,0.25)",
+          "0 1px 0 rgba(255,255,255,0.06) inset, 0 32px 64px -24px rgba(139,92,246,0.28)",
       },
       backgroundImage: {
         grid:
@@ -32,7 +33,8 @@ export default {
         noise:
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")",
         "radial-glow":
-          "radial-gradient(circle at center, rgba(37,99,235,0.35) 0%, rgba(37,99,235,0) 70%)",
+          "radial-gradient(circle at center, rgba(139,92,246,0.38) 0%, rgba(139,92,246,0) 70%)",
+        "accent-gradient": "linear-gradient(90deg, #8B5CF6 0%, #D946EF 100%)",
       },
       keyframes: {
         "spin-slow": {

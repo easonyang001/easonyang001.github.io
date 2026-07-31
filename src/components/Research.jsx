@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { researchAreas } from "../data/research.js";
 import SectionHeading from "./SectionHeading.jsx";
 import SpotlightCard from "./reactbits/SpotlightCard.jsx";
+import TiltedCard from "./reactbits/TiltedCard.jsx";
 
 export default function Research() {
   return (
@@ -26,17 +27,19 @@ export default function Research() {
               whileHover={{ y: -6 }}
               className="group"
             >
-              <SpotlightCard className="glass-card h-full p-6 hover:border-accent/30 hover:shadow-card-hover">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
-                  <Icon size={22} />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold text-text-primary">
-                  {area.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                  {area.description}
-                </p>
-              </SpotlightCard>
+              <TiltedCard maxTilt={6}>
+                <SpotlightCard className="glass-card h-full p-6 hover:border-accent/30 hover:shadow-card-hover">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
+                    <Icon size={22} />
+                  </div>
+                  <h3 className="mt-5 text-lg font-semibold text-text-primary">
+                    {area.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                    {area.description}
+                  </p>
+                </SpotlightCard>
+              </TiltedCard>
             </motion.div>
           );
         })}

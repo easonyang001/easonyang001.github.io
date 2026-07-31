@@ -4,6 +4,7 @@ import { FileText, Link2, Quote } from "lucide-react";
 import { publications } from "../data/publications.js";
 import SectionHeading from "./SectionHeading.jsx";
 import SpotlightCard from "./reactbits/SpotlightCard.jsx";
+import ClickSpark from "./reactbits/ClickSpark.jsx";
 
 export default function Publications() {
   const [copiedIndex, setCopiedIndex] = useState(null);
@@ -61,13 +62,15 @@ export default function Publications() {
                 >
                   <Link2 size={14} /> DOI
                 </a>
-                <button
-                  onClick={() => handleCopyBibtex(pub.bibtex, i)}
-                  className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-xs font-semibold text-text-primary transition-colors duration-300 hover:border-accent hover:text-accent"
-                >
-                  <Quote size={14} />
-                  {copiedIndex === i ? "Copied!" : "BibTeX"}
-                </button>
+                <ClickSpark>
+                  <button
+                    onClick={() => handleCopyBibtex(pub.bibtex, i)}
+                    className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-xs font-semibold text-text-primary transition-colors duration-300 hover:border-accent hover:text-accent"
+                  >
+                    <Quote size={14} />
+                    {copiedIndex === i ? "Copied!" : "BibTeX"}
+                  </button>
+                </ClickSpark>
               </div>
             </SpotlightCard>
           </motion.div>
