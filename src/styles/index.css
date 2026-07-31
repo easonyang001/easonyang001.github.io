@@ -45,6 +45,66 @@ h4 {
   @apply border-border-strong bg-surface-raised;
 }
 
+.readout {
+  @apply font-mono bg-readout-bg;
+  font-variant-numeric: tabular-nums;
+}
+
+.katex {
+  font-size: 1em;
+  color: theme("colors.text.primary");
+}
+
+.katex-display {
+  margin: 24px 0;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: theme("colors.border");
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: theme("colors.accent");
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: theme("colors.accent");
+  cursor: pointer;
+  border-radius: 0;
+  border: none;
+}
+
+.slider::-moz-range-track {
+  height: 2px;
+  background: theme("colors.border");
+}
+
+@keyframes bloch-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bloch-spin {
+  transform-origin: center;
+  animation: bloch-spin 60s linear infinite;
+}
+
 .grid-bg {
   background-image: linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
