@@ -1,6 +1,9 @@
+import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import SimpleBlochSphere from "./SimpleBlochSphere.tsx";
 import { site } from "../data/site.ts";
+
+const DanmakuBackground = lazy(() => import("./DanmakuBackground.tsx"));
 
 export default function Hero() {
   return (
@@ -43,6 +46,9 @@ export default function Hero() {
       `}</style>
 
       <div className="grid-bg absolute inset-0" />
+      <Suspense fallback={null}>
+        <DanmakuBackground />
+      </Suspense>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
 
       <div className="pointer-events-none absolute right-[-15%] top-1/2 h-[560px] w-[560px] -translate-y-1/2 opacity-40 md:right-[-5%] md:h-[720px] md:w-[720px]">
