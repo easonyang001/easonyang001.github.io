@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Segmented, SegmentedButton } from "../components/Segmented.tsx";
 import { ADMIN_ENTITIES, type AdminItem, type FieldConfig } from "../lib/admin/dataFiles.ts";
 import { getFile, publishFileChange, verifyToken, type GitHubConfig } from "../lib/admin/github.ts";
+import { useAuth } from "../lib/auth/useAuth.ts";
 
 const OWNER = "easonyang001";
 const REPO = "easonyang001.github.io";
@@ -26,7 +27,90 @@ function textToFieldValue(field: FieldConfig, text: string): string | string[] |
   return text;
 }
 
+function LoginForm({
+  onLogin,
+  error,
+}: {
+  onLogin: (username: string, password: string) => void;
+  error: string | null;
+}) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    await onLogin(username, password);
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="section-container border-t border-border">
+      <div className="max-w-prose">
+        <div className="eyebrow">
+          <span className="eyebrow-rule" />
+          <span>Admin</span>
+        </div>
+        <h1 className="mt-4 text-h2 text-text-primary">Sign In</h1>
+        <p className="mt-4 text-small text-text-secondary">
+          This area is restricted. Sign in with an admin account to continue.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mt-10 max-w-md space-y-4">
+        <div>
+          <label className="mb-2 block font-mono text-mono-label uppercase text-text-muted">
+            Username
+          </label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoComplete="username"
+            className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50"
+          />
+        </div>
+        <div>
+          <label className="mb-2 block font-mono text-mono-label uppercase text-text-muted">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50"
+          />
+        </div>
+        {error && <p className="text-small text-text-secondary">Error: {error}</p>}
+        <button
+          type="submit"
+          disabled={!username || !password || submitting}
+          className="rounded-md bg-accent px-6 py-3 text-small font-medium text-text-primary transition-colors duration-150 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {submitting ? "Signing in…" : "Sign In"}
+        </button>
+      </form>
+    </div>
+  );
+}
+
 export default function AdminPage() {
+  const { status, error, login, logout } = useAuth();
+
+  if (status === "checking") {
+    return <div className="section-container border-t border-border" />;
+  }
+
+  if (status === "anonymous") {
+    return <LoginForm onLogin={login} error={error} />;
+  }
+
+  return <AdminPanel onLogout={logout} />;
+}
+
+function AdminPanel({ onLogout }: { onLogout: () => void }) {
   const [token, setToken] = useState("");
   const [tokenStatus, setTokenStatus] = useState<"idle" | "checking" | "valid" | "invalid">("idle");
   const [entityKey, setEntityKey] = useState(ADMIN_ENTITIES[0].key);
@@ -151,9 +235,17 @@ export default function AdminPage() {
   return (
     <div className="section-container border-t border-border">
       <div className="max-w-prose">
-        <div className="eyebrow">
-          <span className="eyebrow-rule" />
-          <span>Admin</span>
+        <div className="flex items-center justify-between">
+          <div className="eyebrow">
+            <span className="eyebrow-rule" />
+            <span>Admin</span>
+          </div>
+          <button
+            onClick={onLogout}
+            className="text-small font-medium text-text-secondary transition-colors duration-150 hover:text-text-primary"
+          >
+            Log out
+          </button>
         </div>
         <h1 className="mt-4 text-h2 text-text-primary">Content Admin</h1>
         <p className="mt-4 font-mono text-mono-label uppercase text-text-muted">

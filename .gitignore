@@ -2,6 +2,7 @@ node_modules
 dist
 .DS_Store
 *.local
+.env
 digest-summary.md
 .playwright-mcp
 review
