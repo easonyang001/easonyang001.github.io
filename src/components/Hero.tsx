@@ -1,8 +1,26 @@
+import { useLayoutEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SimpleBlochSphere from "./SimpleBlochSphere.tsx";
+import IntroOverlay from "./IntroOverlay.tsx";
 import { site } from "../data/site.ts";
 
+const INTRO_SEEN_KEY = "mrama-intro-seen";
+
 export default function Hero() {
+  const [showIntro, setShowIntro] = useState(false);
+  const [heroRevealed, setHeroRevealed] = useState(false);
+
+  useLayoutEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+    if (reduced || seen) {
+      sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+      setHeroRevealed(true);
+    } else {
+      setShowIntro(true);
+    }
+  }, []);
+
   return (
     <section id="home" className="hero-portrait relative isolate min-h-screen overflow-hidden bg-background">
       {/*
@@ -42,6 +60,16 @@ export default function Hero() {
         }
       `}</style>
 
+      {showIntro && (
+        <IntroOverlay
+          onExitStart={() => setHeroRevealed(true)}
+          onDone={() => {
+            setShowIntro(false);
+            sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+          }}
+        />
+      )}
+
       <div className="grid-bg absolute inset-0" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
 
@@ -50,9 +78,9 @@ export default function Hero() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={heroRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
         className="absolute left-0 top-[55%] w-full -translate-y-1/2 px-6 md:px-12"
       >
         <div className="mx-auto max-w-content">

@@ -12,3 +12,16 @@ export const site: SiteConfig = {
   githubHandle: "github.com/easonyang001",
   location: "Taiwan",
 };
+
+/** First-visit intro overlay lines. See src/components/IntroOverlay.tsx. */
+export const introSentences: string[] = [
+  "Today's curiosity becomes tomorrow's quantum breakthrough.",
+  "Every optimization begins with a question.",
+  "Research is the bridge between imagination and reality.",
+  "Quantum is not just the future — it is a new way of thinking.",
+  "Transform complexity into possibility.",
+  "Where quantum intelligence meets real-world impact.",
+  "Building tomorrow's quantum intelligence, one solution at a time.",
+  "Ideas become research. Research becomes innovation.",
+  "Open knowledge. Open science. Open future.",
+];
