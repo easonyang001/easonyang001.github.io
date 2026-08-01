@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://easonyang001.github.io/sitemap.xml
+Sitemap: https://mrama.org/sitemap.xml

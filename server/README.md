@@ -42,7 +42,7 @@ npm run dev
 4. **Start Command**: `npm start`
 5. Environment → add `DATABASE_URL`, `JWT_SECRET`, `ALLOWED_ORIGINS` (comma-
    separated list of frontend origins allowed to call this API, e.g.
-   `https://easonyang001.github.io`).
+   `https://mrama.org`).
 6. Deploy. Render gives you a URL like `https://mrama-admin-server.onrender.com`
    — this is `VITE_API_BASE_URL` for the frontend (set as a GitHub Actions
    repo secret, see the root README).

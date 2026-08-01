@@ -4,7 +4,7 @@ The official website of the Mrama Institute — an independent research
 institute dedicated to quantum computing, quantum information science,
 artificial intelligence, and intelligent optimization.
 
-Live site: https://easonyang001.github.io
+Live site: https://mrama.org
 
 ## Tech Stack
 
