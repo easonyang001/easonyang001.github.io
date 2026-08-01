@@ -4,7 +4,44 @@ import { site } from "../data/site.ts";
 
 export default function Hero() {
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden bg-background">
+    <section id="home" className="hero-portrait relative isolate min-h-screen overflow-hidden bg-background">
+      {/*
+        Portrait background layer. Scoped to this component (not index.css) so the
+        shared stylesheet and tailwind.config.js stay untouched, per spec.
+        Sits behind everything via isolation:isolate + z-index:-1 on the ::before,
+        so it never affects text contrast — grid-bg, the gradient overlay, and the
+        text layer all stack above it.
+        Requires public/brand/portrait.webp (+ portrait@2x.webp) to exist; until then
+        this rule has nothing to paint and is inert.
+      */}
+      <style>{`
+        .hero-portrait::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background-image: image-set(
+            url("/brand/portrait.webp") 1x,
+            url("/brand/portrait@2x.webp") 2x
+          );
+          background-size: cover;
+          background-position: 70% 25%;
+          background-repeat: no-repeat;
+          opacity: 0.12;
+          filter: grayscale(1) contrast(1.2) brightness(1.1);
+          mask-image: radial-gradient(ellipse 70% 60% at 70% 30%, #000 35%, transparent 75%);
+          -webkit-mask-image: radial-gradient(ellipse 70% 60% at 70% 30%, #000 35%, transparent 75%);
+          mask-repeat: no-repeat;
+          -webkit-mask-repeat: no-repeat;
+        }
+
+        @media (max-width: 767px) {
+          .hero-portrait::before {
+            display: none;
+          }
+        }
+      `}</style>
+
       <div className="grid-bg absolute inset-0" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
 

@@ -31,6 +31,15 @@
     />
     <meta name="twitter:image" content="/og-image.svg" />
 
+    <!-- Hero portrait layer: preloaded so it's painted before/with first contentful
+         text, avoiding a flash-in. Requires public/brand/portrait.webp to exist. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/brand/portrait.webp"
+      imagesrcset="/brand/portrait.webp 1x, /brand/portrait@2x.webp 2x"
+    />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
