@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 interface ListPageLayoutProps {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description?: string;
   filters?: ReactNode;
@@ -21,11 +21,8 @@ export default function ListPageLayout({
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-12">
         <div className="lg:sticky lg:top-24 lg:col-span-4 lg:self-start">
-          <div className="eyebrow">
-            <span className="eyebrow-rule" />
-            <span>{eyebrow}</span>
-          </div>
-          <h1 className="mt-4 text-h2 text-text-primary">{title}</h1>
+          {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+          <h1 className={`${eyebrow ? "mt-4" : ""} text-h2 text-text-primary`}>{title}</h1>
           {description && <p className="mt-4 text-body-lg text-text-secondary">{description}</p>}
           {filters && <div className="mt-8">{filters}</div>}
         </div>

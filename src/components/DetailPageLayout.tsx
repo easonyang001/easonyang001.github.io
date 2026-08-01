@@ -6,7 +6,7 @@ interface MetaItem {
 }
 
 interface DetailPageLayoutProps {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   meta?: MetaItem[];
   children?: ReactNode;
@@ -17,11 +17,8 @@ export default function DetailPageLayout({ eyebrow, title, meta = [], children }
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-8">
-          <div className="eyebrow">
-            <span className="eyebrow-rule" />
-            <span>{eyebrow}</span>
-          </div>
-          <h1 className="mt-4 text-h2 text-text-primary">{title}</h1>
+          {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+          <h1 className={`${eyebrow ? "mt-4" : ""} text-h2 text-text-primary`}>{title}</h1>
           {children && <div className="mt-8 max-w-prose">{children}</div>}
         </div>
 

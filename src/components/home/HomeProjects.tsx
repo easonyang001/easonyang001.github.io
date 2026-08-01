@@ -7,7 +7,6 @@ export default function HomeProjects() {
 
   return (
     <HomeSection
-      eyebrow="Projects"
       title="Projects"
       description="Applied research translating theory into working systems."
       viewAllHref="/projects"

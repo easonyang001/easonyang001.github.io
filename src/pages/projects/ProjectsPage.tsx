@@ -15,7 +15,7 @@ export default function ProjectsPage() {
 
   return (
     <ListPageLayout
-      eyebrow="Projects"
+      eyebrow={`${projects.length} ${projects.length === 1 ? "Project" : "Projects"}`}
       title="Projects"
       description="Applied research initiatives translating quantum and optimization theory into working systems."
       resultCount={filtered.length}

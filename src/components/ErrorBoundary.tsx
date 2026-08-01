@@ -24,11 +24,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
       return (
         <section className="section-container">
           <div className="max-w-prose">
-            <div className="eyebrow">
-              <span className="eyebrow-rule" />
-              <span>Error</span>
-            </div>
-            <h1 className="mt-4 text-h2 text-text-primary">Something went wrong</h1>
+            <h1 className="text-h2 text-text-primary">Something went wrong</h1>
             <p className="mt-4 text-body-lg text-text-secondary">
               This page failed to render. Try reloading, or return to the homepage.
             </p>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 
 interface HomeSectionProps {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description?: string;
   viewAllHref?: string;
@@ -22,11 +22,8 @@ export default function HomeSection({
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">
         <div className="lg:col-span-4">
-          <div className="eyebrow">
-            <span className="eyebrow-rule" />
-            <span>{eyebrow}</span>
-          </div>
-          <h2 className="mt-4 text-h2 text-text-primary">{title}</h2>
+          {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+          <h2 className={`${eyebrow ? "mt-4" : ""} text-h2 text-text-primary`}>{title}</h2>
           {description && <p className="mt-4 text-body-lg text-text-secondary">{description}</p>}
           {viewAllHref && (
             <Link

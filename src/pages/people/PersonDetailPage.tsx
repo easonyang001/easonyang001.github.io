@@ -16,7 +16,7 @@ export default function PersonDetailPage() {
   ];
 
   return (
-    <DetailPageLayout eyebrow="People" title={person.name} meta={meta}>
+    <DetailPageLayout title={person.name} meta={meta}>
       {person.interests.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {person.interests.map((interest) => (

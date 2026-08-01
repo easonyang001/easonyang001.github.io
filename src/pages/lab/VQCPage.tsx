@@ -87,7 +87,7 @@ export default function VQCPage() {
 
   return (
     <ToolPageLayout
-      eyebrow="Lab"
+      eyebrow="2 Qubits · Parameter-Shift"
       title="Variational Quantum Classifier"
       description={
         <p className="mt-2 text-small text-text-secondary">

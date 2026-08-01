@@ -15,7 +15,7 @@ export default function ProjectDetailPage() {
   ];
 
   return (
-    <DetailPageLayout eyebrow="Projects" title={project.title} meta={meta}>
+    <DetailPageLayout title={project.title} meta={meta}>
       <p className="text-body-lg text-text-secondary">{project.description}</p>
 
       {project.readMoreUrl && (

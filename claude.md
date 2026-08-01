@@ -236,6 +236,19 @@ Research, DeepMind, or OpenAI uses any of them. Using them here creates a
 mismatch between what the effects signal and what the content claims, which
 costs credibility rather than adding polish.
 
+## Exceptions to the ban
+
+The ban above is the default, not an absolute. The user may ask for a
+specific banned effect (e.g. a typewriter/typing effect) in a specific
+place. If they explicitly confirm they want it after being told it's on the
+banned list, that one instance is permitted — implement exactly what was
+confirmed, nowhere else.
+
+This is a per-instance exception, not a reopening of the list: it does not
+carry over to other effects, other pages, or future work, and it does not
+lower the bar for anything not explicitly discussed. When in doubt whether
+something was actually confirmed, ask again rather than assume.
+
 ## Keeping the source available
 
 `src/components/reactbits/` **stays in the repository** even though the

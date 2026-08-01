@@ -10,7 +10,7 @@ export default function LabToolPage() {
   if (!tool) return <NotFoundPage />;
 
   return (
-    <PageShell eyebrow="Lab" title={tool.name} description={tool.description}>
+    <PageShell title={tool.name} description={tool.description}>
       <div className="glass-card p-8">
         <p className="font-mono text-mono-label uppercase text-accent">{tool.status}</p>
         <p className="mt-4 text-body-lg text-text-secondary">

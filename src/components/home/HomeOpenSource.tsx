@@ -5,7 +5,6 @@ import { openSource } from "../../data/openSource.ts";
 export default function HomeOpenSource() {
   return (
     <HomeSection
-      eyebrow="Open Source"
       title="Open Source"
       description="Tools and libraries we publish as we build them."
       viewAllHref="/opensource"

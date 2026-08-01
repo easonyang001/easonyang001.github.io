@@ -10,7 +10,7 @@ export default function EducationDetailPage() {
   if (!lesson) return <NotFoundPage />;
 
   return (
-    <PageShell eyebrow="Education" title={lesson.title}>
+    <PageShell title={lesson.title}>
       <p className="max-w-prose text-body-lg text-text-secondary">{lesson.description}</p>
     </PageShell>
   );

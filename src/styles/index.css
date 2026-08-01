@@ -26,15 +26,7 @@ h4 {
 }
 
 .eyebrow {
-  @apply flex items-center gap-3 font-mono text-mono-label uppercase text-accent;
-}
-
-.eyebrow-index {
-  @apply text-accent/60;
-}
-
-.eyebrow-rule {
-  @apply h-px w-8 bg-accent/40;
+  @apply font-mono text-mono-label uppercase text-text-muted;
 }
 
 .glass-card {

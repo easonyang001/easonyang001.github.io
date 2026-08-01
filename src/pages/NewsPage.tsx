@@ -13,9 +13,19 @@ export default function NewsPage() {
     return q === "" ? news : news.filter((item) => item.title.toLowerCase().includes(q));
   }, [query]);
 
+  const eyebrow = useMemo(() => {
+    const count = news.length;
+    const label = `${count} ${count === 1 ? "Update" : "Updates"}`;
+    if (count === 0) return label;
+    const years = news.map((item) => new Date(item.date).getFullYear());
+    const min = Math.min(...years);
+    const max = Math.max(...years);
+    return min === max ? `${label} · ${min}` : `${label} · ${min}–${max}`;
+  }, []);
+
   return (
     <ListPageLayout
-      eyebrow="News"
+      eyebrow={eyebrow}
       title="News"
       resultCount={filtered.length}
       filters={

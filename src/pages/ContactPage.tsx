@@ -3,7 +3,7 @@ import ContactInfo from "../components/ContactInfo.tsx";
 
 export default function ContactPage() {
   return (
-    <PageShell eyebrow="Contact" title="Contact">
+    <PageShell title="Contact">
       <ContactInfo />
     </PageShell>
   );

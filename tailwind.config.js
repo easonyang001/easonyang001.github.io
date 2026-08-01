@@ -51,7 +51,7 @@ export default {
         "body-lg-lg": ["18px", { lineHeight: "1.60" }],
         body: ["16px", { lineHeight: "1.65" }],
         small: ["13px", { lineHeight: "1.50" }],
-        "mono-label": ["11px", { lineHeight: "1.40", letterSpacing: "0.12em", fontWeight: "500" }],
+        "mono-label": ["15px", { lineHeight: "1.40", letterSpacing: "0.16em", fontWeight: "500" }],
       },
       maxWidth: {
         content: "1200px",

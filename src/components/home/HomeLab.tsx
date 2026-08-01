@@ -7,7 +7,6 @@ export default function HomeLab() {
 
   return (
     <HomeSection
-      eyebrow="Lab"
       title="Interactive Lab"
       description="Hands-on tools for exploring quantum states, circuits, and optimization landscapes."
       viewAllHref="/lab"

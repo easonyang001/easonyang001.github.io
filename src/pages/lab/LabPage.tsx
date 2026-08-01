@@ -5,7 +5,7 @@ import { labTools } from "../../data/labTools.ts";
 export default function LabPage() {
   return (
     <PageShell
-      eyebrow="Lab"
+      eyebrow={`${labTools.length} ${labTools.length === 1 ? "Tool" : "Tools"}`}
       title="Interactive Lab"
       description="Hands-on tools for exploring quantum states, circuits, and optimization landscapes."
     >

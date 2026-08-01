@@ -45,6 +45,16 @@ export default function PublicationsPage() {
   const types = useMemo(() => ["All", ...new Set(publications.map((p) => p.type))], []);
   const statuses = useMemo(() => ["All", ...new Set(publications.map((p) => p.status))], []);
 
+  const eyebrow = useMemo(() => {
+    const count = publications.length;
+    const label = `${count} ${count === 1 ? "Publication" : "Publications"}`;
+    if (count === 0) return label;
+    const years = publications.map((p) => Number(p.year));
+    const min = Math.min(...years);
+    const max = Math.max(...years);
+    return min === max ? `${label} · ${min}` : `${label} · ${min}–${max}`;
+  }, []);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return publications.filter(
@@ -79,7 +89,7 @@ export default function PublicationsPage() {
 
   return (
     <ListPageLayout
-      eyebrow="Publications"
+      eyebrow={eyebrow}
       title="Publications"
       resultCount={filtered.length}
       filters={

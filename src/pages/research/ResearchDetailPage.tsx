@@ -23,7 +23,7 @@ export default function ResearchDetailPage() {
   ];
 
   return (
-    <DetailPageLayout eyebrow="Research" title={area.title} meta={meta}>
+    <DetailPageLayout title={area.title} meta={meta}>
       <Icon size={28} className="text-accent" />
       <p className="mt-6 text-body-lg text-text-secondary">{area.description}</p>
 

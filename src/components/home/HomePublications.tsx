@@ -6,7 +6,6 @@ export default function HomePublications() {
 
   return (
     <HomeSection
-      eyebrow="Publications"
       title="Publications"
       viewAllHref="/publications"
       viewAllLabel={`All ${publications.length} publications`}

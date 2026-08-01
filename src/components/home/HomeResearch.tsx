@@ -7,7 +7,6 @@ export default function HomeResearch() {
 
   return (
     <HomeSection
-      eyebrow="Research"
       title="Research Areas"
       description="Core disciplines that define our research program."
       viewAllHref="/research"

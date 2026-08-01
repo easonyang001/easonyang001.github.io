@@ -5,7 +5,6 @@ import { researchAreas } from "../../data/research.ts";
 export default function ResearchPage() {
   return (
     <ListPageLayout
-      eyebrow="Research"
       title="Research Areas"
       description="Core disciplines that define our research program, from foundational quantum information theory to applied intelligent optimization."
       resultCount={researchAreas.length}

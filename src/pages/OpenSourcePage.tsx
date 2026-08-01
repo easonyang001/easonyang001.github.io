@@ -5,7 +5,7 @@ import { openSource } from "../data/openSource.ts";
 export default function OpenSourcePage() {
   return (
     <ListPageLayout
-      eyebrow="Open Source"
+      eyebrow={`${openSource.length} ${openSource.length === 1 ? "Repository" : "Repositories"}`}
       title="Open Source"
       description="Tools and libraries we publish as we build them."
       resultCount={openSource.length}

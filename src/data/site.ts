@@ -6,6 +6,7 @@ export const site: SiteConfig = {
   tagline: "for Quantum Information and Intelligence",
   description:
     "Advancing Quantum Information, Artificial Intelligence, and Intelligent Optimization.",
+  foundedYear: 2026,
   email: "contact@mrama-institute.org",
   githubUrl: "https://github.com/easonyang001",
   githubHandle: "github.com/easonyang001",

@@ -1,12 +1,12 @@
 import HomeSection from "./HomeSection.tsx";
 import { news } from "../../data/news.ts";
+import { sanitizeRichText } from "../../lib/sanitize.ts";
 
 export default function HomeNews() {
   const featured = news.slice(0, 3);
 
   return (
     <HomeSection
-      eyebrow="News"
       title="News"
       viewAllHref="/news"
       viewAllLabel={`All ${news.length} updates`}
@@ -22,7 +22,10 @@ export default function HomeNews() {
               })}
             </time>
             <h3 className="mt-1 text-h3 text-text-primary">{item.title}</h3>
-            <p className="mt-2 text-small text-text-secondary">{item.description}</p>
+            <div
+              className="mt-2 text-small text-text-secondary [&_a]:text-accent [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-5 [&_p+p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5"
+              dangerouslySetInnerHTML={{ __html: sanitizeRichText(item.description) }}
+            />
           </div>
         ))}
       </div>

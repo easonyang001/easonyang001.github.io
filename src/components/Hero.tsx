@@ -56,12 +56,11 @@ export default function Hero() {
         className="absolute left-0 top-[55%] w-full -translate-y-1/2 px-6 md:px-12"
       >
         <div className="mx-auto max-w-content">
-          <div className="eyebrow">
-            <span className="eyebrow-rule" />
-            Independent Research Institute
-          </div>
+          <p className="eyebrow">
+            EST. {site.foundedYear} &middot; {site.location}
+          </p>
 
-          <h1 className="mt-6 max-w-[800px] text-display text-text-primary md:text-display-lg">
+          <h1 className="mt-4 max-w-[800px] text-display text-text-primary md:text-display-lg">
             {site.name}
           </h1>
 

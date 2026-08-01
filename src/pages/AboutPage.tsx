@@ -5,7 +5,7 @@ export default function AboutPage() {
   const founder = people[0];
 
   return (
-    <PageShell eyebrow="About" title="About the Institute">
+    <PageShell title="About the Institute">
       <p className="max-w-prose text-body-lg text-text-secondary">
         Mrama Institute for Quantum Information and Intelligence is an independent research
         initiative dedicated to advancing quantum information science, quantum machine learning,

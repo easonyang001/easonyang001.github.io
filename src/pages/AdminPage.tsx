@@ -49,11 +49,7 @@ function LoginForm({
   return (
     <div className="section-container border-t border-border">
       <div className="max-w-prose">
-        <div className="eyebrow">
-          <span className="eyebrow-rule" />
-          <span>Admin</span>
-        </div>
-        <h1 className="mt-4 text-h2 text-text-primary">Sign In</h1>
+        <h1 className="text-h2 text-text-primary">Sign In</h1>
         <p className="mt-4 text-small text-text-secondary">
           This area is restricted. Sign in with an admin account to continue.
         </p>
@@ -237,10 +233,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     <div className="section-container border-t border-border">
       <div className="max-w-prose">
         <div className="flex items-center justify-between">
-          <div className="eyebrow">
-            <span className="eyebrow-rule" />
-            <span>Admin</span>
-          </div>
+          <h1 className="text-h2 text-text-primary">Content Admin</h1>
           <button
             onClick={onLogout}
             className="text-small font-medium text-text-secondary transition-colors duration-150 hover:text-text-primary"
@@ -248,7 +241,6 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
             Log out
           </button>
         </div>
-        <h1 className="mt-4 text-h2 text-text-primary">Content Admin</h1>
         <p className="mt-4 font-mono text-mono-label uppercase text-text-muted">
           Every change opens a pull request. Nothing is ever written to main directly.
         </p>

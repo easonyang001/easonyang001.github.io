@@ -18,10 +18,7 @@ export default function ToolPageLayout({
   return (
     <div className="section-container border-t border-border">
       <div className="max-w-prose">
-        <div className="eyebrow">
-          <span className="eyebrow-rule" />
-          <span>{eyebrow}</span>
-        </div>
+        <p className="eyebrow">{eyebrow}</p>
         <h1 className="mt-4 text-h2 text-text-primary">{title}</h1>
         {description}
       </div>

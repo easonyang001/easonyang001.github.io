@@ -3,8 +3,10 @@ import PageShell from "../../components/PageShell.tsx";
 import { education } from "../../data/education.ts";
 
 export default function EducationPage() {
+  const count = education.length;
+
   return (
-    <PageShell eyebrow="Education" title="Education">
+    <PageShell eyebrow={`${count} ${count === 1 ? "Lesson" : "Lessons"}`} title="Education">
       {education.length === 0 ? (
         <p className="text-body-lg text-text-secondary">
           Lessons are in development. Check back soon.
