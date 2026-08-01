@@ -407,12 +407,11 @@ accident. Never invent a DOI, a venue name, or a citation count.
 
 # Brand Assets
 
-`public/brand/logo.png` — liquid chrome 3D "MRAMA" wordmark on a near-black
-background. This is the site's only logo mark; do not reintroduce a text-only
-or vector wordmark in the navbar or footer. The image background is solid dark
-rather than transparent, which blends with the theme. If a
-transparent-background or square-crop variant is produced later, replace
-`logo.png` in place and both navbar and footer pick it up automatically.
+`public/brand/logo.png` — liquid chrome 3D "MRAMA" wordmark, transparent
+background (RGBA). This is the site's only logo mark; do not reintroduce a
+text-only or vector wordmark in the navbar or footer. If a new render is
+produced later, replace `logo.png` in place and both navbar and footer pick
+it up automatically — keep it transparent, not a solid-color background.
 
 ---
 
