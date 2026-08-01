@@ -9,6 +9,14 @@ export default function ResearchPage() {
       title="Research Areas"
       description="Core disciplines that define our research program, from foundational quantum information theory to applied intelligent optimization."
       resultCount={researchAreas.length}
+      filters={
+        <Link
+          to="/projects"
+          className="inline-block text-small font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
+        >
+          Applied Projects &rarr;
+        </Link>
+      }
     >
       <ul className="divide-y divide-border border-t border-border">
         {researchAreas.map((area) => {

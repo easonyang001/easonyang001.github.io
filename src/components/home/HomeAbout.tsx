@@ -2,7 +2,7 @@ import HomeSection from "./HomeSection.tsx";
 
 export default function HomeAbout() {
   return (
-    <HomeSection eyebrow="About" title="About the Institute">
+    <HomeSection eyebrow="About" title="About the Institute" viewAllHref="/about" viewAllLabel="Full story">
       <p className="max-w-prose text-body-lg text-text-secondary">
         Mrama Institute for Quantum Information and Intelligence is an independent research
         initiative dedicated to advancing quantum information science, quantum machine learning,

@@ -10,14 +10,11 @@ interface NavLink {
 }
 
 const links: NavLink[] = [
-  { label: "Home", href: "/" },
   { label: "Research", href: "/research" },
-  { label: "Projects", href: "/projects" },
-  { label: "Publications", href: "/publications" },
-  { label: "People", href: "/people" },
-  { label: "News", href: "/news" },
-  { label: "Digest", href: "/digest" },
   { label: "Lab", href: "/lab" },
+  { label: "Publications", href: "/publications" },
+  { label: "About", href: "/about" },
+  { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./layouts/Layout.tsx";
 
 const HomePage = lazy(() => import("./pages/HomePage.tsx"));
+const AboutPage = lazy(() => import("./pages/AboutPage.tsx"));
 const ResearchPage = lazy(() => import("./pages/research/ResearchPage.tsx"));
 const ResearchDetailPage = lazy(() => import("./pages/research/ResearchDetailPage.tsx"));
 const ProjectsPage = lazy(() => import("./pages/projects/ProjectsPage.tsx"));
@@ -22,6 +23,7 @@ const CircuitPage = lazy(() => import("./pages/lab/CircuitPage.tsx"));
 const VQCPage = lazy(() => import("./pages/lab/VQCPage.tsx"));
 const VQEH2Page = lazy(() => import("./pages/lab/VQEH2Page.tsx"));
 const LabToolPage = lazy(() => import("./pages/lab/LabToolPage.tsx"));
+const AdminPage = lazy(() => import("./pages/AdminPage.tsx"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage.tsx"));
 
 export default function App() {
@@ -31,6 +33,7 @@ export default function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="about" element={<AboutPage />} />
             <Route path="research" element={<ResearchPage />} />
             <Route path="research/:slug" element={<ResearchDetailPage />} />
             <Route path="projects" element={<ProjectsPage />} />
@@ -50,6 +53,7 @@ export default function App() {
             <Route path="lab/vqc" element={<VQCPage />} />
             <Route path="lab/vqe-h2" element={<VQEH2Page />} />
             <Route path="lab/:toolSlug" element={<LabToolPage />} />
+            <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
