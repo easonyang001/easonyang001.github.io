@@ -39,7 +39,6 @@ export default {
         sans: ["Inter", "system-ui", "sans-serif"],
         display: ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "monospace"],
-        "sans-tc": ['"Noto Sans TC"', "sans-serif"],
       },
       fontSize: {
         display: ["44px", { lineHeight: "0.95", letterSpacing: "-0.035em", fontWeight: "500" }],
