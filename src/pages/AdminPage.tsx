@@ -3,6 +3,7 @@ import { Segmented, SegmentedButton } from "../components/Segmented.tsx";
 import { ADMIN_ENTITIES, type AdminItem, type FieldConfig } from "../lib/admin/dataFiles.ts";
 import { getFile, publishFileChange, verifyToken, type GitHubConfig } from "../lib/admin/github.ts";
 import { useAuth } from "../lib/auth/useAuth.ts";
+import RichTextEditor from "../components/admin/RichTextEditor.tsx";
 
 const OWNER = "easonyang001";
 const REPO = "easonyang001.github.io";
@@ -356,7 +357,17 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
               {entity.fields.map((field) => (
                 <div key={field.key}>
                   <label className="mb-1 block text-small text-text-secondary">{field.label}</label>
-                  {field.type === "textarea" ? (
+                  {field.type === "richtext" ? (
+                    <RichTextEditor
+                      value={fieldValueToText(formValues[field.key])}
+                      onChange={(html) =>
+                        setFormValues({
+                          ...formValues,
+                          [field.key]: html,
+                        })
+                      }
+                    />
+                  ) : field.type === "textarea" ? (
                     <textarea
                       rows={4}
                       value={fieldValueToText(formValues[field.key])}

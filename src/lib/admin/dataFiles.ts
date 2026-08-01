@@ -1,6 +1,6 @@
 export type AdminItem = Record<string, string | string[] | null>;
 
-export type FieldType = "text" | "textarea" | "tags" | "nullable-url" | "select";
+export type FieldType = "text" | "textarea" | "richtext" | "tags" | "nullable-url" | "select";
 
 export interface FieldConfig {
   key: string;
@@ -73,7 +73,7 @@ const newsConfig: AdminEntityConfig = {
     { key: "slug", label: "Slug", type: "text" },
     { key: "date", label: "Date (YYYY-MM-DD)", type: "text" },
     { key: "title", label: "Title", type: "text" },
-    { key: "description", label: "Description", type: "textarea" },
+    { key: "description", label: "Description", type: "richtext" },
   ],
   emptyItem: () => ({ slug: "", date: "", title: "", description: "" }),
   parse: (source) => parseArrayLiteral(extractArrayLiteral(source, "news")),
@@ -181,7 +181,7 @@ const publicationsConfig: AdminEntityConfig = {
       type: "select",
       options: ["Published", "Preprint"],
     },
-    { key: "abstract", label: "Abstract", type: "textarea" },
+    { key: "abstract", label: "Abstract", type: "richtext" },
     { key: "pdfUrl", label: "PDF URL", type: "nullable-url" },
     { key: "doiUrl", label: "DOI URL", type: "nullable-url" },
     { key: "codeUrl", label: "Code URL", type: "nullable-url" },

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ListPageLayout from "../components/ListPageLayout.tsx";
 import EmptyState from "../components/EmptyState.tsx";
 import { news } from "../data/news.ts";
+import { sanitizeRichText } from "../lib/sanitize.ts";
 
 export default function NewsPage() {
   const [query, setQuery] = useState("");
@@ -54,7 +55,10 @@ export default function NewsPage() {
                 })}
               </time>
               <h2 className="mt-1 text-h3 text-text-primary">{item.title}</h2>
-              <p className="mt-2 text-small text-text-secondary">{item.description}</p>
+              <div
+                className="mt-2 text-small text-text-secondary [&_a]:text-accent [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-5 [&_p+p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5"
+                dangerouslySetInnerHTML={{ __html: sanitizeRichText(item.description) }}
+              />
             </div>
           ))}
         </div>
