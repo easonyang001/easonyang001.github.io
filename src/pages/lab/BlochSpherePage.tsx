@@ -39,7 +39,6 @@ export default function BlochSpherePage() {
 
   return (
     <ToolPageLayout
-      eyebrow="1 Qubit · Bloch Sphere"
       title="Bloch Sphere"
       description={
         <p className="mt-2 text-small text-text-secondary">

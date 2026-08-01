@@ -49,7 +49,6 @@ export default function VQEH2Page() {
 
   return (
     <ToolPageLayout
-      eyebrow="2 Qubits · H₂ Molecule"
       title="H₂ Ground State (VQE)"
       description={
         <>

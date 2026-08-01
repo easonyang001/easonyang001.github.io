@@ -3,10 +3,8 @@ import PageShell from "../../components/PageShell.tsx";
 import { people } from "../../data/people.ts";
 
 export default function PeoplePage() {
-  const count = people.length;
-
   return (
-    <PageShell eyebrow={`${count} ${count === 1 ? "Member" : "Members"}`} title="People">
+    <PageShell title="People">
       <div className="flex flex-wrap gap-6">
         {people.map((person) => (
           <Link key={person.slug} to={`/people/${person.slug}`} className="glass-card w-full max-w-xs p-8">

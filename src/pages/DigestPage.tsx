@@ -28,17 +28,8 @@ export default function DigestPage() {
 
   const totalPapers = filteredWeeks.reduce((sum, w) => sum + w.papers.length, 0);
 
-  const eyebrow = useMemo(() => {
-    const paperCount = digestWeeks.reduce((sum, w) => sum + w.papers.length, 0);
-    const weekCount = digestWeeks.length;
-    return `${paperCount} ${paperCount === 1 ? "Paper" : "Papers"} · ${weekCount} ${
-      weekCount === 1 ? "Week" : "Weeks"
-    }`;
-  }, []);
-
   return (
     <ListPageLayout
-      eyebrow={eyebrow}
       title="arXiv Digest"
       description="Automated arXiv listing, curated weekly. Summaries, where present, are written and reviewed by hand."
       resultCount={totalPapers}

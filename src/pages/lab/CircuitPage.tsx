@@ -82,7 +82,6 @@ export default function CircuitPage() {
 
   return (
     <ToolPageLayout
-      eyebrow="1–4 Qubits · Statevector Simulation"
       title="Circuit Playground"
       description={
         <p className="mt-2 text-small text-text-secondary">

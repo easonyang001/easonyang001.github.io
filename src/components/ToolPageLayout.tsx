@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 interface ToolPageLayoutProps {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description?: ReactNode;
   panel: ReactNode;
@@ -18,8 +18,8 @@ export default function ToolPageLayout({
   return (
     <div className="section-container border-t border-border">
       <div className="max-w-prose">
-        <p className="eyebrow">{eyebrow}</p>
-        <h1 className="mt-4 text-h2 text-text-primary">{title}</h1>
+        {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+        <h1 className={`${eyebrow ? "mt-4" : ""} text-h2 text-text-primary`}>{title}</h1>
         {description}
       </div>
 
