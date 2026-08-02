@@ -24,6 +24,8 @@ const VQCPage = lazy(() => import("./pages/lab/VQCPage.tsx"));
 const VQEH2Page = lazy(() => import("./pages/lab/VQEH2Page.tsx"));
 const LabToolPage = lazy(() => import("./pages/lab/LabToolPage.tsx"));
 const AdminPage = lazy(() => import("./pages/AdminPage.tsx"));
+const SolutionsPage = lazy(() => import("./pages/solutions/SolutionsPage.tsx"));
+const SolutionDetailPage = lazy(() => import("./pages/solutions/SolutionDetailPage.tsx"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage.tsx"));
 
 export default function App() {
@@ -54,6 +56,8 @@ export default function App() {
             <Route path="lab/vqe-h2" element={<VQEH2Page />} />
             <Route path="lab/:toolSlug" element={<LabToolPage />} />
             <Route path="admin" element={<AdminPage />} />
+            <Route path="solutions" element={<SolutionsPage />} />
+            <Route path="solutions/:slug" element={<SolutionDetailPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>

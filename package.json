@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build && node scripts/copy-404.mjs",
     "preview": "vite preview",
     "test": "vitest run",
-    "digest": "tsx scripts/fetch-arxiv.ts"
+    "digest": "tsx scripts/fetch-arxiv.ts",
+    "types:case": "json2ts contract/schema/case.v1.schema.json -o src/types/case.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
@@ -17,6 +18,7 @@
     "@tiptap/react": "^3.29.2",
     "@tiptap/starter-kit": "^3.29.2",
     "@types/dompurify": "^3.0.5",
+    "ajv-formats": "^3.0.1",
     "dompurify": "^3.4.12",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.400.0",
@@ -31,9 +33,11 @@
     "@types/react-dom": "^18.3.7",
     "@types/three": "^0.185.1",
     "@vitejs/plugin-react": "^4.3.1",
+    "ajv": "^8.20.0",
     "autoprefixer": "^10.4.19",
     "fast-xml-parser": "^5.10.1",
     "jsdom": "^30.0.1",
+    "json-schema-to-typescript": "^15.0.4",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.23.1",
