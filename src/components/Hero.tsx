@@ -100,7 +100,7 @@ export default function Hero() {
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Link
-              to="/projects"
+              to="/solutions"
               className="rounded-md bg-accent px-8 py-3 text-small font-medium text-text-primary transition-colors duration-150 hover:bg-accent-hover"
             >
               Solutions
