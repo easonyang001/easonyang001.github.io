@@ -13,7 +13,7 @@ export default function AboutPage() {
       </p>
 
       <div className="glass-card mt-8 max-w-prose p-8">
-        <p className="font-mono text-mono-label uppercase text-accent">Mission</p>
+        <p className="font-mono text-mono-label uppercase text-text-muted">Mission</p>
         <p className="mt-4 text-body-lg text-text-primary">
           Bridge theoretical research with practical engineering applications.
         </p>

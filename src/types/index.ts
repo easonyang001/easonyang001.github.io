@@ -5,6 +5,7 @@ export interface SiteConfig {
   shortName: string;
   tagline: string;
   description: string;
+  aboutBlurb: string;
   foundedYear: number;
   email: string | null;
   githubUrl: string | null;

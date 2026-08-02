@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SimpleBlochSphere from "./SimpleBlochSphere.tsx";
 import IntroOverlay from "./IntroOverlay.tsx";
@@ -22,7 +23,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="home" className="hero-portrait relative isolate min-h-screen overflow-hidden bg-background">
+    <section
+      id="home"
+      className="hero-portrait relative isolate flex min-h-screen flex-col justify-center overflow-x-hidden bg-background pt-[120px] pb-16 md:pt-[136px] md:pb-24"
+    >
       {/*
         Portrait background layer. Scoped to this component (not index.css) so the
         shared stylesheet and tailwind.config.js stay untouched, per spec.
@@ -81,26 +85,26 @@ export default function Hero() {
         initial={{ opacity: 0, y: 16 }}
         animate={heroRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="absolute left-0 top-[55%] w-full -translate-y-1/2 px-6 md:px-12"
+        className="relative w-full px-6 md:px-12"
       >
         <div className="mx-auto max-w-content">
           <h1 className="max-w-[800px] text-display text-text-primary md:text-display-lg">
             {site.name}
           </h1>
 
-          <p className="mt-4 max-w-[800px] text-body-lg font-medium text-accent md:text-body-lg-lg">
+          <p className="mt-4 max-w-[800px] text-[26px] font-normal text-text-primary">
             {site.tagline}
           </p>
 
           <p className="mt-8 max-w-[500px] text-body-lg text-text-secondary">{site.description}</p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <a
-              href="#research"
+            <Link
+              to="/projects"
               className="rounded-md bg-accent px-8 py-3 text-small font-medium text-text-primary transition-colors duration-150 hover:bg-accent-hover"
             >
-              Explore Research
-            </a>
+              Solutions
+            </Link>
             <a
               href="#publications"
               className="rounded-md border border-border px-8 py-3 text-small font-medium text-text-primary transition-colors duration-150 hover:border-border-strong"
