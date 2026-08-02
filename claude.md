@@ -63,6 +63,15 @@ git push
 
 ---
 
+# Admin System
+
+The `/admin` login + content-management backend is a separate service from
+the static site. Its architecture, security constraints, and required env
+vars are documented in [docs/architecture/admin.md](docs/architecture/admin.md) — read it before touching
+any admin-related code.
+
+---
+
 # Technology Stack
 
 - React
