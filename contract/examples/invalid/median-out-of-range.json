@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "invalid-median-out-of-range",
+    "title": "Invalid: reliability median out of range",
+    "date": "2026-01-01",
+    "status": "draft",
+    "oneLiner": "Should be rejected: median must lie within [min, max]."
+  },
+  "problem": {
+    "summary": "Placeholder.",
+    "objective": "Placeholder.",
+    "scale": { "numVariables": 10, "description": "Placeholder." }
+  },
+  "improvement": {
+    "primary": {
+      "name": "Metric", "unit": "%", "baseline": 50, "achieved": 75,
+      "higherIsBetter": true, "baselineSource": "Placeholder."
+    }
+  },
+  "approach": {
+    "chosen": { "name": "Solver", "kind": "classical", "rationale": "Placeholder." }
+  },
+  "reliability": {
+    "numRuns": 3,
+    "values": [80.0, 81.0, 82.0],
+    "median": 95.0,
+    "min": 80.0,
+    "max": 82.0
+  },
+  "reproduce": { "repository": null, "commit": "0000000" }
+}

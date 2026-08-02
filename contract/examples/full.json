@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "example-full-case",
+    "title": "[EXAMPLE] AED Placement Optimization",
+    "date": "2026-08-15",
+    "status": "published",
+    "visibility": "internal",
+    "oneLiner": "Illustrative fixture covering every optional field and figure type in schema v1.",
+    "domain": "facility-location",
+    "tags": ["optimization", "example"]
+  },
+  "problem": {
+    "summary": "Illustrative problem used only to exercise every field the schema supports. Not a real deployment.",
+    "objective": "Maximize simulated population coverage within a 5-minute response radius.",
+    "scale": {
+      "numVariables": 120,
+      "description": "120 candidate sites, 8400 synthetic demand points."
+    },
+    "currentApproach": "Manual placement by a planning committee, revisited annually.",
+    "constraints": ["Budget caps total site count at 120.", "At least one site per district."],
+    "formulation": "QUBO",
+    "objectiveLatex": "\\max \\sum_i c_i x_i"
+  },
+  "improvement": {
+    "primary": {
+      "name": "5-minute reachability",
+      "unit": "%",
+      "baseline": 61.2,
+      "achieved": 87.4,
+      "higherIsBetter": true,
+      "baselineSource": "Simulated current configuration, synthetic 2026-03 dataset."
+    },
+    "secondary": [
+      {
+        "name": "Average response time",
+        "unit": "min",
+        "baseline": 6.8,
+        "achieved": 4.1,
+        "higherIsBetter": false,
+        "baselineSource": "Simulated current configuration, synthetic 2026-03 dataset."
+      }
+    ]
+  },
+  "approach": {
+    "chosen": {
+      "name": "GPU Simulated Annealing",
+      "kind": "classical",
+      "rationale": "Chosen for fast iteration during the design phase; revisits candidate placements in seconds rather than the ~1 hour a commercial MILP solver needed at this scale.",
+      "parameters": { "iterations": 50000, "replicas": 128 },
+      "hardware": "1x RTX 4090"
+    },
+    "alternatives": [
+      { "name": "Gurobi", "kind": "classical", "whyNot": "3600s to converge to the reported gap; too slow for interactive exploration." }
+    ]
+  },
+  "reliability": {
+    "numRuns": 30,
+    "values": [84.2, 86.1, 86.1, 86.1, 86.1, 86.1, 86.2, 86.2, 86.2, 86.3, 86.3, 86.4, 86.6, 86.6, 86.6, 86.7, 86.8, 86.8, 86.9, 87.0, 87.1, 87.2, 87.3, 87.3, 87.6, 87.7, 87.7, 87.9, 88.0, 88.0],
+    "median": 86.65,
+    "min": 84.2,
+    "max": 88.0,
+    "successThreshold": 85.0,
+    "successRate": 0.93
+  },
+  "optimality": {
+    "boundValue": -1863.44,
+    "boundSource": "Gurobi 11.0.1, 3600s, gap 0.67%.",
+    "achievedValue": -1847.23,
+    "gapPercent": 0.87,
+    "interpretation": "Within 1% of the theoretical bound; further compute has limited marginal benefit."
+  },
+  "performance": {
+    "solveTimeSeconds": 12.4,
+    "baselineTime": "Manual planning takes roughly 2 weeks.",
+    "workUnits": { "metric": "objective_evaluations", "value": 4200000 },
+    "note": null
+  },
+  "value": {
+    "items": [
+      {
+        "label": "Illustrative avoided cost",
+        "unitValue": 28000,
+        "unitLabel": "currency/site/year",
+        "quantity": 120,
+        "quantityLabel": "sites",
+        "annualValue": 3360000,
+        "assumption": "Illustrative figure for schema testing only, not a real cost model.",
+        "confidence": "illustrative"
+      }
+    ],
+    "currency": "TWD",
+    "qualitative": ["Faster iteration on candidate configurations during planning review."],
+    "caveat": "Internal estimate for schema-testing purposes; not independently verified."
+  },
+  "figures": [
+    {
+      "type": "series",
+      "heading": "Convergence",
+      "caption": null,
+      "xLabel": "Iteration",
+      "yLabel": "Energy",
+      "xScale": "linear",
+      "yScale": "linear",
+      "series": [
+        { "label": "Best", "emphasis": true, "data": [[0, -120.5], [100, -890.2], [200, -1847.2]] }
+      ],
+      "annotations": []
+    },
+    {
+      "type": "points",
+      "heading": "Coverage",
+      "bounds": { "xMin": 0, "xMax": 100, "yMin": 0, "yMax": 100 },
+      "layers": [
+        { "label": "Demand", "role": "muted", "points": [[12.3, 45.1], [30.2, 60.5]] },
+        { "label": "Selected", "role": "emphasis", "points": [[10, 40]], "radius": 8.5 }
+      ],
+      "isSynthetic": true
+    },
+    {
+      "type": "matrix",
+      "heading": "Parameter sweep",
+      "xLabel": "penalty",
+      "yLabel": "T0",
+      "xValues": [100, 150, 200],
+      "yValues": [1.0, 5.0, 10.0],
+      "values": [[-1801.2, -1832.5, -1847.2], [-1790.1, -1820.4, -1840.0], [-1780.5, -1810.2, -1830.8]],
+      "valueLabel": "Best Energy",
+      "highlightBest": true
+    },
+    {
+      "type": "bars",
+      "heading": "Solver comparison",
+      "metricLabel": "Coverage",
+      "higherIsBetter": true,
+      "items": [
+        { "label": "Greedy", "value": 0.8121, "emphasis": false, "distribution": null },
+        { "label": "GPU SA", "value": 0.8734, "emphasis": true, "distribution": [0.871, 0.868, 0.879] }
+      ]
+    },
+    {
+      "type": "table",
+      "heading": "Site detail",
+      "columns": ["Site", "Coverage"],
+      "rows": [["A-14", 23], ["B-02", 18]],
+      "numericColumns": [1]
+    },
+    {
+      "type": "beforeAfter",
+      "heading": "Configuration comparison",
+      "before": { "label": "Current", "figure": { "type": "points", "bounds": { "xMin": 0, "xMax": 100, "yMin": 0, "yMax": 100 }, "layers": [{ "label": "Sites", "role": "muted", "points": [[20, 20]] }] } },
+      "after": { "label": "Optimized", "figure": { "type": "points", "bounds": { "xMin": 0, "xMax": 100, "yMin": 0, "yMax": 100 }, "layers": [{ "label": "Sites", "role": "emphasis", "points": [[10, 40]] }] } }
+    },
+    {
+      "type": "image",
+      "heading": "Map overview",
+      "src": "figures/map.png",
+      "alt": "Illustrative map of candidate and selected sites over a synthetic service area.",
+      "sourceData": "map-points.csv"
+    },
+    {
+      "type": "note",
+      "heading": "Implementation notes",
+      "markdown": "Penalty weights were tuned by grid search; see `parameters` for the final values."
+    }
+  ],
+  "downloads": [
+    { "label": "Solution (CSV)", "file": "solution.csv" }
+  ],
+  "reproduce": {
+    "repository": "https://github.com/example/example-repo",
+    "commit": "a3f9c21",
+    "command": "python experiment/aed.py --config configs/example.yaml",
+    "dataSource": "synthetic",
+    "dataNote": "Fully synthetic data; does not correspond to any real jurisdiction.",
+    "environment": { "python": "3.11.4" }
+  },
+  "notes": {
+    "whatWorked": "GPU batching across replicas gave a large wall-clock speedup over sequential runs.",
+    "whatDidnt": "Early penalty weights were too aggressive and collapsed the search early.",
+    "gotchas": ["Coordinate normalization must happen before penalty scaling, not after."],
+    "nextTime": "Start the parameter sweep earlier in the process.",
+    "timeSpentHours": 18
+  }
+}

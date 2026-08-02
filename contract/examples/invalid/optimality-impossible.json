@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "invalid-optimality-impossible",
+    "title": "Invalid: achieved value beats the theoretical bound",
+    "date": "2026-01-01",
+    "status": "draft",
+    "oneLiner": "Should be rejected: achievedValue cannot be better than boundValue."
+  },
+  "problem": {
+    "summary": "Placeholder.",
+    "objective": "Placeholder.",
+    "scale": { "numVariables": 10, "description": "Placeholder." }
+  },
+  "improvement": {
+    "primary": {
+      "name": "Metric", "unit": "%", "baseline": 50, "achieved": 75,
+      "higherIsBetter": true, "baselineSource": "Placeholder."
+    }
+  },
+  "approach": {
+    "chosen": { "name": "Solver", "kind": "classical", "rationale": "Placeholder." }
+  },
+  "optimality": {
+    "boundValue": -1863.44,
+    "boundSource": "Placeholder solver bound.",
+    "achievedValue": -1900.0,
+    "gapPercent": null,
+    "interpretation": null
+  },
+  "reproduce": { "repository": null, "commit": "0000000" }
+}

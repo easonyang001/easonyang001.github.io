@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "minimal-example",
+    "title": "Minimal Example Case",
+    "date": "2026-01-01",
+    "status": "draft",
+    "oneLiner": "The smallest case that still validates."
+  },
+  "problem": {
+    "summary": "A placeholder problem used only to exercise the schema's required fields.",
+    "objective": "Minimize a placeholder objective function.",
+    "scale": {
+      "numVariables": 10,
+      "description": "10 decision variables."
+    }
+  },
+  "improvement": {
+    "primary": {
+      "name": "Placeholder metric",
+      "unit": "%",
+      "baseline": 50.0,
+      "achieved": 75.0,
+      "higherIsBetter": true,
+      "baselineSource": "Placeholder baseline for schema testing."
+    }
+  },
+  "approach": {
+    "chosen": {
+      "name": "Placeholder Solver",
+      "kind": "classical",
+      "rationale": "Chosen because this is a minimal example, not a real case."
+    }
+  },
+  "reproduce": {
+    "repository": null,
+    "commit": "0000000"
+  }
+}

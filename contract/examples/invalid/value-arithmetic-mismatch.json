@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "invalid-value-arithmetic-mismatch",
+    "title": "Invalid: value item arithmetic mismatch",
+    "date": "2026-01-01",
+    "status": "draft",
+    "oneLiner": "Should be rejected: unitValue * quantity must equal annualValue within 1%."
+  },
+  "problem": {
+    "summary": "Placeholder.",
+    "objective": "Placeholder.",
+    "scale": { "numVariables": 10, "description": "Placeholder." }
+  },
+  "improvement": {
+    "primary": {
+      "name": "Metric", "unit": "%", "baseline": 50, "achieved": 75,
+      "higherIsBetter": true, "baselineSource": "Placeholder."
+    }
+  },
+  "approach": {
+    "chosen": { "name": "Solver", "kind": "classical", "rationale": "Placeholder." }
+  },
+  "value": {
+    "items": [
+      {
+        "label": "Mismatched item",
+        "unitValue": 1000,
+        "unitLabel": "currency/unit",
+        "quantity": 10,
+        "quantityLabel": "units",
+        "annualValue": 50000,
+        "assumption": null,
+        "confidence": "estimated"
+      }
+    ]
+  },
+  "reproduce": { "repository": null, "commit": "0000000" }
+}

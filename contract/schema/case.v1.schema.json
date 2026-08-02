@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrama.org/contract/schema/case.v1.schema.json",
+  "title": "Mrama Case (schema v1)",
+  "type": "object",
+  "required": ["schemaVersion", "meta", "problem", "improvement", "approach", "reproduce"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+
+    "meta": {
+      "type": "object",
+      "required": ["slug", "title", "date", "status", "oneLiner"],
+      "additionalProperties": false,
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "title": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "status": { "enum": ["draft", "published"] },
+        "visibility": { "enum": ["internal", "public"], "default": "internal" },
+        "oneLiner": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "domain": { "type": ["string", "null"] },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "problem": {
+      "type": "object",
+      "required": ["summary", "objective", "scale"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "objective": { "type": "string", "minLength": 1 },
+        "scale": {
+          "type": "object",
+          "required": ["numVariables", "description"],
+          "additionalProperties": false,
+          "properties": {
+            "numVariables": { "type": "number" },
+            "description": { "type": "string", "minLength": 1 }
+          }
+        },
+        "currentApproach": { "type": ["string", "null"] },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "formulation": { "type": ["string", "null"] },
+        "objectiveLatex": { "type": ["string", "null"] }
+      }
+    },
+
+    "improvement": {
+      "type": "object",
+      "required": ["primary"],
+      "additionalProperties": false,
+      "properties": {
+        "primary": { "$ref": "#/$defs/metricEntry" },
+        "secondary": { "type": "array", "items": { "$ref": "#/$defs/metricEntry" } }
+      }
+    },
+
+    "approach": {
+      "type": "object",
+      "required": ["chosen"],
+      "additionalProperties": false,
+      "properties": {
+        "chosen": {
+          "type": "object",
+          "required": ["name", "kind", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "kind": {
+              "enum": ["classical", "quantum_inspired", "quantum_simulated", "quantum_hardware", "hybrid"]
+            },
+            "rationale": { "type": "string", "minLength": 1 },
+            "parameters": { "type": "object" },
+            "hardware": { "type": ["string", "null"] }
+          }
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "kind", "whyNot"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "kind": {
+                "enum": ["classical", "quantum_inspired", "quantum_simulated", "quantum_hardware", "hybrid"]
+              },
+              "whyNot": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+
+    "reliability": {
+      "type": "object",
+      "required": ["numRuns", "values", "median", "min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "numRuns": { "type": "integer", "minimum": 1 },
+        "values": { "type": "array", "items": { "type": "number" } },
+        "median": { "type": "number" },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "successThreshold": { "type": ["number", "null"] },
+        "successRate": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "optimality": {
+      "type": "object",
+      "required": ["boundValue", "boundSource", "achievedValue"],
+      "additionalProperties": false,
+      "properties": {
+        "boundValue": { "type": "number" },
+        "boundSource": { "type": "string", "minLength": 1 },
+        "achievedValue": { "type": "number" },
+        "gapPercent": { "type": ["number", "null"] },
+        "interpretation": { "type": ["string", "null"] }
+      }
+    },
+
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "solveTimeSeconds": { "type": ["number", "null"] },
+        "baselineTime": { "type": ["string", "null"] },
+        "workUnits": {
+          "type": ["object", "null"],
+          "required": ["metric", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "metric": { "type": "string" },
+            "value": { "type": "number" }
+          }
+        },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+
+    "value": {
+      "type": "object",
+      "required": ["items"],
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "unitValue", "unitLabel", "quantity", "quantityLabel", "annualValue", "confidence"],
+            "additionalProperties": false,
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "unitValue": { "type": "number" },
+              "unitLabel": { "type": "string" },
+              "quantity": { "type": "number" },
+              "quantityLabel": { "type": "string" },
+              "annualValue": { "type": "number" },
+              "assumption": { "type": ["string", "null"] },
+              "confidence": { "enum": ["measured", "estimated", "illustrative"] }
+            }
+          }
+        },
+        "currency": { "type": ["string", "null"] },
+        "qualitative": { "type": "array", "items": { "type": "string" } },
+        "caveat": { "type": ["string", "null"] }
+      }
+    },
+
+    "figures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string" },
+          "heading": { "type": ["string", "null"] },
+          "caption": { "type": ["string", "null"] }
+        },
+        "if": { "properties": { "type": { "const": "image" } } },
+        "then": {
+          "required": ["type", "src", "alt", "sourceData"],
+          "properties": {
+            "src": { "type": "string", "minLength": 1 },
+            "alt": { "type": "string", "minLength": 1 },
+            "sourceData": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+
+    "downloads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "file"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "file": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+
+    "reproduce": {
+      "type": "object",
+      "required": ["commit"],
+      "additionalProperties": false,
+      "properties": {
+        "repository": { "type": ["string", "null"] },
+        "commit": { "type": "string", "minLength": 1 },
+        "command": { "type": ["string", "null"] },
+        "dataSource": { "enum": ["synthetic", "public", "client", null] },
+        "dataNote": { "type": ["string", "null"] },
+        "environment": { "type": ["object", "null"] }
+      }
+    },
+
+    "notes": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "whatWorked": { "type": ["string", "null"] },
+        "whatDidnt": { "type": ["string", "null"] },
+        "gotchas": { "type": "array", "items": { "type": "string" } },
+        "nextTime": { "type": ["string", "null"] },
+        "timeSpentHours": { "type": ["number", "null"] }
+      }
+    }
+  },
+
+  "if": {
+    "properties": { "meta": { "properties": { "visibility": { "const": "public" } } } }
+  },
+  "then": {
+    "properties": { "notes": { "const": null } }
+  },
+
+  "$defs": {
+    "metricEntry": {
+      "type": "object",
+      "required": ["name", "unit", "baseline", "achieved", "higherIsBetter", "baselineSource"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "unit": { "type": "string" },
+        "baseline": { "type": "number" },
+        "achieved": { "type": "number" },
+        "higherIsBetter": { "type": "boolean" },
+        "baselineSource": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

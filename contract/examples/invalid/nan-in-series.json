@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "invalid-nan-in-series",
+    "title": "Invalid: NaN value in series figure data",
+    "date": "2026-01-01",
+    "status": "draft",
+    "oneLiner": "Should be rejected: figures[].type=series data must not contain NaN or Infinity."
+  },
+  "problem": {
+    "summary": "Placeholder.",
+    "objective": "Placeholder.",
+    "scale": { "numVariables": 10, "description": "Placeholder." }
+  },
+  "improvement": {
+    "primary": {
+      "name": "Metric", "unit": "%", "baseline": 50, "achieved": 75,
+      "higherIsBetter": true, "baselineSource": "Placeholder."
+    }
+  },
+  "approach": {
+    "chosen": { "name": "Solver", "kind": "classical", "rationale": "Placeholder." }
+  },
+  "figures": [
+    {
+      "type": "series",
+      "heading": "Broken convergence",
+      "series": [
+        { "label": "Best", "emphasis": true, "data": [[0, -120.5], [100, NaN]] }
+      ]
+    }
+  ],
+  "reproduce": { "repository": null, "commit": "0000000" }
+}
