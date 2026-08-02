@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
 import { authRouter } from "./auth.js";
 
@@ -26,6 +26,16 @@ app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.use("/api", authRouter);
+
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (err instanceof Error && err.message === "Not allowed by CORS") {
+    res.status(403).json({ error: "Origin not allowed" });
+    return;
+  }
+  console.error(err);
+  res.status(500).json({ error: "Internal error" });
+};
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`mrama-admin-server listening on port ${port}`);
