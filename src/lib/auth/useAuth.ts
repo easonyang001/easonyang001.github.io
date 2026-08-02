@@ -8,15 +8,17 @@ export type AuthStatus = "checking" | "authenticated" | "anonymous";
 export function useAuth() {
   const [status, setStatus] = useState<AuthStatus>("checking");
   const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (!token) {
+    const stored = localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (!stored) {
       setStatus("anonymous");
       return;
     }
-    verifySession(token).then((valid) => {
+    verifySession(stored).then((valid) => {
       if (valid) {
+        setToken(stored);
         setStatus("authenticated");
       } else {
         localStorage.removeItem(TOKEN_STORAGE_KEY);
@@ -28,8 +30,9 @@ export function useAuth() {
   const login = useCallback(async (username: string, password: string) => {
     setError(null);
     try {
-      const token = await loginRequest(username, password);
-      localStorage.setItem(TOKEN_STORAGE_KEY, token);
+      const newToken = await loginRequest(username, password);
+      localStorage.setItem(TOKEN_STORAGE_KEY, newToken);
+      setToken(newToken);
       setStatus("authenticated");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -38,8 +41,9 @@ export function useAuth() {
 
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
+    setToken(null);
     setStatus("anonymous");
   }, []);
 
-  return { status, error, login, logout };
+  return { status, error, token, login, logout };
 }

@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
 import { authRouter } from "./auth.js";
+import { githubRouter } from "./routes/github.js";
 
 const app = express();
 const port = process.env.PORT ?? 3001;
@@ -26,6 +27,7 @@ app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.use("/api", authRouter);
+app.use("/api/github", githubRouter);
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof Error && err.message === "Not allowed by CORS") {
