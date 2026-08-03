@@ -4,6 +4,7 @@ import cors from "cors";
 import { authRouter } from "./auth.js";
 import { githubRouter } from "./routes/github.js";
 import { imagesRouter } from "./routes/images.js";
+import { contentRouter } from "./routes/content.js";
 
 const app = express();
 const port = process.env.PORT ?? 3001;
@@ -30,6 +31,7 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 app.use("/api", authRouter);
 app.use("/api/github", githubRouter);
 app.use("/api/images", imagesRouter);
+app.use("/api/content", contentRouter);
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof Error && err.message === "Not allowed by CORS") {

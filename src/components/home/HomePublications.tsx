@@ -16,7 +16,7 @@ export default function HomePublications() {
             <div className="flex flex-wrap items-center gap-3 font-mono text-mono-label uppercase text-text-muted">
               <span className="text-accent">{pub.year}</span>
               <span>&middot;</span>
-              <span>{pub.conference}</span>
+              <span>{pub.venue}</span>
             </div>
             <h3 className="mt-3 text-h3 text-text-primary">{pub.title}</h3>
           </div>

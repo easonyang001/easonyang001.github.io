@@ -11,12 +11,14 @@ export default function ProjectDetailPage() {
 
   const meta = [
     { label: "Status", value: project.status },
-    ...(project.tags.length > 0 ? [{ label: "Technologies", value: project.tags.join(", ") }] : []),
+    { label: "Year", value: String(project.year) },
+    ...(project.technologies.length > 0 ? [{ label: "Technologies", value: project.technologies.join(", ") }] : []),
+    ...(project.researchAreas.length > 0 ? [{ label: "Research Areas", value: project.researchAreas.join(", ") }] : []),
   ];
 
   return (
     <DetailPageLayout title={project.title} meta={meta}>
-      <p className="text-body-lg text-text-secondary">{project.description}</p>
+      <p className="text-body-lg text-text-secondary">{project.summary}</p>
 
       {project.readMoreUrl && (
         <a
