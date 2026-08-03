@@ -49,6 +49,7 @@ const PUB_STATUSES = ["Published", "Under Review", "Accepted", "Preprint"] as co
 interface ContentTypeSpec {
   table: string;
   idColumn: string;
+  titleColumn: string;
   filePath: string;
   writableFields: string[];
   validate: (body: Record<string, unknown>) => string[];
@@ -60,6 +61,7 @@ const SPECS: Record<string, ContentTypeSpec> = {
   news: {
     table: "content_news",
     idColumn: "news_id",
+    titleColumn: "title",
     filePath: "src/data/news.ts",
     writableFields: [
       "news_id",
@@ -94,6 +96,7 @@ const SPECS: Record<string, ContentTypeSpec> = {
   projects: {
     table: "content_projects",
     idColumn: "project_id",
+    titleColumn: "title",
     filePath: "src/data/projects.ts",
     writableFields: [
       "project_id",
@@ -124,6 +127,7 @@ const SPECS: Record<string, ContentTypeSpec> = {
   people: {
     table: "content_people",
     idColumn: "person_id",
+    titleColumn: "name",
     filePath: "src/data/people.ts",
     writableFields: [
       "person_id",
@@ -155,6 +159,7 @@ const SPECS: Record<string, ContentTypeSpec> = {
   publications: {
     table: "content_publications",
     idColumn: "pub_id",
+    titleColumn: "title",
     filePath: "src/data/publications.ts",
     writableFields: [
       "pub_id",
@@ -210,7 +215,7 @@ contentRouter.get("/:type/drafts", async (req, res) => {
   const spec = SPECS[req.params.type];
   const { data, error } = await supabase
     .from(spec.table)
-    .select(`id, status, ${spec.idColumn}, title, created_at, updated_at`)
+    .select(`id, status, ${spec.idColumn}, ${spec.titleColumn}, created_at, updated_at`)
     .order("created_at", { ascending: false });
 
   if (error) {
