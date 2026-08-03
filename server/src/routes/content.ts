@@ -142,6 +142,8 @@ const SPECS: Record<string, ContentTypeSpec> = {
       "scholar_url",
       "linkedin_url",
       "orcid",
+      "location_country",
+      "location_city",
     ],
     validate: (b) => {
       const errors: string[] = [];
@@ -150,6 +152,8 @@ const SPECS: Record<string, ContentTypeSpec> = {
       if (!isStringArray(b.roles)) errors.push("roles must be an array of strings");
       if (!isStringArray(b.research_interests)) errors.push("research_interests must be an array of strings");
       if (!isOptionalString(b.biography)) errors.push("biography must be a string");
+      if (!isOptionalString(b.location_country)) errors.push("location_country must be a string");
+      if (!isOptionalString(b.location_city)) errors.push("location_city must be a string");
       if (!isOptionalString(b.email)) errors.push("email must be a string");
       return errors;
     },

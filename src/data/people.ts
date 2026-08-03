@@ -20,5 +20,7 @@ export const people: Person[] = [
     scholarUrl: null,
     linkedinUrl: null,
     orcid: null,
+    locationCountry: "Taiwan",
+    locationCity: null,
   },
 ];
