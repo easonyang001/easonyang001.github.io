@@ -4,7 +4,14 @@ import { supabase } from "../supabase.js";
 
 const BUCKET = "content-images";
 const CONTENT_TYPES = ["news", "projects", "people", "publications"] as const;
-const MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
+const EXTENSIONS_BY_MIME: Record<(typeof MIME_TYPES)[number], readonly string[]> = {
+  "image/jpeg": [".jpg", ".jpeg"],
+  "image/png": [".png"],
+  "image/webp": [".webp"],
+  "image/gif": [".gif"],
+};
+const STORED_IMAGE_PATH_RE = /^(news|projects|people|publications)\/\d{10,}-[a-zA-Z0-9._-]{1,200}$/;
 
 function isKnownContentType(value: unknown): value is (typeof CONTENT_TYPES)[number] {
   return typeof value === "string" && (CONTENT_TYPES as readonly string[]).includes(value);
@@ -12,7 +19,19 @@ function isKnownContentType(value: unknown): value is (typeof CONTENT_TYPES)[num
 
 /** No path separators or traversal -- filename must stay a bare file name. */
 function isSafeFilename(value: unknown): value is string {
-  return typeof value === "string" && value.length > 0 && value.length <= 200 && !/[/\\]/.test(value) && value !== "." && value !== "..";
+  return (
+    typeof value === "string" &&
+    value.length > 0 &&
+    value.length <= 200 &&
+    /^[a-zA-Z0-9._-]+$/.test(value) &&
+    value !== "." &&
+    value !== ".."
+  );
+}
+
+function hasExpectedExtension(filename: string, contentType: (typeof MIME_TYPES)[number]): boolean {
+  const lower = filename.toLowerCase();
+  return EXTENSIONS_BY_MIME[contentType].some((extension) => lower.endsWith(extension));
 }
 
 export const imagesRouter = Router();
@@ -25,11 +44,12 @@ imagesRouter.post("/upload-url", async (req, res) => {
     res.status(400).json({ error: "Unknown content type" });
     return;
   }
-  if (typeof contentType !== "string" || !MIME_TYPES.includes(contentType)) {
+  if (typeof contentType !== "string" || !MIME_TYPES.includes(contentType as (typeof MIME_TYPES)[number])) {
     res.status(400).json({ error: "Unsupported image type" });
     return;
   }
-  if (!isSafeFilename(filename)) {
+  const imageContentType = contentType as (typeof MIME_TYPES)[number];
+  if (!isSafeFilename(filename) || !hasExpectedExtension(filename, imageContentType)) {
     res.status(400).json({ error: "Invalid filename" });
     return;
   }
@@ -54,7 +74,7 @@ imagesRouter.post("/upload-url", async (req, res) => {
 imagesRouter.delete("/*", async (req, res) => {
   const path = (req.params as Record<string, string>)[0];
 
-  if (!path || path.includes("..") || !isKnownContentType(path.split("/")[0])) {
+  if (!path || !STORED_IMAGE_PATH_RE.test(path)) {
     res.status(400).json({ error: "Invalid path" });
     return;
   }

@@ -10,7 +10,7 @@ describe("sanitizeRichText", () => {
 
   it("keeps links with href/target/rel", () => {
     const html = '<p><a href="https://example.com" target="_blank" rel="noopener">link</a></p>';
-    expect(sanitizeRichText(html)).toBe(html);
+    expect(sanitizeRichText(html)).toBe('<p><a href="https://example.com" target="_blank" rel="noopener noreferrer">link</a></p>');
   });
 
   it("keeps lists", () => {
@@ -35,6 +35,11 @@ describe("sanitizeRichText", () => {
 
   it("strips javascript: URLs", () => {
     const html = '<p><a href="javascript:alert(1)">bad link</a></p>';
+    expect(sanitizeRichText(html)).toBe("<p><a>bad link</a></p>");
+  });
+
+  it("strips malformed https-like URLs", () => {
+    const html = '<p><a href="https:example.com">bad link</a></p>';
     expect(sanitizeRichText(html)).toBe("<p><a>bad link</a></p>");
   });
 });

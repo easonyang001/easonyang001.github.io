@@ -9,15 +9,31 @@ const CONTENT_IMAGE_PATH = "/storage/v1/object/public/content-images/";
 interface SanitizedElement {
   tagName: string;
   getAttribute(name: string): string | null;
+  setAttribute(name: string, value: string): void;
   removeAttribute(name: string): void;
   remove(): void;
+}
+
+function isSafeLink(rawUrl: string): boolean {
+  if (rawUrl.startsWith("mailto:")) return true;
+  if (!rawUrl.startsWith("https://")) return false;
+  try {
+    return new URL(rawUrl).protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 DOMPurify.addHook("afterSanitizeAttributes", (rawNode) => {
   const node = rawNode as unknown as SanitizedElement;
   if (node.tagName === "A") {
     const href = node.getAttribute("href") ?? "";
-    if (!/^https:|^mailto:/.test(href)) node.removeAttribute("href");
+    if (!isSafeLink(href)) {
+      node.removeAttribute("href");
+    }
+    if (node.getAttribute("target") === "_blank") {
+      node.setAttribute("rel", "noopener noreferrer");
+    }
   }
   if (node.tagName === "IMG") {
     const src = node.getAttribute("src") ?? "";
