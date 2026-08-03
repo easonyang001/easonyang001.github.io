@@ -10,6 +10,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from datetime import date
 from pathlib import Path
@@ -120,6 +121,12 @@ def main() -> int:
     mark_as_seen(supabase, selected["papers"], selected["news"])
 
     print(f"草稿已建立（{week_label}，draft_id: {draft_id}）")
+
+    github_output = os.environ.get("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a", encoding="utf-8") as f:
+            f.write(f"draft_created=true\ndraft_id={draft_id}\nweek_label={week_label}\n")
+
     return 0
 
 
