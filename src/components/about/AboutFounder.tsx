@@ -1,11 +1,7 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import { people } from "../../data/people.ts";
 
-export default function AboutFounder() {
-  const founder = people[0];
-  if (!founder) return null;
-
-  const RESPONSIBILITIES = [
+const RESPONSIBILITIES = [
   "Research",
   "Software Engineering",
   "Open-Source Development",
@@ -14,7 +10,11 @@ export default function AboutFounder() {
   "Institutional Development",
 ];
 
-const links = [
+export default function AboutFounder() {
+  const founder = people[0];
+  if (!founder) return null;
+
+  const links = [
     founder.email && { label: "Email", href: `mailto:${founder.email}`, icon: Mail },
     founder.githubUrl && { label: "GitHub", href: founder.githubUrl, icon: Github },
     founder.linkedinUrl && { label: "LinkedIn", href: founder.linkedinUrl, icon: Linkedin },
@@ -22,7 +22,7 @@ const links = [
 
   return (
     <section className="section-container border-t border-border">
-      <p className="eyebrow">Founder</p>
+      <p className="text-small font-medium text-text-muted">Founder</p>
       <div className="glass-card mt-6 max-w-prose p-8">
         {founder.avatarUrl ? (
           <img src={founder.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" />
@@ -49,7 +49,7 @@ const links = [
         )}
 
         <div className="mt-6 border-t border-border pt-6">
-          <p className="font-mono text-mono-label uppercase text-text-muted">Responsibilities</p>
+          <p className="text-small font-medium text-text-muted">Responsibilities</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {RESPONSIBILITIES.map((item) => (
               <span

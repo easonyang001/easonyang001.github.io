@@ -13,7 +13,7 @@ export default function AboutVisionMission() {
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div>
-          <p className="eyebrow">Vision</p>
+          <p className="text-small font-medium text-text-muted">Vision</p>
           <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
             To become a recognized independent research institute advancing quantum technologies
             through research, engineering, and open collaboration.
@@ -21,7 +21,7 @@ export default function AboutVisionMission() {
         </div>
 
         <div>
-          <p className="eyebrow">Mission</p>
+          <p className="text-small font-medium text-text-muted">Mission</p>
           <ul className="mt-4 space-y-3">
             {MISSION_ITEMS.map((item) => (
               <li key={item} className="flex gap-3 text-body text-text-secondary">
@@ -34,7 +34,7 @@ export default function AboutVisionMission() {
       </div>
 
       <div className="mt-12 border-t border-border pt-12">
-        <p className="eyebrow">Research Philosophy</p>
+        <p className="text-small font-medium text-text-muted">Research Philosophy</p>
         <div className="mt-4 flex flex-wrap gap-3">
           {PHILOSOPHY_ITEMS.map((item) => (
             <span

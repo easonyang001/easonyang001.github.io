@@ -14,7 +14,7 @@ export default function AboutGlance() {
       <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
         {STATS.map((stat) => (
           <div key={stat.label}>
-            <p className="font-mono text-mono-label uppercase text-text-muted">{stat.label}</p>
+            <p className="text-small font-medium text-text-muted">{stat.label}</p>
             <p className="mt-2 text-h4 text-text-primary">{stat.value}</p>
           </div>
         ))}

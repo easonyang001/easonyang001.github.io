@@ -35,7 +35,7 @@ export default function AboutFAQ() {
 
   return (
     <section className="section-container border-t border-border">
-      <p className="eyebrow">FAQ</p>
+      <p className="text-small font-medium text-text-muted">FAQ</p>
       <h2 className="mt-4 text-h2 text-text-primary">Common questions</h2>
 
       <div className="mt-10 max-w-prose divide-y divide-border border-t border-border">
