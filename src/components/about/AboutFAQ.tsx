@@ -16,6 +16,18 @@ const FAQ_ITEMS = [
     question: "Can students join?",
     answer: "Yes. Students interested in contributing to research or open-source work are welcome to get in touch.",
   },
+  {
+    question: "How is Mrama funded?",
+    answer: "Mrama is currently self-funded by its founder. It does not receive external grants, venture funding, or institutional backing at this stage.",
+  },
+  {
+    question: "Where is Mrama based?",
+    answer: `Mrama is based in ${site.location}. Collaboration is remote-friendly and not limited by location.`,
+  },
+  {
+    question: "How can I get in touch?",
+    answer: "Reach out through the Contact page, by email, or on GitHub — see the links in the footer.",
+  },
 ];
 
 export default function AboutFAQ() {

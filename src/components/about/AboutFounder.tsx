@@ -5,7 +5,16 @@ export default function AboutFounder() {
   const founder = people[0];
   if (!founder) return null;
 
-  const links = [
+  const RESPONSIBILITIES = [
+  "Research",
+  "Software Engineering",
+  "Open-Source Development",
+  "Website Development",
+  "Education",
+  "Institutional Development",
+];
+
+const links = [
     founder.email && { label: "Email", href: `mailto:${founder.email}`, icon: Mail },
     founder.githubUrl && { label: "GitHub", href: founder.githubUrl, icon: Github },
     founder.linkedinUrl && { label: "LinkedIn", href: founder.linkedinUrl, icon: Linkedin },
@@ -38,6 +47,20 @@ export default function AboutFounder() {
             ))}
           </div>
         )}
+
+        <div className="mt-6 border-t border-border pt-6">
+          <p className="font-mono text-mono-label uppercase text-text-muted">Responsibilities</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {RESPONSIBILITIES.map((item) => (
+              <span
+                key={item}
+                className="rounded-md border border-border px-2 py-1 text-small text-text-secondary"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
 
         {founder.scholarUrl && (
           <a
