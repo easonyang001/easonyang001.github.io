@@ -1,4 +1,4 @@
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 const ALLOWED_TAGS = ["p", "br", "strong", "em", "u", "a", "ul", "ol", "li", "h3", "h4", "blockquote", "code", "img"];
 const ALLOWED_ATTR = ["href", "title", "target", "rel", "src", "alt"];
@@ -6,7 +6,15 @@ const ALLOWED_ATTR = ["href", "title", "target", "rel", "src", "alt"];
 /** Path Supabase Storage always uses for public objects in the content-images bucket. */
 const CONTENT_IMAGE_PATH = "/storage/v1/object/public/content-images/";
 
-DOMPurify.addHook("afterSanitizeAttributes", (node) => {
+interface SanitizedElement {
+  tagName: string;
+  getAttribute(name: string): string | null;
+  removeAttribute(name: string): void;
+  remove(): void;
+}
+
+DOMPurify.addHook("afterSanitizeAttributes", (rawNode) => {
+  const node = rawNode as unknown as SanitizedElement;
   if (node.tagName === "A") {
     const href = node.getAttribute("href") ?? "";
     if (!/^https:|^mailto:/.test(href)) node.removeAttribute("href");
@@ -21,6 +29,11 @@ DOMPurify.addHook("afterSanitizeAttributes", (node) => {
   }
 });
 
+/**
+ * The second, non-bypassable sanitization pass -- the frontend's DOMPurify
+ * run is UX, this one is the actual security boundary. See
+ * docs/architecture/admin.md.
+ */
 export function sanitizeRichText(html: string): string {
   return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });
 }

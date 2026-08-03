@@ -2,18 +2,23 @@ import type { Person } from "../types/index.ts";
 
 export const people: Person[] = [
   {
-    slug: "jia-zhen-yang",
-    name: "Jia-Zhen Yang",
-    role: "Founder",
-    interests: [
+    slug: "chia-chen-yang",
+    name: "Chia-Chen Yang",
+    roles: ["Founder"],
+    biography: null,
+    researchInterests: [
       "Quantum Machine Learning",
       "Quantum Optimization",
       "Quantum Annealing",
       "Artificial Intelligence",
       "Operations Research",
     ],
-    avatarInitials: "JZ",
+    avatarUrl: null,
+    avatarInitials: "CY",
     email: null,
     githubUrl: null,
+    scholarUrl: null,
+    linkedinUrl: null,
+    orcid: null,
   },
 ];

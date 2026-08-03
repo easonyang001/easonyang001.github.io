@@ -40,7 +40,7 @@ export default function ProjectsPage() {
             >
               <div>
                 <h2 className="text-h3 text-text-primary">{project.title}</h2>
-                <p className="mt-1 text-small text-text-secondary">{project.description}</p>
+                <p className="mt-1 text-small text-text-secondary">{project.summary}</p>
               </div>
               <span className="shrink-0 rounded-md bg-accent-subtle px-2 py-1 font-mono text-mono-label uppercase text-accent">
                 {project.status}

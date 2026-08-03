@@ -41,7 +41,7 @@ export default function PublicationsPage() {
   const [status, setStatus] = useState("All");
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
-  const areas = useMemo(() => ["All", ...new Set(publications.map((p) => p.area))], []);
+  const areas = useMemo(() => ["All", ...new Set(publications.flatMap((p) => p.researchAreas))], []);
   const types = useMemo(() => ["All", ...new Set(publications.map((p) => p.type))], []);
   const statuses = useMemo(() => ["All", ...new Set(publications.map((p) => p.status))], []);
 
@@ -50,20 +50,20 @@ export default function PublicationsPage() {
     return publications.filter(
       (pub) =>
         (q === "" || pub.title.toLowerCase().includes(q)) &&
-        (area === "All" || pub.area === area) &&
+        (area === "All" || pub.researchAreas.includes(area)) &&
         (type === "All" || pub.type === type) &&
         (status === "All" || pub.status === status)
     );
   }, [query, area, type, status]);
 
   const groupedByYear = useMemo(() => {
-    const groups = new Map<string, typeof publications>();
+    const groups = new Map<number, typeof publications>();
     for (const pub of filtered) {
       const existing = groups.get(pub.year) ?? [];
       existing.push(pub);
       groups.set(pub.year, existing);
     }
-    return [...groups.entries()].sort((a, b) => Number(b[0]) - Number(a[0]));
+    return [...groups.entries()].sort((a, b) => b[0] - a[0]);
   }, [filtered]);
 
   const handleCopyBibtex = async (bibtex: string | null, slug: string) => {
@@ -114,7 +114,7 @@ export default function PublicationsPage() {
                     <span className="absolute -left-[2.35rem] top-1.5 h-3 w-3 rounded-full border-2 border-background bg-accent" />
                     <div className="glass-card p-8">
                       <div className="flex flex-wrap items-center gap-3 font-mono text-mono-label uppercase text-text-muted">
-                        <span>{pub.conference}</span>
+                        <span>{pub.venue}</span>
                         <span>&middot;</span>
                         <span>{pub.type}</span>
                         <span>&middot;</span>

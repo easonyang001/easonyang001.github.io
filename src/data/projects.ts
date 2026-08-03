@@ -3,38 +3,50 @@ import type { Project } from "../types/index.ts";
 export const projects: Project[] = [
   {
     slug: "aed-placement-optimization",
-    title: "AED Placement Optimization",
-    status: "Ongoing",
-    description:
+    title: "[SAMPLE] AED Placement Optimization",
+    year: 2026,
+    status: "Active",
+    summary:
       "Optimizing the placement of automated external defibrillators across urban areas using quantum and classical combinatorial optimization to maximize cardiac arrest survival coverage.",
-    tags: ["Quantum Optimization", "Operations Research", "Public Health"],
+    coverImageUrl: null,
+    technologies: ["Quantum Annealing", "Classical Solvers"],
+    researchAreas: ["Operations Research", "Public Health"],
     readMoreUrl: null,
   },
   {
     slug: "quantum-diet-optimization",
-    title: "Quantum Diet Optimization",
-    status: "Ongoing",
-    description:
+    title: "[SAMPLE] Quantum Diet Optimization",
+    year: 2026,
+    status: "Active",
+    summary:
       "Formulating nutritional planning as a constrained optimization problem and solving it with quantum annealing and hybrid solvers.",
-    tags: ["Quantum Annealing", "Optimization", "Healthcare"],
+    coverImageUrl: null,
+    technologies: ["Quantum Annealing", "Hybrid Solvers"],
+    researchAreas: ["Optimization", "Healthcare"],
     readMoreUrl: null,
   },
   {
     slug: "hybrid-quantum-solver",
-    title: "Hybrid Quantum Solver",
-    status: "In Development",
-    description:
+    title: "[SAMPLE] Hybrid Quantum Solver",
+    year: 2026,
+    status: "Active",
+    summary:
       "A hybrid quantum-classical solver framework that decomposes large optimization problems into quantum-tractable subproblems.",
-    tags: ["Hybrid Computing", "Quantum-Classical", "Solver Design"],
+    coverImageUrl: null,
+    technologies: ["Hybrid Computing", "Quantum-Classical Decomposition"],
+    researchAreas: ["Solver Design"],
     readMoreUrl: null,
   },
   {
     slug: "quantum-portfolio-optimization",
-    title: "Quantum Portfolio Optimization",
-    status: "Research",
-    description:
+    title: "[SAMPLE] Quantum Portfolio Optimization",
+    year: 2025,
+    status: "On Hold",
+    summary:
       "Applying quantum optimization techniques to portfolio construction under risk and diversification constraints.",
-    tags: ["Quantum Computing", "Finance", "Optimization"],
+    coverImageUrl: null,
+    technologies: ["Quantum Computing"],
+    researchAreas: ["Finance", "Optimization"],
     readMoreUrl: null,
   },
 ];

@@ -21,7 +21,7 @@ export default function HomeProjects() {
                 {project.status}
               </span>
             </div>
-            <p className="mt-3 flex-1 text-small text-text-secondary">{project.description}</p>
+            <p className="mt-3 flex-1 text-small text-text-secondary">{project.summary}</p>
           </Link>
         ))}
       </div>

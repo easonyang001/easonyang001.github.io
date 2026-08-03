@@ -32,13 +32,17 @@ export default function AboutPage() {
         <div className="mt-12 max-w-prose">
           <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Founder</p>
           <div className="glass-card p-8">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-subtle text-h4 text-accent">
-              {founder.avatarInitials}
-            </div>
+            {founder.avatarUrl ? (
+              <img src={founder.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-subtle text-h4 text-accent">
+                {founder.avatarInitials}
+              </div>
+            )}
             <h2 className="mt-5 text-h3 text-text-primary">{founder.name}</h2>
-            <p className="mt-1 text-small font-medium text-accent">{founder.role}</p>
+            <p className="mt-1 text-small font-medium text-accent">{founder.roles.join(", ")}</p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {founder.interests.map((interest) => (
+              {founder.researchInterests.map((interest) => (
                 <span
                   key={interest}
                   className="rounded-md border border-border px-2 py-1 font-mono text-mono-label uppercase text-text-secondary"

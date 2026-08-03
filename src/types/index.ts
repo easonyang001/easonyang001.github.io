@@ -24,24 +24,42 @@ export interface ResearchArea {
   relatedLabTools?: string[];
 }
 
+export type ProjectStatus = "Active" | "Completed" | "On Hold";
+
 export interface Project {
   slug: string;
   title: string;
-  status: string;
-  description: string;
-  tags: string[];
+  year: number;
+  status: ProjectStatus;
+  summary: string;
+  coverImageUrl: string | null;
+  technologies: string[];
+  researchAreas: string[];
   readMoreUrl: string | null;
 }
+
+export type PublicationType =
+  | "Journal Article"
+  | "Conference Paper"
+  | "Full Paper"
+  | "Poster"
+  | "Workshop Paper"
+  | "Preprint"
+  | "Research Note";
+
+export type PublicationStatus = "Published" | "Under Review" | "Accepted" | "Preprint";
 
 export interface Publication {
   slug: string;
   title: string;
-  conference: string;
-  year: string;
-  area: string;
-  type: string;
-  status: string;
+  authors: string[];
+  year: number;
+  venue: string | null;
+  type: PublicationType;
+  status: PublicationStatus;
   abstract: string;
+  keywords: string[];
+  researchAreas: string[];
   pdfUrl: string | null;
   doiUrl: string | null;
   codeUrl: string | null;
@@ -51,18 +69,32 @@ export interface Publication {
 export interface Person {
   slug: string;
   name: string;
-  role: string;
-  interests: string[];
+  roles: string[];
+  biography: string | null;
+  researchInterests: string[];
+  avatarUrl: string | null;
+  /** Fallback shown while avatarUrl is null (e.g. before a photo is uploaded). */
   avatarInitials: string;
   email: string | null;
   githubUrl: string | null;
+  scholarUrl: string | null;
+  linkedinUrl: string | null;
+  orcid: string | null;
 }
+
+export type NewsCategory = "Publication" | "Research Update" | "Project" | "Announcement" | "Event";
 
 export interface NewsItem {
   slug: string;
   date: string;
+  category: NewsCategory;
   title: string;
-  description: string;
+  summary: string;
+  content: string | null;
+  coverImageUrl: string | null;
+  relatedProjectSlug: string | null;
+  relatedPublicationSlug: string | null;
+  externalUrl: string | null;
 }
 
 export interface EducationLesson {
