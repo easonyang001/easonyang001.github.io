@@ -13,6 +13,8 @@ export interface FieldSpec {
   imageType?: UploadImageType;
   /** image only -- sibling column that stores the storage path, cleared together with the URL. */
   pathKey?: string;
+  /** text only -- normalize input to the ^[a-z0-9-]+$ shape the backend requires. */
+  slugify?: boolean;
 }
 
 export interface ContentTypeConfig {
@@ -36,7 +38,7 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
     idKey: "news_id",
     titleKey: "title",
     fields: [
-      { key: "news_id", label: "Slug", kind: "text", required: true },
+      { key: "news_id", label: "Slug", kind: "text", required: true, slugify: true },
       { key: "date", label: "Date", kind: "date", required: true },
       { key: "category", label: "Category", kind: "select", required: true, options: NEWS_CATEGORIES },
       { key: "title", label: "Title", kind: "text", required: true },
@@ -67,7 +69,7 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
     idKey: "project_id",
     titleKey: "title",
     fields: [
-      { key: "project_id", label: "Slug", kind: "text", required: true },
+      { key: "project_id", label: "Slug", kind: "text", required: true, slugify: true },
       { key: "title", label: "Title", kind: "text", required: true },
       { key: "year", label: "Year", kind: "number", required: true },
       { key: "project_status", label: "Status", kind: "select", required: true, options: PROJECT_STATUSES },
@@ -94,7 +96,7 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
     idKey: "person_id",
     titleKey: "name",
     fields: [
-      { key: "person_id", label: "Slug", kind: "text", required: true },
+      { key: "person_id", label: "Slug", kind: "text", required: true, slugify: true },
       { key: "name", label: "Name", kind: "text", required: true },
       { key: "roles", label: "Roles", kind: "tags" },
       { key: "biography", label: "Biography", kind: "textarea" },
@@ -127,7 +129,7 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
     idKey: "pub_id",
     titleKey: "title",
     fields: [
-      { key: "pub_id", label: "Slug", kind: "text", required: true },
+      { key: "pub_id", label: "Slug", kind: "text", required: true, slugify: true },
       { key: "title", label: "Title", kind: "text", required: true },
       { key: "authors", label: "Authors", kind: "tags" },
       { key: "year", label: "Year", kind: "number", required: true },

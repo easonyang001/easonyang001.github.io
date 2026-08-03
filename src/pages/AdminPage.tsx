@@ -17,6 +17,14 @@ import ImageUpload from "../components/admin/ImageUpload.tsx";
 import RichTextEditor from "../components/admin/RichTextEditor.tsx";
 import TagInput from "../components/admin/TagInput.tsx";
 
+/** Normalizes free typing into the ^[a-z0-9-]+$ shape the backend requires. */
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[\s_]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+}
+
 function LoginForm({
   onLogin,
   error,
@@ -410,7 +418,12 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
                 <input
                   type="text"
                   value={String(formValues[field.key] ?? "")}
-                  onChange={(e) => setFormValues({ ...formValues, [field.key]: e.target.value })}
+                  onChange={(e) =>
+                    setFormValues({
+                      ...formValues,
+                      [field.key]: field.slugify ? slugify(e.target.value) : e.target.value,
+                    })
+                  }
                   className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50"
                 />
               )}
