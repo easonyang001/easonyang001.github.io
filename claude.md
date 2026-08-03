@@ -94,12 +94,15 @@ scripts, no `gh-pages` branch.
 
 ---
 
-# Design Tokens (Single Source of Truth)
+# Design Tokens (Starting Palette)
 
-These are **values, not suggestions**. Define them once in
-`tailwind.config.js` under `theme.extend` and reference them by name
-everywhere. Do not introduce a color, size, or radius that is not listed here.
-If something seems to need a new value, stop and ask.
+The values below are the default palette — defined in `tailwind.config.js`
+under `theme.extend` and referenced by name everywhere they still apply.
+This is no longer a closed system: new colors, spacing values, and radii can
+be added directly to `tailwind.config.js` as a design actually needs them,
+without stopping to ask first. Keep reusing an existing token where it
+already fits — a new value earns its place by solving something the current
+palette can't, not by being slightly different for its own sake.
 
 ## Color
 
@@ -195,14 +198,15 @@ One value per category. Do not mix `rounded-lg`, `rounded-xl`, and
 
 ---
 
-# Motion Budget (Replaces the previous "Motion Library" and "Animations" sections)
+# Motion Budget
 
-The previous version of this spec asked for heavy effect usage in one section
-and "only subtle animations, no flashy effects" in another. The specific
-instruction won and the site ended up over-decorated. This section is now the
-**only** authority on motion, and it is stated as limits rather than adjectives.
+This section used to gate every effect behind an explicit ask-first approval
+(see the changelog note at the bottom of this section for why). That gate is
+now lifted — the effects below are available by default, no confirmation
+needed. Use judgment about where an effect actually earns its place; the
+site is still an institute's homepage, not a demo reel.
 
-## Site-wide, allowed
+## Baseline, always available
 
 | Where | What | Spec |
 |---|---|---|
@@ -211,8 +215,9 @@ instruction won and the site ended up over-decorated. This section is now the
 | Nav on scroll | background opacity + border-bottom fade in | 200ms |
 | Links / buttons hover | color or background shift only | 150ms |
 
-That is the complete list. Every section on the site uses the same entrance
-animation. Consistency reads as intentional; variety reads as undisciplined.
+This is the default rhythm most sections should still follow — consistency
+reads as intentional. Reach past it when a specific section calls for
+something more.
 
 ## The hero gets exactly one signature effect
 
@@ -224,39 +229,39 @@ chaotic, and was the main problem with the previous build.
 Particles constraints: ≤ 60 nodes, opacity ≤ 0.25, no cursor interaction,
 disabled entirely under `prefers-reduced-motion`.
 
-## Banned outright
+## Previously-restricted, now available by default
 
-Do not use, anywhere on the site:
+These no longer need to be asked about individually — pick whichever fits
+the section:
 
-- `SplitText` on section headings (or anywhere except — optionally — nothing)
-- `DecryptedText` / scramble-reveal on any text
+- `SplitText` on section headings
+- `DecryptedText` / scramble-reveal
 - `ShinyText` light sweeps
 - `GradientText`
-- `TiltedCard` / any cursor-driven 3D tilt
+- `TiltedCard` / cursor-driven 3D tilt
 - `Magnetic` / cursor-attracted buttons
 - `ClickSpark` / click particle bursts
 - Cursor-tracking spotlight glows (`SpotlightCard`)
 - Number count-up animations
 - Scroll-linked parallax
-- Any animation on a heading, label, or badge
+- Animation on a heading, label, or badge
 
-These are portfolio-site devices. None of IBM Research, CSAIL, Microsoft
-Research, DeepMind, or OpenAI uses any of them. Using them here creates a
-mismatch between what the effects signal and what the content claims, which
-costs credibility rather than adding polish.
+These used to be flagged as "portfolio-site devices" that clash with an
+institute register — that critique still applies as a design opinion, just
+not as a hard block. If a page is starting to feel like a demo reel rather
+than a research institute's homepage, that's the signal to pull back, not a
+rule being broken.
 
-## Exceptions to the ban
+### Changelog note (why this section used to be stricter)
 
-The ban above is the default, not an absolute. The user may ask for a
-specific banned effect (e.g. a typewriter/typing effect) in a specific
-place. If they explicitly confirm they want it after being told it's on the
-banned list, that one instance is permitted — implement exactly what was
-confirmed, nowhere else.
-
-This is a per-instance exception, not a reopening of the list: it does not
-carry over to other effects, other pages, or future work, and it does not
-lower the bar for anything not explicitly discussed. When in doubt whether
-something was actually confirmed, ask again rather than assume.
+The original version of this spec banned all of the above outright, gated
+behind an explicit per-instance confirmation. That came from a real
+incident: an earlier draft asked for heavy effect usage in one section and
+"only subtle animations, no flashy effects" in another, the specific
+instruction won, and the site ended up over-decorated. The ban fixed that,
+but the user has since asked to lift it project-wide — see git history for
+`claude.md` around 2026-08-03 for the request. Keeping this note so the
+reasoning behind the old rule isn't lost, in case it's useful context later.
 
 ## Keeping the source available
 
@@ -316,6 +321,13 @@ All copy, publication entries, project entries, people, and news items live in
 
 # Website Structure
 
+The sections below are the baseline, not a ceiling — new sections and new
+pages beyond this list are fine when a page calls for one (the About page
+expansion on 2026-08-03 — Vision, Timeline, FAQ, a research-network map,
+etc. — is the precedent). Still apply the same design tokens, motion
+guidance, and content-integrity rules to anything new; "more sections is
+allowed" doesn't mean "invented facts are allowed."
+
 ## Navigation
 
 Sticky. Left: liquid chrome "MRAMA" wordmark image (`public/brand/logo.png`),
@@ -373,7 +385,7 @@ actions as text links rather than filled buttons.
 
 Profile cards, currently one entry:
 
-**Jia-Zhen Yang** — Founder.
+**Chia-Chen Yang** — Founder.
 Research interests: Quantum Machine Learning, Quantum Optimization, Quantum
 Annealing, Artificial Intelligence, Operations Research.
 
@@ -396,12 +408,15 @@ Same `public/brand/logo.png` wordmark, institute name, and:
 
 > © 2026 Mrama Institute. All rights reserved.
 
-## Not included
+## Statistics / metrics sections
 
-**No statistics / metrics section.** It appeared in the previous build without
-ever being specified here. Animated counters on an institute with one listed
-member undermine the credibility the rest of the site is trying to establish.
-Do not add one.
+Previously banned outright — an institute with one listed member showing an
+animated member counter read as undermining its own credibility. That
+restriction is lifted; a statistics section is allowed if a page calls for
+one. Still worth a gut check on whether the numbers being shown are real and
+worth surfacing, since a stats block with padded or trivial numbers has the
+same credibility problem the original ban was trying to avoid — just without
+the count-up animation.
 
 ---
 
@@ -464,9 +479,11 @@ Title, description, Open Graph tags, favicon, `robots.txt`, `sitemap.xml`.
    without visual feedback is the largest single source of poor output.
 3. **Read files, do not recall them.** When a component is referenced, open
    the actual file. Do not reconstruct it from memory.
-4. **Do not invent tokens.** Every color, size, radius, and duration comes
-   from the Design Tokens section. If something appears to be missing, stop
-   and ask rather than filling in a Tailwind default.
+4. **Reuse an existing token before adding a new one.** The Design Tokens
+   section is a starting palette, not a closed list — extend
+   `tailwind.config.js` directly when a design genuinely needs a new color,
+   size, or radius, but check the existing values first so the palette
+   doesn't just accumulate near-duplicates.
 5. **Separate commits** per logical change, following `<type>: <summary>`
    with types `feat` / `fix` / `docs` / `refactor`.
 
