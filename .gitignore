@@ -6,3 +6,8 @@ dist
 digest-summary.md
 .playwright-mcp
 review
+
+# Python (scripts/ news automation)
+scripts/.venv
+__pycache__
+*.pyc
