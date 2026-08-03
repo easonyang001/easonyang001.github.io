@@ -107,6 +107,8 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
       { key: "scholar_url", label: "Google Scholar URL", kind: "text" },
       { key: "linkedin_url", label: "LinkedIn URL", kind: "text" },
       { key: "orcid", label: "ORCID", kind: "text" },
+      { key: "location_country", label: "Country (for the About page's network map)", kind: "text" },
+      { key: "location_city", label: "City", kind: "text" },
     ],
     emptyItem: () => ({
       person_id: "",
@@ -121,6 +123,8 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
       scholar_url: null,
       linkedin_url: null,
       orcid: null,
+      location_country: null,
+      location_city: null,
     }),
   },
   {

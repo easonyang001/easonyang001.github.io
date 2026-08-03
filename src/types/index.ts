@@ -80,6 +80,9 @@ export interface Person {
   scholarUrl: string | null;
   linkedinUrl: string | null;
   orcid: string | null;
+  /** Country name, used to place a marker on the About page's network map. */
+  locationCountry: string | null;
+  locationCity: string | null;
 }
 
 export type NewsCategory = "Publication" | "Research Update" | "Project" | "Announcement" | "Event";

@@ -89,6 +89,8 @@ export interface PersonRow {
   scholar_url: string | null;
   linkedin_url: string | null;
   orcid: string | null;
+  location_country: string | null;
+  location_city: string | null;
 }
 
 /** Falls back to a two-letter initial when no avatar has been uploaded yet. */
@@ -115,6 +117,8 @@ export function peopleToTypeScript(rows: PersonRow[]): string {
     scholarUrl: ${strOrNull(r.scholar_url)},
     linkedinUrl: ${strOrNull(r.linkedin_url)},
     orcid: ${strOrNull(r.orcid)},
+    locationCountry: ${strOrNull(r.location_country)},
+    locationCity: ${strOrNull(r.location_city)},
   }`
     )
     .join(",\n");
