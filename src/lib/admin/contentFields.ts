@@ -49,7 +49,7 @@ export const CONTENT_TYPES: ContentTypeConfig[] = [
     ],
     emptyItem: () => ({
       news_id: "",
-      date: "",
+      date: new Date().toISOString().slice(0, 10),
       category: NEWS_CATEGORIES[0],
       title: "",
       summary: "",

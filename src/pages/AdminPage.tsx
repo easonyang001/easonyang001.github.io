@@ -398,10 +398,13 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
                 />
               ) : field.kind === "date" ? (
                 <input
-                  type="date"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="YYYY-MM-DD"
+                  pattern="\d{4}-\d{2}-\d{2}"
                   value={String(formValues[field.key] ?? "")}
                   onChange={(e) => setFormValues({ ...formValues, [field.key]: e.target.value })}
-                  className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50"
+                  className="w-full rounded-md border border-border bg-surface px-4 py-2 font-mono text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50"
                 />
               ) : (
                 <input
