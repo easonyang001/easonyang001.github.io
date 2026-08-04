@@ -5,6 +5,7 @@ import { authRouter } from "./auth.js";
 import { githubRouter } from "./routes/github.js";
 import { imagesRouter } from "./routes/images.js";
 import { contentRouter } from "./routes/content.js";
+import { newsAutomationRouter } from "./routes/newsAutomation.js";
 
 const app = express();
 const port = process.env.PORT ?? 3001;
@@ -32,6 +33,7 @@ app.use("/api", authRouter);
 app.use("/api/github", githubRouter);
 app.use("/api/images", imagesRouter);
 app.use("/api/content", contentRouter);
+app.use("/api/news", newsAutomationRouter);
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof Error && err.message === "Not allowed by CORS") {

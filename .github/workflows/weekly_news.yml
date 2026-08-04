@@ -1,0 +1,87 @@
+name: weekly-quantum-news
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Monday 06:00 UTC (14:00 Taiwan time)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (fetch & score only, skip OpenAI & Supabase)"
+        required: false
+        default: "false"
+        type: boolean
+      force:
+        description: "Force regenerate even if this week's draft exists"
+        required: false
+        default: "false"
+        type: boolean
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Generate weekly news draft
+        id: generate
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          python scripts/generate_news.py $ARGS
+
+      - name: Create notification branch and PR
+        if: success() && steps.generate.outputs.draft_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WEEK="${{ steps.generate.outputs.week_label }}"
+          DRAFT_ID="${{ steps.generate.outputs.draft_id }}"
+          BRANCH="news/auto-${WEEK}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+
+          mkdir -p .news-drafts
+          echo "$WEEK" > ".news-drafts/${WEEK}.txt"
+          git add ".news-drafts/${WEEK}.txt"
+          git commit -m "news: 本週量子新聞草稿已就緒 ${WEEK}"
+          git push origin "$BRANCH"
+
+          {
+            echo "## 本週量子新聞草稿已就緒"
+            echo ""
+            echo "**草稿 ID**：\`${DRAFT_ID}\`"
+            echo "**週次**：${WEEK}"
+            echo ""
+            echo "### 下一步"
+            echo "1. 到 [Admin → News](https://mrama.org/admin) 審核草稿"
+            echo "2. 修改標題或內容（如果需要）"
+            echo "3. 按「核准並發布」，會另開一個 PR 發布到網站"
+            echo ""
+            echo "此 PR 僅作為通知用途，可直接 merge 或 close。"
+          } > /tmp/pr_body.md
+
+          gh pr create \
+            --title "news: 本週量子新聞草稿 ${WEEK}" \
+            --body-file /tmp/pr_body.md \
+            --base main \
+            --head "$BRANCH" \
+            --label "auto-draft"
