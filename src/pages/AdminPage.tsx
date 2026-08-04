@@ -16,6 +16,7 @@ import { useAuth } from "../lib/auth/useAuth.ts";
 import ImageUpload from "../components/admin/ImageUpload.tsx";
 import RichTextEditor from "../components/admin/RichTextEditor.tsx";
 import TagInput from "../components/admin/TagInput.tsx";
+import NewsDraftsAdmin from "../components/admin/NewsDraftsAdmin.tsx";
 
 /** Normalizes free typing into the ^[a-z0-9-]+$ shape the backend requires. */
 function slugify(value: string): string {
@@ -111,6 +112,7 @@ const STATUS_LABEL_CLASS: Record<string, string> = {
 };
 
 function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void }) {
+  const [section, setSection] = useState<"content" | "news-drafts">("content");
   const [typeKey, setTypeKey] = useState<ContentType>(CONTENT_TYPES[0].key);
   const config = CONTENT_TYPES.find((c) => c.key === typeKey)!;
 
@@ -245,17 +247,33 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
       </div>
 
       <div className="mt-10">
-        <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Content Type</p>
+        <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Section</p>
         <Segmented>
-          {CONTENT_TYPES.map((c) => (
-            <SegmentedButton key={c.key} active={typeKey === c.key} onClick={() => setTypeKey(c.key)}>
-              {c.label}
-            </SegmentedButton>
-          ))}
+          <SegmentedButton active={section === "content"} onClick={() => setSection("content")}>
+            Content
+          </SegmentedButton>
+          <SegmentedButton active={section === "news-drafts"} onClick={() => setSection("news-drafts")}>
+            News Drafts
+          </SegmentedButton>
         </Segmented>
       </div>
 
-      {editingId === null && (
+      {section === "news-drafts" && <NewsDraftsAdmin token={token} />}
+
+      {section === "content" && (
+        <>
+          <div className="mt-10">
+            <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Content Type</p>
+            <Segmented>
+              {CONTENT_TYPES.map((c) => (
+                <SegmentedButton key={c.key} active={typeKey === c.key} onClick={() => setTypeKey(c.key)}>
+                  {c.label}
+                </SegmentedButton>
+              ))}
+            </Segmented>
+          </div>
+
+          {editingId === null && (
         <div className="mt-8 max-w-2xl">
           <button
             onClick={startNew}
@@ -448,6 +466,8 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
             </button>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );
