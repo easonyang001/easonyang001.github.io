@@ -11,6 +11,7 @@ import { createServer } from "node:http";
 import { readFileSync, existsSync, mkdirSync, writeFileSync, statSync } from "node:fs";
 import { resolve, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import serverlessChromium from "@sparticuz/chromium";
 import { chromium } from "playwright";
 import { getAllRoutePaths } from "./all-routes.mjs";
 
@@ -77,7 +78,15 @@ async function main() {
 
   const routePaths = await getAllRoutePaths(REPO_ROOT);
   const server = await startStaticServer();
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(
+    process.env.VERCEL
+      ? {
+          args: serverlessChromium.args,
+          executablePath: await serverlessChromium.executablePath(),
+          headless: true,
+        }
+      : undefined
+  );
 
   try {
     const page = await browser.newPage();
