@@ -10,6 +10,9 @@ if (!JWT_SECRET) {
 }
 
 const TOKEN_EXPIRY = "12h";
+const MAX_USERNAME_LENGTH = 100;
+const MAX_PASSWORD_LENGTH = 1024;
+const MAX_BEARER_TOKEN_LENGTH = 4096;
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -23,7 +26,12 @@ export const authRouter = Router();
 
 authRouter.post("/login", loginLimiter, async (req, res) => {
   const { username, password } = req.body ?? {};
-  if (typeof username !== "string" || typeof password !== "string") {
+  if (
+    typeof username !== "string" ||
+    typeof password !== "string" ||
+    username.length > MAX_USERNAME_LENGTH ||
+    password.length > MAX_PASSWORD_LENGTH
+  ) {
     return res.status(400).json({ error: "username and password are required" });
   }
 
@@ -45,6 +53,7 @@ authRouter.post("/login", loginLimiter, async (req, res) => {
     }
 
     const token = jwt.sign({ sub: user.id, username: user.username }, JWT_SECRET, {
+      algorithm: "HS256",
       expiresIn: TOKEN_EXPIRY,
     });
     res.json({ token });
@@ -57,11 +66,19 @@ authRouter.post("/login", loginLimiter, async (req, res) => {
 authRouter.get("/verify", (req, res) => {
   const header = req.header("authorization");
   const token = header?.startsWith("Bearer ") ? header.slice("Bearer ".length) : null;
-  if (!token) {
+  if (!token || token.length > MAX_BEARER_TOKEN_LENGTH) {
     return res.status(401).json({ error: "Missing token" });
   }
   try {
-    jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] });
+    if (
+      typeof payload !== "object" ||
+      payload === null ||
+      typeof payload.sub !== "string" ||
+      typeof payload.username !== "string"
+    ) {
+      return res.status(401).json({ error: "Invalid or expired token" });
+    }
     res.status(200).json({ valid: true });
   } catch {
     res.status(401).json({ error: "Invalid or expired token" });
