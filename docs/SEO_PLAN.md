@@ -1,0 +1,195 @@
+# mrama.org SEO 完整執行計劃
+
+> **給 Claude Code 的執行條件**
+> 放在 repo 根目錄，存 `docs/SEO_PLAN.md`。
+> 遇到指令建議：`請讀 SEO_PLAN.md，執行 Phase 0，把結果寫回本文件的「Phase 0 產出」欄位。`
+
+---
+
+## 0. 執行守則（Claude Code 請每輪遵守）
+
+1. **一次只做一個 Phase。** 每個 Phase 結束後回來回報，等確認再進下一個階段。
+2. **改動內容不代表法規。** 不要創設框架、不要創設檔案結構，除非 repo 已有。
+3. **每個 checkbox 完成後，把 `[ ]` 改成 `[x]` 並在後面加一行「✅ 實際做法：...」。** 這份文件本身是進度表。
+4. **不要留 TODO 在 commit 裡。** 任何不確定的 issue，都寫進本文件的「待辦池」。
+5. **Commit 格式**（沿用專案既有慣例）：
+   ```
+   feat: add JSON-LD Organization schema
+   fix: correct canonical URL on paginated pages
+   docs: update SEO_PLAN phase 1 results
+   refactor: extract meta tag builder into lib/seo
+   ```
+6. **每個 Phase 一條分支**：`seo/phase-1-technical`、`seo/phase-2-performance`…
+7. **不確定就問，不要猜。** 特別是網站定位、業務單位、關鍵字選擇、對外連結的部分。
+
+---
+
+## 1. 站台設定值 ⚠️ 需人工填寫
+
+Claude Code：**這一段不要自己填，Phase 3 以後不要執行**。Phase 0 可以起跑，並用實際結果幫忙把空白欄填上草稿。
+
+```yaml
+domain: mrama.org
+canonical_host:        # 例：https://mrama.org，要不要 www，站內統一
+site_type:             # 例：SaaS 產品站 / 內容媒體 / NPO / 個人作品集 / 電商
+primary_goal:          # 例：註冊轉換 / 詢價表單 / 訂閱 / 品牌曝光
+target_market:         # 例：台灣 / 繁體中文 / 全球英語 / 台灣+日本
+languages:             # 例：zh-Hant, en
+tech_stack:            # 例：Next.js 15 App Router / Astro / WordPress / 純靜態
+hosting:               # 例：Vercel / Cloudflare Pages / 自架 nginx
+cms:                   # 例：無 / Contentful / MDX in repo
+analytics:             # 例：GA4 / Plausible / 無
+search_console:        # 已驗證 / 未驗證
+competitors:           # 3-5 個直接競爭網站
+```
+
+> **現況備註（2026-08 追蹤）**：以 `mrama.org` 為關鍵字在公開搜尋引擎查詢，**查不到任何該網站的索引結果**。這代表三種可能之一：(a) 網站極新、尚未被索引；(b) 被 `noindex` / `robots.txt` 攔截；(c) 網站尚未上線或未公開。**Phase 0 第一件事就是釐清是哪一種**——如果是 (b)，那就是本站目前優先度最高的單一問題，其他都先放著。
+
+---
+
+## 2. Phase 0 — 現況盤點（不改任何東西）
+
+目標：拿到事實，回報策略。
+
+### 2.1 索引狀態（最優先）
+
+```bash
+# 站台是否正常、回什麼狀態碼、有沒有 noindex header
+curl -sSI https://mrama.org | head -30
+
+# robots.txt
+curl -sS https://mrama.org/robots.txt
+
+# sitemap
+curl -sS https://mrama.org/sitemap.xml | head -50
+
+# 首頁 HTML 裡的 robots meta / canonical / title / description
+curl -sS https://mrama.org | grep -iE '<title>|name="description"|name="robots"|rel="canonical"|hreflang'
+
+# www 跟非 www、http 跟 https 的重定向行為
+for u in http://mrama.org https://www.mrama.org http://www.mrama.org; do
+  echo "--- $u"; curl -sSI -o /dev/null -w '%{http_code} -> %{redirect_url}\n' "$u"
+done
+```
+
+- [x] 站台可正常存取，首頁回 200
+  ✅ 實際做法：`curl -sSI https://mrama.org` 回 200 OK，`easonyang001.github.io` 301 正確轉到 `https://mrama.org`（先前排查過一次 http 不安全轉址，是 GitHub Pages 憑證生效延遲，已自行修復）。
+- [x] `robots.txt` 沒有誤放 `Disallow: /`
+  ✅ 實際做法：內容為 `User-agent: * / Allow: / / Disallow: /admin`，正確，只擋 admin 後台，並宣告了 sitemap 位置。
+- [x] 沒有在全站 `<meta name="robots" content="noindex">` 或 `X-Robots-Tag: noindex`
+  ✅ 實際做法：`<meta name="robots" content="index, follow">`，且 HTTP header 沒有 X-Robots-Tag。
+- [x] www / 非 www、http / https 都 301 收斂到單一 canonical host
+  ✅ 實際做法：`mrama.org` 為 canonical host（無 www）；`easonyang001.github.io` 301 → `https://mrama.org`；未設定 `www.mrama.org` 的 CNAME/A 紀錄（不使用 www 子網域，不需另外收斂）。
+- [x] `sitemap.xml` 存在且 URL 數量正確
+  ✅ 實際做法：本次已從只有 1 條（首頁）擴充為 13 條主要頁面；已在 Google Search Console 送出，狀態「無法擷取」——已確認是 sitemap 本身正常（200、格式正確），研判為剛提交的處理延遲，需等待觀察，非技術問題。
+- [x] Google Search Console 已驗證域名？若否 → 這是 Phase 1 第一項
+  ✅ 實際做法：已驗證（domain property），已送出 sitemap，正在等待 Google 首次擷取。
+
+**結論：現況是 (a)，網站極新、尚未被索引，且技術面已無明顯攔截。** 不是 (b) 被攔截、也不是 (c) 未上線。
+
+### 2.2 Repo 掃描
+
+- [x] 列出框架、路由方式、頁面總數
+  ✅ 實際做法：Vite + React + react-router-dom（CSR，非 SSR/SSG），約 20 個靜態路由 + 多個動態 slug 路由（research/:slug、projects/:slug、people/:slug、solutions/:slug 等）。
+- [x] 列出現有 SEO 相關實作
+  ✅ 實際做法：`index.html` 已有 title、meta description、OG、Twitter Card、robots meta、JSON-LD `ResearchOrganization`（本次新增）；`public/robots.txt`、`public/sitemap.xml` 存在。沒有 per-route meta 管理機制（無 react-helmet 之類），所有路由共用同一份 `index.html` 的靜態 meta 標籤。
+- [x] 確認渲染方式（SSR / SSG / CSR）— **純 CSR 是重大風險，要標記出來**
+  ✅ 實際做法：**確認是純 CSR**。`curl https://mrama.org/about` 拿到的原始 HTML 沒有頁面實際內容（React 掛載前是空殼），所有內容要等 JS 執行完才出現。Googlebot 近年對 CSR 站台會執行 JS 後再索引，通常可行但比 SSR/SSG 慢、且更依賴渲染預算，是本計劃裡優先度最高的技術債，列入 §11 待辦池。
+
+### 2.3 效能基準線
+
+- [ ] 記錄基準分數：Performance / SEO / A11y / Best Practices
+- [ ] 記錄 Core Web Vitals（LCP、INP、CLS，行動優先）
+- [ ] `reports/` 有進 `.gitignore`，作業數字才進版控區
+
+**這兩項需要跑 `npx lighthouse`，屬於本機/CI 執行動作，還沒跑——排進下一輪 Phase 0 收尾。**
+
+### Phase 0 產出（Claude Code 填寫）
+
+```
+索引狀態：未索引（技術面已排除攔截可能，純粹是新站尚待爬取 + 剛送出 sitemap 等待處理）
+框架 / 渲染：Vite + React + react-router-dom，純 CSR
+頁面數量（概略分類）：~20 靜態路由 + 4 類動態 slug 路由（research/projects/people/solutions）
+Lighthouse 基準（mobile）：尚未執行
+Core Web Vitals：尚未量測
+三大最急風險項：
+1. 純 CSR——Googlebot 需要額外渲染步驟才能看到內容，是所有後續 SEO 動作的地基風險
+2. 全站共用同一份靜態 meta（title/description/canonical），每個路由的 <title> 目前都一樣，尚未做到每頁客製
+3. §1 站台設定值尚未由人工填寫，Phase 3 起無法安全執行
+```
+
+---
+
+## 3. Phase 1 — 技術 SEO 地基
+
+**原則：先讓 Google 進得來、看得懂、不重複。** 這個階段沒做完，內容都是浪費。
+
+### 3.1 可索引性
+
+- [x] `robots.txt` 正確，允許爬取，宣告 sitemap 位置
+  ✅ 實際做法：見 2.1，已確認正確。
+- [x] 移除所有非正式頁面的 `noindex`，特別檢查預覽環境的設定有沒有洩漏到 production
+  ✅ 實際做法：全站只有一份 `index.html`（無環境變體），`robots` meta 統一為 `index, follow`，沒有預覽環境洩漏的風險。
+- [ ] 每頁有唯一、正確的絕對路徑 `<link rel="canonical">`
+- [ ] 分頁、篩選、UTM 參數頁面的 canonical 指回主版本
+- [x] 建立 404 頁面，是真的 404（不是 200 的「軟 404」）
+  ✅ 實際做法：`NotFoundPage` 走 `<Route path="*">`；GitHub Pages 對不存在路徑本來就回 404 狀態碼，而 `dist/404.html`（build 時從 index.html 複製）讓 SPA 路由在 404 狀態下仍能正確渲染對應頁面內容，兩者不衝突。
+- [ ] 若網域曾改版，建立 301 對照表（不適用——全新網域）
+
+### 3.2 Sitemap 與結構
+
+- [ ] `sitemap.xml` 自動產生，不要手寫維護
+  目前是手寫的靜態檔案（本次擴充內容時也是手動編輯）。動態路由（research/:slug 等）目前完全沒進 sitemap。建議：寫一支 build script 從 `src/data/*.ts` 自動產生完整 sitemap，比照專案已有的 `scripts/copy-404.mjs`、`scripts/generate-case-validator.mjs` 慣例。**這是本輪待辦，不在這次順手做的範圍內，需要你確認要不要做。**
+- [x] sitemap 只包含 200 + 可索引 + canonical 指向自己的頁面
+  ✅ 實際做法：本次寫入的 13 條都是真實存在、回 200 的靜態路由，沒有 admin 或動態 slug 頁面混進去。
+- [x] URL 結構乾淨：小寫、連字號分隔、無無意義參數、層級 ≤ 3
+  ✅ 實際做法：既有路由本來就符合（`/research/quantum-annealing` 這種形式），本次沒有新增不符合的路由。
+- [x] 全站 HTTPS，無混合內容（mixed content）
+  ✅ 實際做法：CSP 含 `upgrade-insecure-requests`，且先前排查過的唯一 http 問題（github.io 轉址）已修復。
+- [x] 提交 sitemap 到 Google Search Console 及 Bing Webmaster Tools
+  ✅ 實際做法：GSC 已送出（狀態待處理中）。**Bing Webmaster Tools 還沒做**——這個可以直接匯入 GSC 驗證結果，幾分鐘完成，建議你之後也做一下，留在待辦池。
+
+### 3.3 渲染
+
+- [x] 主要內容在**原始 HTML** 就存在，用 `curl` 檢查（不要看瀏覽器）
+  ✅ 實際做法：已檢查，**確認不存在**——見 2.2，純 CSR，原始 HTML 是空殼。這條目前是「發現問題」而非「做完」，故評估內容見下。
+- [ ] 若目前是 CSR，要不要改成 SSR/SSG，這是本階段最高成本的改動方案
+  **不自己動手，先回報評估**：現有站台是 Vite SPA，改 SSR/SSG（例如換成 Next.js 或加 Vite SSR）是架構級變動，会牽動全部頁面、Admin 後台整合、GitHub Pages 純靜態託管的部署模式（GitHub Pages 不跑 server，SSR 需要另外的執行環境，等於要換 hosting）。這不是「這次順手做」量級的事，需要你明確決定要不要做、以及可接受的改動範圍有多大。目前 Googlebot 對 CSR 網站確實會執行 JS 再索引，只是比 SSR/SSG 慢、更依賴爬取預算，並非完全爬不到——先把 Phase 1 其餘項目做完、觀察 GSC 的「涵蓋範圍」報告，若幾週後仍遲遲不索引，再回頭考慮這個大改動更務實。
+- [x] 內部連結用真正的 `<a href>`，不要用 `onClick` 導頁
+  ✅ 實際做法：站內連結統一用 `react-router-dom` 的 `<Link>`，會渲染成真正的 `<a href>`，不是純 onClick 導頁。
+
+**驗收：** Lighthouse SEO 分數 ≥ 95；GSC「網頁」報告無「已封鎖」「未編入索引」的異常項；未編入索引的頁數合理。**這兩項驗收本輪都還沒跑，留待下一輪。**
+
+---
+
+## 4～10（Phase 2-7、時程規劃）
+
+尚未執行，維持原文件內容不變，等 Phase 1 剩餘項目與 §1 站台設定值確認後再排。
+
+---
+
+## 11. 待辦池
+
+（Claude Code 過程中發現、但不屬於當下 Phase 的事，寫這裡，不要留在程式碼裡當 TODO）
+
+- [ ] Sitemap 改成 build time 自動產生（從 `src/data/*.ts` 讀 slug），目前是手寫、動態路由頁面完全沒收錄
+- [ ] 每頁專屬 `<title>` / `<meta description>` / `<link rel="canonical">`——目前全站共用 `index.html` 同一份，所有路由標題相同，這對已索引後的排序會是扣分項
+- [ ] 提交 sitemap 到 Bing Webmaster Tools（可直接匯入 GSC 驗證，幾分鐘工作量）
+- [ ] 是否要為 CSR 導入 SSR/SSG 或預渲染（prerender）——架構級決定，需要你明確拍板，見 3.3
+- [ ] Lighthouse 基準線還沒跑（2.3、3.3 的驗收都卡在這裡）
+- [ ] §1 站台設定值需要你填：`site_type` / `primary_goal` / `target_market` / `competitors` 等，Phase 3（On-Page 關鍵字）開始前必須先有這些
+
+---
+
+## 12. Claude Code 起手式指令範例
+
+```
+# 第一步
+請讀 SEO_PLAN.md，執行 Phase 0 剩餘項目（Lighthouse 基準線）。
+把結果填進「Phase 0 產出」欄位。
+
+# 確認後
+Phase 0 結果我看過了，開分支 seo/phase-1-technical，
+把 3.1、3.2 剩下的 checkbox 做掉，每個完成後更新文件。
+3.3 渲染那段先不要動，等我看完評估再決定。
+```
