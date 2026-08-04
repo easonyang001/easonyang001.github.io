@@ -24,23 +24,23 @@
 
 ---
 
-## 1. 站台設定值 ⚠️ 需人工填寫
+## 1. 站台設定值
 
-Claude Code：**這一段不要自己填，Phase 3 以後不要執行**。Phase 0 可以起跑，並用實際結果幫忙把空白欄填上草稿。
+> 使用者已明確指示 Claude Code 直接填寫（原本的「不要自己填」規則本輪解除）。`competitors` 沒有把握用猜的，留白給使用者。
 
 ```yaml
 domain: mrama.org
-canonical_host:        # 例：https://mrama.org，要不要 www，站內統一
-site_type:             # 例：SaaS 產品站 / 內容媒體 / NPO / 個人作品集 / 電商
-primary_goal:          # 例：註冊轉換 / 詢價表單 / 訂閱 / 品牌曝光
-target_market:         # 例：台灣 / 繁體中文 / 全球英語 / 台灣+日本
-languages:             # 例：zh-Hant, en
-tech_stack:            # 例：Next.js 15 App Router / Astro / WordPress / 純靜態
-hosting:               # 例：Vercel / Cloudflare Pages / 自架 nginx
-cms:                   # 例：無 / Contentful / MDX in repo
-analytics:             # 例：GA4 / Plausible / 無
-search_console:        # 已驗證 / 未驗證
-competitors:           # 3-5 個直接競爭網站
+canonical_host: https://mrama.org        # 無 www，已確認 www.mrama.org 沒有 DNS 紀錄
+site_type: 獨立研究機構官網（非 SaaS / 非電商 / 非內容媒體，比較接近 NPO/學術機構站）
+primary_goal: 品牌能見度與可信度——讓外界搜尋機構名稱、研究人員、研究主題時找得到並認識這個機構，不是註冊轉換或詢價表單
+target_market: 全球英語（網站文案全英文），機構本身立足台灣
+languages: en（目前無 zh-Hant 版本，UI 全英文）
+tech_stack: Vite + React + TypeScript + react-router-dom（CSR SPA，Phase 1 起加入 build-time prerender，見 3.3）
+hosting: GitHub Pages（custom domain mrama.org，見 CNAME）
+cms: 無傳統 CMS。Admin 後端（Express + Supabase）透過 GitHub API 開 PR，把內容寫回 src/data/*.ts 靜態檔案，人工 review 後 merge
+analytics: 無（目前沒有 GA4 / Plausible 等工具，index.html 裡確認沒有）
+search_console: 已驗證（domain property）
+competitors:                            # ⚠️ 需要你填：claude.md 列的 IBM Research / MIT CSAIL / Microsoft Research / Google DeepMind / OpenAI 是「設計風格參考」，不是真正的搜尋排名競爭對手——真正會在搜尋結果裡跟 mrama.org 競爭的，應該是規模相近的獨立/小型量子運算研究者網站或部落格，這個我沒有真實資料，不該用猜的
 ```
 
 > **現況備註（2026-08 追蹤）**：以 `mrama.org` 為關鍵字在公開搜尋引擎查詢，**查不到任何該網站的索引結果**。這代表三種可能之一：(a) 網站極新、尚未被索引；(b) 被 `noindex` / `robots.txt` 攔截；(c) 網站尚未上線或未公開。**Phase 0 第一件事就是釐清是哪一種**——如果是 (b)，那就是本站目前優先度最高的單一問題，其他都先放著。
@@ -115,15 +115,16 @@ done
 
 ```
 索引狀態：未索引（技術面已排除攔截可能，純粹是新站尚待爬取 + 剛送出 sitemap 等待處理）
-框架 / 渲染：Vite + React + react-router-dom，純 CSR
+框架 / 渲染：Vite + React + react-router-dom，CSR + build-time prerender（見 3.3）
 頁面數量（概略分類）：~20 靜態路由 + 4 類動態 slug 路由（research/projects/people/solutions）
 Lighthouse 基準（mobile）：Performance 64 / SEO 100 / A11y 95 / Best Practices 100
 Lighthouse 基準（desktop）：Performance 91 / SEO 100 / A11y 95 / Best Practices 100
 Core Web Vitals（mobile, lab data）：LCP 6.5s / CLS 0 / TBT 80ms
-三大最急風險項（更新於 Phase 1 完成後）：
+最急風險項（更新於 CSR→prerender 完成後）：
 1. Mobile LCP 6.5s，遠高於 Phase 2 目標 2.5s——最大單一元凶是 BlochSpherePage 920KB 的 JS chunk，是接下來效能優化的第一個對象
-2. 純 CSR——Googlebot 需要額外渲染步驟才能看到內容，SEO 分數雖已是 100，但這是「爬蟲執行 JS 後」的分數，實際索引速度仍受影響，是否要改 SSR/SSG 需要你拍板（見 3.3）
-3. §1 站台設定值尚未由人工填寫，Phase 3（關鍵字/內容架構）起無法安全執行
+2. §1 站台設定值已由使用者授權填寫（見上），但 `competitors` 仍空著，Phase 3（關鍵字/內容架構）真的要動之前需要你補上
+
+~~純 CSR，Googlebot 需要額外渲染步驟~~ — 已解決，見 3.3 的 prerender 實作，現在 `curl` 任何路由都能直接拿到完整內容
 
 ~~2. 全站共用同一份靜態 meta~~ — 已在 Phase 1 解決（每頁專屬 title/description/canonical，見 3.1）
 ```
@@ -164,9 +165,15 @@ Core Web Vitals（mobile, lab data）：LCP 6.5s / CLS 0 / TBT 80ms
 ### 3.3 渲染
 
 - [x] 主要內容在**原始 HTML** 就存在，用 `curl` 檢查（不要看瀏覽器）
-  ✅ 實際做法：已檢查，**確認不存在**——見 2.2，純 CSR，原始 HTML 是空殼。這條目前是「發現問題」而非「做完」，故評估內容見下。
-- [ ] 若目前是 CSR，要不要改成 SSR/SSG，這是本階段最高成本的改動方案
-  **不自己動手，先回報評估**：現有站台是 Vite SPA，改 SSR/SSG（例如換成 Next.js 或加 Vite SSR）是架構級變動，会牽動全部頁面、Admin 後台整合、GitHub Pages 純靜態託管的部署模式（GitHub Pages 不跑 server，SSR 需要另外的執行環境，等於要換 hosting）。這不是「這次順手做」量級的事，需要你明確決定要不要做、以及可接受的改動範圍有多大。目前 Googlebot 對 CSR 網站確實會執行 JS 再索引，只是比 SSR/SSG 慢、更依賴爬取預算，並非完全爬不到——先把 Phase 1 其餘項目做完、觀察 GSC 的「涵蓋範圍」報告，若幾週後仍遲遲不索引，再回頭考慮這個大改動更務實。
+  ✅ 實際做法：本輪之前確認不存在（純 CSR，原始 HTML 是空殼）。**本輪已解決**——見下一項的 prerender 實作，`curl` 現在對每個路由都能直接拿到完整渲染後的內容。
+- [x] 若目前是 CSR，要不要改成 SSR/SSG，這是本階段最高成本的改動方案
+  ✅ 實際做法：使用者決定要做，且明確選擇「**build-time prerender**」而非真正的 SSR/框架遷移——GitHub Pages 只能放靜態檔案，換成 Next.js 之類的 SSR 框架必須連 hosting 一起換，違反 claude.md「必須能部署到 GitHub Pages」的硬性要求，成本高太多不成比例。
+
+  做法：新增 `scripts/prerender.mjs`，在 `vite build` + `copy-404.mjs` 之後、`npm run build` 的最後一步執行。用 Playwright（新增為 devDependency）開一個真的無頭瀏覽器，起一個本機靜態伺服器讀 `dist/`，把 `all-routes.mjs`（跟 sitemap 產生器共用的路由清單）列出的全部 35 條路由都真的訪問一次、等 `networkidle` 後抓 `page.content()`，寫成 `dist/<route>/index.html`（首頁例外，直接覆蓋 `dist/index.html`）。CI（`.github/workflows/deploy.yml`）加了 `npx playwright install --with-deps chromium` 步驟，不然 build 在 GitHub Actions 上會找不到瀏覽器執行檔。
+
+  **過程中抓到一個真的 bug**：一開始的 SPA fallback 邏輯在遇到還沒生成的路由時，會退回去讀 `dist/index.html` 當殼——但這個檔案在處理完首頁後，已經被首頁「渲染完的實際內容」（含 Hero 區塊的 IntroOverlay 動畫）覆蓋掉了，導致除了首頁本身，其他 34 個頁面的殼都混進了首頁的殘留內容。修正：fallback 一律改讀 `dist/404.html`（`copy-404.mjs` 在預渲染開始前存下來的原始空殼備份，腳本全程不會去動它），並在腳本一開頭加了防呆——如果 `dist/404.html` 不存在就直接報錯，不會默默用錯的東西頂替。
+
+  **驗證時的另一個插曲，記下來避免未來的人被誤導**：用 `npm run preview`（`vite preview`）在本機測試時，畫面整個是黑的，一度以為預渲染又壞了——後來查出來是 `vite preview` 自己的 SPA fallback 邏輯不認得巢狀的 `dist/about/index.html` 這種結構，對任何「看起來像路由、不是靜態資源」的請求一律回傳根目錄的 `index.html`，跟 GitHub Pages 真實的靜態檔案伺服器行為完全不同。**改用 `npx serve dist` 測試後，一切正常**（title、canonical、視覺畫面都對，多個路由 + client-side 導航都測過，0 console 錯誤）。**之後要在本機驗證預渲染結果，不要用 `npm run preview`，要用 `npx serve dist` 或直接看部署後的正式環境。**
 - [x] 內部連結用真正的 `<a href>`，不要用 `onClick` 導頁
   ✅ 實際做法：站內連結統一用 `react-router-dom` 的 `<Link>`，會渲染成真正的 `<a href>`，不是純 onClick 導頁。
 
@@ -192,9 +199,12 @@ Core Web Vitals（mobile, lab data）：LCP 6.5s / CLS 0 / TBT 80ms
 - [ ] og:image 目前是全站共用同一張（`/og-image.svg`），沒有隨路由換圖——Phase 3（結構化資料/OG）範圍，先記著
 - [ ] Lighthouse a11y 95 分，唯一扣分項是 `color-contrast`（文字對比度不足）——不是 SEO 範疇，是 claude.md 本來就要求的無障礙項目，找時間單獨處理
 - [ ] Mobile LCP 6.5s（目標 < 2.5s），最大元凶是 `BlochSpherePage` 920KB 的 JS chunk——這是 Phase 2（效能）第一項要處理的
-- [ ] 是否要為 CSR 導入 SSR/SSG 或預渲染（prerender）——架構級決定，需要你明確拍板，見 3.3
-- [ ] Lighthouse 基準線還沒跑（2.3、3.3 的驗收都卡在這裡）
-- [ ] §1 站台設定值需要你填：`site_type` / `primary_goal` / `target_market` / `competitors` 等，Phase 3（On-Page 關鍵字）開始前必須先有這些
+- [x] ~~是否要為 CSR 導入 SSR/SSG 或預渲染（prerender）~~ — 已完成，見 3.3
+- [x] ~~Lighthouse 基準線還沒跑~~ — 已完成，見 2.3
+- [x] ~~§1 站台設定值需要你填~~ — 已由使用者授權填寫，`competitors` 仍留白
+- [ ] **本機測試預渲染結果不要用 `npm run preview`**——`vite preview` 自己的 SPA fallback 不認得巢狀的 `dist/<route>/index.html`，任何非靜態資源的路徑都會回傳根目錄 `index.html`，會誤導成「畫面壞了」。改用 `npx serve dist` 或直接看正式環境。
+- [ ] `npm run build` 現在多了一個 Playwright 開瀏覽器跑 35 個路由的步驟，本機/CI 的 build 時間會變長（CI 另外加了 `playwright install --with-deps chromium` 的安裝步驟）——如果之後路由數量大幅增加，這個步驟的耗時要留意
+- [ ] Prerender 只走過一次 CSP 驗證（zero console 錯誤），但沒有針對「每個路由」逐一人工檢查畫面——目前是抽測幾個 + 自動化 title/canonical 驗證，如果之後發現特定頁面畫面跑掉，回來看是不是那個頁面本身的元件有 SSR-unsafe 的邏輯（例如直接讀 `window`/`document` 而沒做防呆）
 
 ---
 
