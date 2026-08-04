@@ -98,11 +98,18 @@ done
 
 ### 2.3 效能基準線
 
-- [ ] 記錄基準分數：Performance / SEO / A11y / Best Practices
-- [ ] 記錄 Core Web Vitals（LCP、INP、CLS，行動優先）
-- [ ] `reports/` 有進 `.gitignore`，作業數字才進版控區
-
-**這兩項需要跑 `npx lighthouse`，屬於本機/CI 執行動作，還沒跑——排進下一輪 Phase 0 收尾。**
+- [x] 記錄基準分數：Performance / SEO / A11y / Best Practices
+  ✅ 實際做法：對正式環境 `https://mrama.org` 跑 `npx lighthouse`。
+  Desktop：Performance 91 / **SEO 100**（零失敗項）/ A11y 95 / Best Practices 100
+  Mobile：Performance 64 / **SEO 100**（零失敗項）/ A11y 95 / Best Practices 100
+  A11y 的唯一扣分項是 `color-contrast`（文字對比度），跟 SEO 無關，記進 §11 待辦池，這次不動手改。
+- [x] 記錄 Core Web Vitals（LCP、INP、CLS，行動優先）
+  ✅ 實際做法：Lighthouse 是實驗室測試（lab data），量不到真正的 INP（那是需要真實使用者流量的欄位指標），用 TBT（Total Blocking Time）當替代指標。
+  Desktop：LCP 1.5s / CLS 0 / TBT 0ms
+  Mobile：LCP **6.5s**（Phase 2 目標是 < 2.5s，目前差距大）/ CLS 0 / TBT 80ms
+  Mobile LCP 過高跟 build 時就有的警告一致（`BlochSpherePage` chunk 920KB，遠超建議值），是 Phase 2（效能）的頭號項目，這次不處理。
+- [x] `reports/` 有進 `.gitignore`，作業數字才進版控區
+  ✅ 實際做法：`.gitignore` 加了 `reports/`，原始報告只留在本機，不進版控。
 
 ### Phase 0 產出（Claude Code 填寫）
 
@@ -110,12 +117,15 @@ done
 索引狀態：未索引（技術面已排除攔截可能，純粹是新站尚待爬取 + 剛送出 sitemap 等待處理）
 框架 / 渲染：Vite + React + react-router-dom，純 CSR
 頁面數量（概略分類）：~20 靜態路由 + 4 類動態 slug 路由（research/projects/people/solutions）
-Lighthouse 基準（mobile）：尚未執行
-Core Web Vitals：尚未量測
-三大最急風險項：
-1. 純 CSR——Googlebot 需要額外渲染步驟才能看到內容，是所有後續 SEO 動作的地基風險
-2. 全站共用同一份靜態 meta（title/description/canonical），每個路由的 <title> 目前都一樣，尚未做到每頁客製
-3. §1 站台設定值尚未由人工填寫，Phase 3 起無法安全執行
+Lighthouse 基準（mobile）：Performance 64 / SEO 100 / A11y 95 / Best Practices 100
+Lighthouse 基準（desktop）：Performance 91 / SEO 100 / A11y 95 / Best Practices 100
+Core Web Vitals（mobile, lab data）：LCP 6.5s / CLS 0 / TBT 80ms
+三大最急風險項（更新於 Phase 1 完成後）：
+1. Mobile LCP 6.5s，遠高於 Phase 2 目標 2.5s——最大單一元凶是 BlochSpherePage 920KB 的 JS chunk，是接下來效能優化的第一個對象
+2. 純 CSR——Googlebot 需要額外渲染步驟才能看到內容，SEO 分數雖已是 100，但這是「爬蟲執行 JS 後」的分數，實際索引速度仍受影響，是否要改 SSR/SSG 需要你拍板（見 3.3）
+3. §1 站台設定值尚未由人工填寫，Phase 3（關鍵字/內容架構）起無法安全執行
+
+~~2. 全站共用同一份靜態 meta~~ — 已在 Phase 1 解決（每頁專屬 title/description/canonical，見 3.1）
 ```
 
 ---
@@ -160,7 +170,9 @@ Core Web Vitals：尚未量測
 - [x] 內部連結用真正的 `<a href>`，不要用 `onClick` 導頁
   ✅ 實際做法：站內連結統一用 `react-router-dom` 的 `<Link>`，會渲染成真正的 `<a href>`，不是純 onClick 導頁。
 
-**驗收：** Lighthouse SEO 分數 ≥ 95；GSC「網頁」報告無「已封鎖」「未編入索引」的異常項；未編入索引的頁數合理。**這兩項驗收本輪都還沒跑，留待下一輪。**
+**驗收：** Lighthouse SEO 分數 ≥ 95；GSC「網頁」報告無「已封鎖」「未編入索引」的異常項；未編入索引的頁數合理。
+- [x] Lighthouse SEO 分數 ≥ 95 ✅ 實際做法：desktop/mobile 都是 100 分，零失敗項（見 2.3）。
+- [ ] GSC 涵蓋範圍報告——網站太新，GSC 目前還沒有涵蓋範圍資料可看，等 Google 真的開始爬了才有東西可查，留待下一輪。
 
 ---
 
@@ -178,6 +190,8 @@ Core Web Vitals：尚未量測
 - [x] ~~每頁專屬 title / description / canonical~~ — 已完成，見 3.1
 - [ ] 提交 sitemap 到 Bing Webmaster Tools（可直接匯入 GSC 驗證，幾分鐘工作量）
 - [ ] og:image 目前是全站共用同一張（`/og-image.svg`），沒有隨路由換圖——Phase 3（結構化資料/OG）範圍，先記著
+- [ ] Lighthouse a11y 95 分，唯一扣分項是 `color-contrast`（文字對比度不足）——不是 SEO 範疇，是 claude.md 本來就要求的無障礙項目，找時間單獨處理
+- [ ] Mobile LCP 6.5s（目標 < 2.5s），最大元凶是 `BlochSpherePage` 920KB 的 JS chunk——這是 Phase 2（效能）第一項要處理的
 - [ ] 是否要為 CSR 導入 SSR/SSG 或預渲染（prerender）——架構級決定，需要你明確拍板，見 3.3
 - [ ] Lighthouse 基準線還沒跑（2.3、3.3 的驗收都卡在這裡）
 - [ ] §1 站台設定值需要你填：`site_type` / `primary_goal` / `target_market` / `competitors` 等，Phase 3（On-Page 關鍵字）開始前必須先有這些

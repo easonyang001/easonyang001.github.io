@@ -11,3 +11,7 @@ review
 scripts/.venv
 __pycache__
 *.pyc
+
+# Lighthouse SEO reports (docs/SEO_PLAN.md) -- raw run artifacts, numbers get
+# transcribed into the plan by hand.
+reports/
