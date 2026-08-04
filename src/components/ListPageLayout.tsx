@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useSeo } from "../lib/seo/useSeo.ts";
 
 interface ListPageLayoutProps {
   eyebrow?: string;
@@ -7,6 +8,8 @@ interface ListPageLayoutProps {
   filters?: ReactNode;
   resultCount?: number;
   children: ReactNode;
+  /** Canonical path for this page, e.g. "/research". */
+  path: string;
 }
 
 export default function ListPageLayout({
@@ -16,7 +19,10 @@ export default function ListPageLayout({
   filters,
   resultCount,
   children,
+  path,
 }: ListPageLayoutProps) {
+  useSeo({ title, description, path });
+
   return (
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-12">

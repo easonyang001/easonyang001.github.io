@@ -16,6 +16,8 @@ export default function NewsPage() {
   return (
     <ListPageLayout
       title="News"
+      description="Announcements, research updates, and project milestones from Mrama Institute."
+      path="/news"
       resultCount={filtered.length}
       filters={
         <div className="space-y-6">

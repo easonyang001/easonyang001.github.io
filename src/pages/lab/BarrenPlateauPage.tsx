@@ -53,6 +53,8 @@ export default function BarrenPlateauPage() {
     <ToolPageLayout
       eyebrow="Trainability Lab"
       title="Barren Plateau Demo"
+      path="/lab/barren-plateau"
+      seoDescription="Explore how gradient variance shrinks as variational circuits grow, and why costs collapse exponentially with width and depth."
       description={
         <p className="mt-3 text-small text-text-secondary">
           Explore how gradient variance shrinks as variational circuits grow. This lightweight

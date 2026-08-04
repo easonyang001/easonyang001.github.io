@@ -80,6 +80,8 @@ export default function PublicationsPage() {
   return (
     <ListPageLayout
       title="Publications"
+      description="Peer-reviewed papers, preprints, and technical reports from Mrama Institute's research program."
+      path="/publications"
       resultCount={filtered.length}
       filters={
         <div className="space-y-6">

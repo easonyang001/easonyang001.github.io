@@ -47,6 +47,7 @@ export default function ContactPage() {
       eyebrow="Contact"
       title="Send the right message"
       description="Use this page for direct contact, specific requests, bug reports, project inquiries, and follow-up conversations."
+      path="/contact"
     >
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="space-y-12">

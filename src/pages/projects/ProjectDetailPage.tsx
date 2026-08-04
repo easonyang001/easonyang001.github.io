@@ -17,7 +17,7 @@ export default function ProjectDetailPage() {
   ];
 
   return (
-    <DetailPageLayout title={project.title} meta={meta}>
+    <DetailPageLayout title={project.title} description={project.summary} path={`/projects/${project.slug}`} meta={meta}>
       <p className="text-body-lg text-text-secondary">{project.summary}</p>
 
       {project.readMoreUrl && (

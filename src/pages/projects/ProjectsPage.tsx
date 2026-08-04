@@ -17,6 +17,7 @@ export default function ProjectsPage() {
     <ListPageLayout
       title="Projects"
       description="Applied research initiatives translating quantum and optimization theory into working systems."
+      path="/projects"
       resultCount={filtered.length}
       filters={
         <div>

@@ -7,6 +7,7 @@ export default function ResearchPage() {
     <ListPageLayout
       title="Research Areas"
       description="Core disciplines that define our research program, from foundational quantum information theory to applied intelligent optimization."
+      path="/research"
       resultCount={researchAreas.length}
       filters={
         <Link

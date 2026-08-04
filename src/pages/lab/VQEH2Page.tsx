@@ -50,6 +50,8 @@ export default function VQEH2Page() {
   return (
     <ToolPageLayout
       title="H₂ Ground State (VQE)"
+      path="/lab/vqe-h2"
+      seoDescription="Educational demonstration of the Variational Quantum Eigensolver on a minimal H2 Hamiltonian."
       description={
         <>
           <p className="mt-3 font-mono text-mono-label uppercase text-text-muted">

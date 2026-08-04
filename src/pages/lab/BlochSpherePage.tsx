@@ -40,6 +40,8 @@ export default function BlochSpherePage() {
   return (
     <ToolPageLayout
       title="Bloch Sphere"
+      path="/lab/bloch-sphere"
+      seoDescription="Rotate a single qubit on the Bloch sphere with Rx, Ry, and Rz gates and see the resulting state and measurement probabilities."
       description={
         <p className="mt-2 text-small text-text-secondary">
           Rx, Ry, and Rz apply the rotation angle set in the panel below.

@@ -4,7 +4,11 @@ import { people } from "../../data/people.ts";
 
 export default function PeoplePage() {
   return (
-    <PageShell title="People">
+    <PageShell
+      title="People"
+      description="Researchers and engineers at Mrama Institute."
+      path="/people"
+    >
       <div className="flex flex-wrap gap-6">
         {people.map((person) => (
           <Link key={person.slug} to={`/people/${person.slug}`} className="glass-card w-full max-w-xs p-8">

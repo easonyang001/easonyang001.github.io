@@ -32,6 +32,7 @@ export default function DigestPage() {
     <ListPageLayout
       title="arXiv Digest"
       description="Automated arXiv listing, curated weekly. Summaries, where present, are written and reviewed by hand."
+      path="/digest"
       resultCount={totalPapers}
       filters={
         allKeywords.length > 1 && (

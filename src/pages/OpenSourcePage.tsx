@@ -7,6 +7,7 @@ export default function OpenSourcePage() {
     <ListPageLayout
       title="Open Source"
       description="Tools and libraries we publish as we build them."
+      path="/opensource"
       resultCount={openSource.length}
     >
       {openSource.length === 0 ? (

@@ -4,7 +4,11 @@ import { education } from "../../data/education.ts";
 
 export default function EducationPage() {
   return (
-    <PageShell title="Education">
+    <PageShell
+      title="Education"
+      description="Lessons and explainers on quantum computing and optimization concepts."
+      path="/education"
+    >
       {education.length === 0 ? (
         <p className="text-body-lg text-text-secondary">
           Lessons are in development. Check back soon.
