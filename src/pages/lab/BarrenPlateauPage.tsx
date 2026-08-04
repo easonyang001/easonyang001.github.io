@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import LabNarrative, { BARREN_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import { Segmented, SegmentedButton } from "../../components/Segmented.tsx";
 import {
@@ -48,6 +49,7 @@ export default function BarrenPlateauPage() {
     }))
   );
   const maxAbsGradient = Math.max(...gradients.map((point) => Math.abs(point.value)), 1e-6);
+  const narrativeCtx = { qubits, depth, scope, variance: selectedVariance, samples };
 
   return (
     <ToolPageLayout
@@ -64,7 +66,7 @@ export default function BarrenPlateauPage() {
       }
       panel={
         <>
-          <div>
+          <div data-lab-control="scope">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Cost Scope</p>
             <Segmented>
               <SegmentedButton active={scope === "global"} onClick={() => setScope("global")}>
@@ -76,7 +78,7 @@ export default function BarrenPlateauPage() {
             </Segmented>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="qubits">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Qubits</label>
               <span className="readout font-mono text-small text-text-primary">{qubits}</span>
@@ -92,7 +94,7 @@ export default function BarrenPlateauPage() {
             />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="depth">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Depth</label>
               <span className="readout font-mono text-small text-text-primary">{depth}</span>
@@ -153,46 +155,48 @@ export default function BarrenPlateauPage() {
         </>
       }
     >
-      <section>
-        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Gradient Variance vs. Width</p>
-        <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-border bg-readout-bg">
-          <path d={trendPath} fill="none" stroke="#8B5CF6" strokeWidth="2.5" />
-          {trend.map((point, index) => (
-            <circle
-              key={point.qubits}
-              cx={sx(index, trend.length)}
-              cy={syLog(point.variance, minVariance, maxVariance)}
-              r={point.qubits === qubits ? 7 : 4}
-              fill={point.qubits === qubits ? "#FCFDBF" : "#D946EF"}
-            />
-          ))}
-          <text x={PAD} y={PAD - 12} fill="#64748B" fontSize="12">
-            log variance
-          </text>
-        </svg>
-      </section>
-
-      <section className="mt-10">
-        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Sampled Gradients</p>
-        <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-border bg-readout-bg">
-          <line x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} stroke="#1E293B" />
-          {gradients.map((sample) => {
-            const x = sx(sample.index, gradients.length);
-            const y = H / 2 - (sample.value / maxAbsGradient) * (H / 2 - PAD);
-            return (
-              <line
-                key={sample.index}
-                x1={x}
-                x2={x}
-                y1={H / 2}
-                y2={y}
-                stroke={sample.value >= 0 ? "#8B5CF6" : "#D946EF"}
-                strokeWidth="2"
+      <LabNarrative config={BARREN_NARRATIVE} ctx={narrativeCtx}>
+        <section data-lab-visual="variance-trend">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Gradient Variance vs. Width</p>
+          <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Log gradient variance trend. At ${qubits} qubits the modeled variance is ${selectedVariance.toExponential(2)}.`} className="w-full rounded-md border border-border bg-readout-bg">
+            <path d={trendPath} fill="none" stroke="#8B5CF6" strokeWidth="2.5" />
+            {trend.map((point, index) => (
+              <circle
+                key={point.qubits}
+                cx={sx(index, trend.length)}
+                cy={syLog(point.variance, minVariance, maxVariance)}
+                r={point.qubits === qubits ? 7 : 4}
+                fill={point.qubits === qubits ? "#FCFDBF" : "#D946EF"}
               />
-            );
-          })}
-        </svg>
-      </section>
+            ))}
+            <text x={PAD} y={PAD - 12} fill="#64748B" fontSize="12">
+              log variance
+            </text>
+          </svg>
+        </section>
+
+        <section className="mt-10" data-lab-visual="gradient-samples">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Sampled Gradients</p>
+          <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-border bg-readout-bg">
+            <line x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} stroke="#1E293B" />
+            {gradients.map((sample) => {
+              const x = sx(sample.index, gradients.length);
+              const y = H / 2 - (sample.value / maxAbsGradient) * (H / 2 - PAD);
+              return (
+                <line
+                  key={sample.index}
+                  x1={x}
+                  x2={x}
+                  y1={H / 2}
+                  y2={y}
+                  stroke={sample.value >= 0 ? "#8B5CF6" : "#D946EF"}
+                  strokeWidth="2"
+                />
+              );
+            })}
+          </svg>
+        </section>
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import LabNarrative, { VQE_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import EnergyThetaChart from "../../components/chemistry/EnergyThetaChart.tsx";
 import PesChart from "../../components/chemistry/PesChart.tsx";
@@ -12,6 +13,7 @@ export default function VQEH2Page() {
   const [bondLength, setBondLength] = useState(H2_EQUILIBRIUM_BOND_LENGTH_ANGSTROM);
   const [theta, setTheta] = useState(0.1);
   const [bestEnergy, setBestEnergy] = useState<number | null>(null);
+  const [optimizationHistory, setOptimizationHistory] = useState<number[]>([]);
 
   const hamiltonian = useMemo(() => h2Hamiltonian(bondLength), [bondLength]);
   const exact = useMemo(() => exactDiagonalize(hamiltonian), [hamiltonian]);
@@ -35,16 +37,19 @@ export default function VQEH2Page() {
 
   const displayedBest = bestEnergy ?? currentEnergy;
   const error = Math.abs(displayedBest - exact.groundEnergy);
+  const narrativeCtx = { bondLength, theta, currentEnergy: displayedBest, error, optimized: bestEnergy !== null };
 
   const handleOptimize = () => {
     const result = optimizeVQE(hamiltonian, theta, 0.3, 300);
     setTheta(((result.theta % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI));
     setBestEnergy(result.energy);
+    setOptimizationHistory(result.history);
   };
 
   const handleBondLengthChange = (r: number) => {
     setBondLength(r);
     setBestEnergy(null);
+    setOptimizationHistory([]);
   };
 
   return (
@@ -69,7 +74,7 @@ export default function VQEH2Page() {
       }
       panel={
         <>
-          <div>
+          <div data-lab-control="bond-length">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">
                 Bond Length R
@@ -89,7 +94,7 @@ export default function VQEH2Page() {
             />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="theta">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Theta</label>
               <span className="readout font-mono text-small text-text-primary">
@@ -108,6 +113,7 @@ export default function VQEH2Page() {
           </div>
 
           <button
+            data-lab-control="optimize"
             onClick={handleOptimize}
             className="mt-6 w-full rounded-md bg-accent px-3 py-2 text-small font-medium text-text-primary transition-colors duration-150 hover:bg-accent-hover"
           >
@@ -143,19 +149,55 @@ export default function VQEH2Page() {
         </>
       }
     >
-      <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">E(θ) Curve</p>
-      <EnergyThetaChart points={thetaCurve} currentTheta={theta} currentEnergy={currentEnergy} />
+      <LabNarrative config={VQE_NARRATIVE} ctx={narrativeCtx}>
+        <section className="mb-10" data-lab-visual="molecule-geometry">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Molecular geometry</p>
+          <svg viewBox="0 0 720 180" role="img" aria-label={`Hydrogen atoms separated by ${bondLength.toFixed(2)} angstrom.`} className="w-full rounded-md border border-border bg-readout-bg">
+            <line x1={360 - bondLength * 70} y1="90" x2={360 + bondLength * 70} y2="90" stroke="#64748B" strokeWidth="3" />
+            <circle cx={360 - bondLength * 70} cy="90" r="24" fill="#8B5CF6" />
+            <circle cx={360 + bondLength * 70} cy="90" r="24" fill="#D946EF" />
+            <text x={360 - bondLength * 70} y="96" textAnchor="middle" fill="#F8FAFC" fontSize="16">H</text>
+            <text x={360 + bondLength * 70} y="96" textAnchor="middle" fill="#F8FAFC" fontSize="16">H</text>
+            <text x="360" y="145" textAnchor="middle" fill="#94A3B8" fontSize="13">R = {bondLength.toFixed(2)} angstrom</text>
+          </svg>
+        </section>
+        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">E(θ) Curve</p>
+        <div data-lab-visual="energy-theta">
+          <EnergyThetaChart points={thetaCurve} currentTheta={theta} currentEnergy={currentEnergy} />
+        </div>
 
-      <div className="mt-10">
-        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">
-          Potential Energy Surface — VQE (accent) vs. exact (dashed)
-        </p>
-        <PesChart
-          points={pesPoints}
-          equilibriumR={H2_EQUILIBRIUM_BOND_LENGTH_ANGSTROM}
-          currentR={bondLength}
-        />
-      </div>
+        <div className="mt-10" data-lab-visual="pes">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">
+            Potential Energy Surface — VQE (accent) vs. exact (dashed)
+          </p>
+          <PesChart
+            points={pesPoints}
+            equilibriumR={H2_EQUILIBRIUM_BOND_LENGTH_ANGSTROM}
+            currentR={bondLength}
+          />
+        </div>
+
+        {optimizationHistory.length > 1 && (() => {
+          const high = Math.max(...optimizationHistory);
+          const low = Math.min(...optimizationHistory);
+          return (
+            <div className="mt-10" data-lab-visual="optimization-trace">
+              <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Optimization trajectory</p>
+              <div
+                className="grid grid-cols-[repeat(auto-fit,minmax(3px,1fr))] items-end gap-px border-b border-l border-border px-2 pt-4"
+                style={{ height: 180 }}
+                role="img"
+                aria-label={`Optimization energy decreased from ${optimizationHistory[0].toFixed(5)} to ${optimizationHistory[optimizationHistory.length - 1].toFixed(5)} Hartree.`}
+              >
+                {optimizationHistory.map((energy, index) => {
+                  const height = high === low ? 8 : 8 + ((energy - low) / (high - low)) * 140;
+                  return <span key={index} className="block bg-accent/70" style={{ height }} aria-hidden="true" />;
+                })}
+              </div>
+            </div>
+          );
+        })()}
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

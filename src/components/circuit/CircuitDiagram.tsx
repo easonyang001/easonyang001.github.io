@@ -58,7 +58,13 @@ export default function CircuitDiagram({
               height={ROW_H}
               fill="transparent"
               className="cursor-pointer"
+              role="button"
+              tabIndex={0}
+              aria-label={`Place selected gate on qubit ${q}, column ${col + 1}`}
               onClick={() => onCellClick(col, q)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") onCellClick(col, q);
+              }}
             />
           ))
         )}
@@ -84,7 +90,9 @@ export default function CircuitDiagram({
           if (gate.name === "CNOT" && gate.control !== undefined) {
             const controlY = cy(gate.control);
             return (
-              <g key={gate.id} className="cursor-pointer" onClick={() => onGateClick(gate.id)}>
+              <g key={gate.id} className="cursor-pointer" role="button" tabIndex={0} aria-label={`Remove CNOT in column ${gate.column + 1}`} onClick={() => onGateClick(gate.id)} onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") onGateClick(gate.id);
+              }}>
                 <line x1={x} y1={controlY} x2={x} y2={y} stroke={colors.fill} strokeWidth="1.5" />
                 <circle cx={x} cy={controlY} r="5" fill={colors.fill} />
                 <circle cx={x} cy={y} r="10" fill="none" stroke={colors.fill} strokeWidth="1.5" />
@@ -95,7 +103,9 @@ export default function CircuitDiagram({
           }
 
           return (
-            <g key={gate.id} className="cursor-pointer" onClick={() => onGateClick(gate.id)}>
+            <g key={gate.id} className="cursor-pointer" role="button" tabIndex={0} aria-label={`Remove ${gate.name} from qubit ${gate.qubit}, column ${gate.column + 1}`} onClick={() => onGateClick(gate.id)} onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") onGateClick(gate.id);
+            }}>
               <rect
                 x={x - GATE_SIZE / 2}
                 y={y - GATE_SIZE / 2}

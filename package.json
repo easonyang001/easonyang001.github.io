@@ -30,6 +30,7 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^149.0.0",
     "@types/node": "^26.1.2",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
