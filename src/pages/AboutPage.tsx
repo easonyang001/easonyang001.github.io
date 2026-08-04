@@ -1,4 +1,5 @@
 import AboutHero from "../components/about/AboutHero.tsx";
+import AboutGlance from "../components/about/AboutGlance.tsx";
 import AboutVisionMission from "../components/about/AboutVisionMission.tsx";
 import AboutPrinciples from "../components/about/AboutPrinciples.tsx";
 import AboutNetwork from "../components/about/AboutNetwork.tsx";
@@ -11,6 +12,7 @@ export default function AboutPage() {
   return (
     <>
       <AboutHero />
+      <AboutGlance />
 
       <AboutVisionMission />
       <AboutPrinciples />

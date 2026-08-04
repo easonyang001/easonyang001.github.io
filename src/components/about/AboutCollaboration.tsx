@@ -1,26 +1,35 @@
 import { Link } from "react-router-dom";
 import { site } from "../../data/site.ts";
 
-const AUDIENCES = ["Students", "Researchers", "Engineers", "Universities", "Industry"];
+const AUDIENCES = [
+  { name: "Students", opportunities: ["Research assistantships", "Open-source contributions"] },
+  { name: "Researchers", opportunities: ["Joint publications", "Research collaboration"] },
+  { name: "Engineers", opportunities: ["Software development", "System implementation"] },
+  { name: "Universities", opportunities: ["Joint research", "Guest talks and workshops"] },
+  { name: "Industry", opportunities: ["Applied optimization", "Technical consulting"] },
+];
 
 export default function AboutCollaboration() {
   return (
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div>
-          <p className="eyebrow">Collaboration</p>
+          <p className="text-small font-medium text-text-muted">Collaboration</p>
           <h2 className="mt-4 text-h2 text-text-primary">Who we work with</h2>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 space-y-5">
             {AUDIENCES.map((audience) => (
-              <span key={audience} className="rounded-md border border-border px-3 py-1.5 text-small text-text-secondary">
-                {audience}
-              </span>
+              <div key={audience.name}>
+                <h3 className="text-h4 text-text-primary">{audience.name}</h3>
+                <p className="mt-1 text-small text-text-secondary">
+                  {audience.opportunities.join(" · ")}
+                </p>
+              </div>
             ))}
           </div>
         </div>
 
         <div>
-          <p className="eyebrow">Join Mrama</p>
+          <p className="text-small font-medium text-text-muted">Join Mrama</p>
           <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
             Reach out if you'd like to collaborate on research, contribute code, or discuss a project.
           </p>

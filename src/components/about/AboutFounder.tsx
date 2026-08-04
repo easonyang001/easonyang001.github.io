@@ -1,6 +1,15 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import { people } from "../../data/people.ts";
 
+const RESPONSIBILITIES = [
+  "Research",
+  "Software Engineering",
+  "Open-Source Development",
+  "Website Development",
+  "Education",
+  "Institutional Development",
+];
+
 export default function AboutFounder() {
   const founder = people[0];
   if (!founder) return null;
@@ -13,7 +22,7 @@ export default function AboutFounder() {
 
   return (
     <section className="section-container border-t border-border">
-      <p className="eyebrow">Founder</p>
+      <p className="text-small font-medium text-text-muted">Founder</p>
       <div className="glass-card mt-6 max-w-prose p-8">
         {founder.avatarUrl ? (
           <img src={founder.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" />
@@ -38,6 +47,20 @@ export default function AboutFounder() {
             ))}
           </div>
         )}
+
+        <div className="mt-6 border-t border-border pt-6">
+          <p className="text-small font-medium text-text-muted">Responsibilities</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {RESPONSIBILITIES.map((item) => (
+              <span
+                key={item}
+                className="rounded-md border border-border px-2 py-1 text-small text-text-secondary"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
 
         {founder.scholarUrl && (
           <a

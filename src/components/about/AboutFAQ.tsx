@@ -16,6 +16,18 @@ const FAQ_ITEMS = [
     question: "Can students join?",
     answer: "Yes. Students interested in contributing to research or open-source work are welcome to get in touch.",
   },
+  {
+    question: "How is Mrama funded?",
+    answer: "Mrama is currently self-funded by its founder. It does not receive external grants, venture funding, or institutional backing at this stage.",
+  },
+  {
+    question: "Where is Mrama based?",
+    answer: `Mrama is based in ${site.location}. Collaboration is remote-friendly and not limited by location.`,
+  },
+  {
+    question: "How can I get in touch?",
+    answer: "Reach out through the Contact page, by email, or on GitHub — see the links in the footer.",
+  },
 ];
 
 export default function AboutFAQ() {
@@ -23,7 +35,7 @@ export default function AboutFAQ() {
 
   return (
     <section className="section-container border-t border-border">
-      <p className="eyebrow">FAQ</p>
+      <p className="text-small font-medium text-text-muted">FAQ</p>
       <h2 className="mt-4 text-h2 text-text-primary">Common questions</h2>
 
       <div className="mt-10 max-w-prose divide-y divide-border border-t border-border">

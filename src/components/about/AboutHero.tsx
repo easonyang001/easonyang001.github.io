@@ -23,7 +23,17 @@ export default function AboutHero() {
         </p>
 
         <div className="mt-8 max-w-prose">
-          <p className="font-mono text-mono-label uppercase text-text-muted">Organization</p>
+          <p className="text-small font-medium text-text-muted">Why Mrama</p>
+          <p className="mt-4 text-body-lg text-text-secondary">
+            Most quantum computing research happens inside universities and large corporate labs,
+            where the agenda follows department priorities or product roadmaps. Mrama started as a
+            way to work on quantum optimization and quantum machine learning problems on their own
+            terms — driven by the problems themselves, not by where a funding cycle points next.
+          </p>
+        </div>
+
+        <div className="mt-8 max-w-prose">
+          <p className="text-small font-medium text-text-muted">Organization</p>
           <p className="mt-4 text-body-lg text-text-secondary">
             Mrama Institute is an independent research project, currently led by a single
             researcher, self-funded, and not a registered legal entity. Research is focused on
