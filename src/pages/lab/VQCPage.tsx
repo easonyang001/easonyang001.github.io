@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import LabNarrative, { VQC_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import { Segmented, SegmentedButton } from "../../components/Segmented.tsx";
 import DecisionBoundary from "../../components/qml/DecisionBoundary.tsx";
@@ -47,7 +48,7 @@ export default function VQCPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datasetSlug, layers, seed]);
 
-  const doEpoch = useCallback(() => {
+  const doEpoch = useCallback((forceBoundary = false) => {
     const { weights: w, epoch: e, lossHistory: h } = stateRef.current;
     const nextWeights = trainStep(dataset, w, layers, learningRate);
     const loss = datasetLoss(dataset, nextWeights, layers);
@@ -56,7 +57,7 @@ export default function VQCPage() {
     setWeights(nextWeights);
     setEpoch(nextEpoch);
     setLossHistory(nextHistory);
-    if (nextEpoch % BOUNDARY_REDRAW_INTERVAL === 0 || nextEpoch >= maxEpochs) {
+    if (forceBoundary || nextEpoch % BOUNDARY_REDRAW_INTERVAL === 0 || nextEpoch >= maxEpochs) {
       setBoundaryWeights(nextWeights);
     }
     return nextEpoch;
@@ -79,11 +80,20 @@ export default function VQCPage() {
 
   const handleStep = () => {
     if (training) return;
-    doEpoch();
+    doEpoch(true);
   };
 
   const currentAccuracy = datasetAccuracy(dataset, weights, layers);
   const currentLoss = lossHistory[lossHistory.length - 1] ?? datasetLoss(dataset, weights, layers);
+  const narrativeCtx = {
+    epoch,
+    loss: currentLoss,
+    initialLoss: lossHistory[0] ?? currentLoss,
+    accuracy: currentAccuracy,
+    layers,
+    learningRate,
+    datasetSlug,
+  };
 
   return (
     <ToolPageLayout
@@ -98,7 +108,7 @@ export default function VQCPage() {
       }
       panel={
         <>
-          <div>
+          <div data-lab-control="dataset">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Dataset</p>
             <Segmented>
               {DATASETS.map((d) => (
@@ -113,7 +123,7 @@ export default function VQCPage() {
             </Segmented>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="layers">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Layers</p>
             <Segmented>
               {Array.from({ length: MAX_LAYERS - MIN_LAYERS + 1 }, (_, i) => MIN_LAYERS + i).map(
@@ -126,7 +136,7 @@ export default function VQCPage() {
             </Segmented>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="learning-rate">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">
                 Learning Rate
@@ -174,7 +184,7 @@ export default function VQCPage() {
             />
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-2">
+          <div className="mt-6 grid grid-cols-2 gap-2" data-lab-control="training">
             <button
               onClick={() => setTraining((t) => !t)}
               disabled={epoch >= maxEpochs}
@@ -220,18 +230,20 @@ export default function VQCPage() {
         </>
       }
     >
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <p className="font-mono text-mono-label uppercase text-text-muted">Decision Boundary</p>
-        <MagmaLegend label="P(class 1)" />
-      </div>
-      <div className="mt-4">
-        <DecisionBoundary weights={boundaryWeights} layers={layers} dataset={dataset} />
-      </div>
+      <LabNarrative config={VQC_NARRATIVE} ctx={narrativeCtx}>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <p className="font-mono text-mono-label uppercase text-text-muted">Decision Boundary</p>
+          <MagmaLegend label="P(class 1)" />
+        </div>
+        <div className="mt-4" data-lab-visual="decision-boundary">
+          <DecisionBoundary weights={boundaryWeights} layers={layers} dataset={dataset} />
+        </div>
 
-      <div className="mt-10">
-        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Loss Curve</p>
-        <LossCurve lossHistory={lossHistory} />
-      </div>
+        <div className="mt-10" data-lab-visual="loss-curve">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Loss Curve</p>
+          <LossCurve lossHistory={lossHistory} />
+        </div>
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

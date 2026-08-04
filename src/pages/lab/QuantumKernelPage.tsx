@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import LabNarrative, { KERNEL_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import { Segmented, SegmentedButton } from "../../components/Segmented.tsx";
 import {
@@ -29,6 +30,7 @@ export default function QuantumKernelPage() {
   const [kernelKind, setKernelKind] = useState<KernelKind>("quantum");
   const [depth, setDepth] = useState(2);
   const [gamma, setGamma] = useState(0.8);
+  const [selectedPair, setSelectedPair] = useState<[number, number]>([0, 0]);
 
   const datasetInfo =
     KERNEL_DATASETS.find((item) => item.slug === datasetSlug) ?? KERNEL_DATASETS[0];
@@ -46,6 +48,18 @@ export default function QuantumKernelPage() {
   const quantumAlignment = kernelAlignment(quantumMatrix, dataset);
   const rbfAlignment = kernelAlignment(rbfMatrix, dataset);
   const cell = SIZE / matrix.length;
+  const [selectedI, selectedJ] = selectedPair;
+  const selectedSimilarity = matrix[selectedI]?.[selectedJ] ?? 0;
+  const narrativeCtx = {
+    kernelKind,
+    alignment,
+    quantumAlignment,
+    rbfAlignment,
+    depth,
+    gamma,
+    datasetSlug,
+    comparisonGap: quantumAlignment - rbfAlignment,
+  };
 
   return (
     <ToolPageLayout
@@ -61,7 +75,7 @@ export default function QuantumKernelPage() {
       }
       panel={
         <>
-          <div>
+          <div data-lab-control="dataset">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Dataset</p>
             <Segmented>
               {KERNEL_DATASETS.map((item) => (
@@ -76,7 +90,7 @@ export default function QuantumKernelPage() {
             </Segmented>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="kernel">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Kernel</p>
             <Segmented>
               <SegmentedButton active={kernelKind === "quantum"} onClick={() => setKernelKind("quantum")}>
@@ -88,7 +102,7 @@ export default function QuantumKernelPage() {
             </Segmented>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="depth">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Feature Depth</label>
               <span className="readout font-mono text-small text-text-primary">{depth}</span>
@@ -104,7 +118,7 @@ export default function QuantumKernelPage() {
             />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="gamma">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">RBF Gamma</label>
               <span className="readout font-mono text-small text-text-primary">{gamma.toFixed(2)}</span>
@@ -139,37 +153,59 @@ export default function QuantumKernelPage() {
         </>
       }
     >
-      <div className="grid gap-10 xl:grid-cols-2">
-        <section>
-          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Kernel Matrix</p>
-          <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-md rounded-md border border-border bg-readout-bg">
-            {matrix.map((row, i) =>
-              row.map((value, j) => (
-                <rect key={`${i}-${j}`} x={j * cell} y={i * cell} width={cell + 0.4} height={cell + 0.4} fill={heatColor(value)} />
-              ))
-            )}
-          </svg>
-        </section>
+      <LabNarrative config={KERNEL_NARRATIVE} ctx={narrativeCtx}>
+        <div className="grid gap-10 xl:grid-cols-2">
+          <section data-lab-visual="kernel-matrix">
+            <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Kernel Matrix</p>
+            <svg viewBox={`0 0 ${SIZE} ${SIZE}`} role="img" aria-label={`${kernelKind} kernel similarity matrix with alignment ${alignment.toFixed(3)}`} className="w-full max-w-md rounded-md border border-border bg-readout-bg">
+              {matrix.map((row, i) =>
+                row.map((value, j) => (
+                  <rect
+                    key={`${i}-${j}`}
+                    x={j * cell}
+                    y={i * cell}
+                    width={cell + 0.4}
+                    height={cell + 0.4}
+                    fill={heatColor(value)}
+                    stroke={i === selectedI && j === selectedJ ? "#FCFDBF" : "none"}
+                    strokeWidth="2"
+                    className="cursor-pointer focus:outline-none"
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Select pair ${i + 1} and ${j + 1}, similarity ${value.toFixed(3)}`}
+                    onClick={() => setSelectedPair([i, j])}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") setSelectedPair([i, j]);
+                    }}
+                  />
+                ))
+              )}
+            </svg>
+            <div className="mt-4 border-y border-border py-3 text-small text-text-secondary" aria-live="polite">
+              Pair {selectedI + 1} and {selectedJ + 1}: similarity <span className="font-mono text-text-primary">{selectedSimilarity.toFixed(3)}</span>; labels {dataset[selectedI]?.label} and {dataset[selectedJ]?.label}.
+            </div>
+          </section>
 
-        <section>
-          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Dataset</p>
-          <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-md rounded-md border border-border bg-readout-bg">
-            <line x1={PAD} y1={SIZE / 2} x2={SIZE - PAD} y2={SIZE / 2} stroke="#1E293B" />
-            <line x1={SIZE / 2} y1={PAD} x2={SIZE / 2} y2={SIZE - PAD} stroke="#1E293B" />
-            {dataset.map((point, index) => (
-              <circle
-                key={index}
-                cx={pointX(point.x[0])}
-                cy={pointY(point.x[1])}
-                r="5"
-                fill={point.label === 1 ? "#D946EF" : "#8B5CF6"}
-                stroke="#F8FAFC"
-                strokeWidth="0.8"
-              />
-            ))}
-          </svg>
-        </section>
-      </div>
+          <section data-lab-visual="dataset">
+            <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Dataset</p>
+            <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-md rounded-md border border-border bg-readout-bg">
+              <line x1={PAD} y1={SIZE / 2} x2={SIZE - PAD} y2={SIZE / 2} stroke="#1E293B" />
+              <line x1={SIZE / 2} y1={PAD} x2={SIZE / 2} y2={SIZE - PAD} stroke="#1E293B" />
+              {dataset.map((point, index) => (
+                <circle
+                  key={index}
+                  cx={pointX(point.x[0])}
+                  cy={pointY(point.x[1])}
+                  r="5"
+                  fill={point.label === 1 ? "#D946EF" : "#8B5CF6"}
+                  stroke={index === selectedI || index === selectedJ ? "#FCFDBF" : "#F8FAFC"}
+                  strokeWidth={index === selectedI || index === selectedJ ? "2.5" : "0.8"}
+                />
+              ))}
+            </svg>
+          </section>
+        </div>
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

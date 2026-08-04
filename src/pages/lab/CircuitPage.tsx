@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import LabNarrative, { CIRCUIT_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import { Segmented, SegmentedButton } from "../../components/Segmented.tsx";
 import CircuitDiagram from "../../components/circuit/CircuitDiagram.tsx";
@@ -25,11 +26,32 @@ export default function CircuitPage() {
   const [circuit, setCircuit] = useState<Circuit>(() => emptyCircuit(2));
   const [selectedGate, setSelectedGate] = useState<CircuitGateName>("H");
   const [rotationAngleDeg, setRotationAngleDeg] = useState(90);
+  const [inspectColumn, setInspectColumn] = useState(7);
+  const [placementMessage, setPlacementMessage] = useState<string | null>(null);
   const [pendingControl, setPendingControl] = useState<{ column: number; qubit: number } | null>(
     null
   );
 
-  const result = useMemo(() => simulate(circuit), [circuit]);
+  const inspectedCircuit = useMemo(
+    () => ({ ...circuit, gates: circuit.gates.filter((gate) => gate.column <= inspectColumn) }),
+    [circuit, inspectColumn]
+  );
+  const result = useMemo(() => simulate(inspectedCircuit), [inspectedCircuit]);
+  const gateCount = circuit.gates.length;
+  const hasCnot = circuit.gates.some((gate) => gate.name === "CNOT");
+  const probabilityByLabel = Object.fromEntries(
+    result.basisLabels.map((label, index) => [label, result.probabilities[index]])
+  );
+  const narrativeCtx = {
+    numQubits: circuit.numQubits,
+    gateCount,
+    hasCnot,
+    selectedGate,
+    supportCount: result.probabilities.filter((value) => value > 0.02).length,
+    p0: probabilityByLabel["0"] ?? probabilityByLabel["00"] ?? 0,
+    p1: probabilityByLabel["1"] ?? probabilityByLabel["11"] ?? 0,
+    bellWeight: (probabilityByLabel["00"] ?? 0) + (probabilityByLabel["11"] ?? 0),
+  };
 
   const handleQubitCount = (n: number) => {
     setCircuit((c) => resizeCircuit(c, n));
@@ -38,15 +60,22 @@ export default function CircuitPage() {
 
   const handleCellClick = (column: number, qubit: number) => {
     const existing = gateAtCell(circuit, column, qubit);
-    if (existing) return; // occupied — click the gate itself to remove it
+    if (existing) {
+      setPlacementMessage("That cell is occupied. Select the existing gate to remove it first.");
+      return;
+    }
 
     if (selectedGate === "CNOT") {
       if (!pendingControl) {
         setPendingControl({ column, qubit });
+        setPlacementMessage("Control selected. Choose a different qubit in the same column for the target.");
         return;
       }
       if (pendingControl.column === column && pendingControl.qubit !== qubit) {
         setCircuit((c) => addGate(c, { name: "CNOT", control: pendingControl.qubit, qubit, column }));
+        setPlacementMessage("CNOT placed.");
+      } else {
+        setPlacementMessage("Invalid CNOT target: control and target must be different qubits in the same column.");
       }
       setPendingControl(null);
       return;
@@ -61,6 +90,7 @@ export default function CircuitPage() {
         param: isRotation ? (rotationAngleDeg * Math.PI) / 180 : undefined,
       })
     );
+    setPlacementMessage(`${selectedGate} placed in column ${column + 1}.`);
   };
 
   const handleGateClick = (id: string) => {
@@ -135,6 +165,9 @@ export default function CircuitPage() {
                 );
               })}
             </div>
+            <p className="mt-3 min-h-5 text-small text-text-secondary" aria-live="polite">
+              {placementMessage}
+            </p>
           </div>
 
           {ROTATION_GATES.includes(selectedGate) && (
@@ -181,30 +214,43 @@ export default function CircuitPage() {
         </>
       }
     >
-      <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Circuit</p>
-      <CircuitDiagram
-        circuit={circuit}
-        pendingControl={pendingControl}
-        onCellClick={handleCellClick}
-        onGateClick={handleGateClick}
-      />
-
-      <div className="mt-12 grid gap-10 lg:grid-cols-2">
-        <div>
-          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">
-            Probability Distribution
-          </p>
-          <Histogram basisLabels={result.basisLabels} probabilities={result.probabilities} />
-        </div>
-        <div>
-          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Statevector</p>
-          <AmplitudeTable
-            basisLabels={result.basisLabels}
-            statevector={result.statevector}
-            probabilities={result.probabilities}
+      <LabNarrative config={CIRCUIT_NARRATIVE} ctx={narrativeCtx}>
+        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Circuit</p>
+        <div data-lab-visual="circuit">
+          <CircuitDiagram
+            circuit={circuit}
+            pendingControl={pendingControl}
+            onCellClick={handleCellClick}
+            onGateClick={handleGateClick}
           />
+          <div className="mt-4" data-lab-control="inspect-column">
+            <div className="mb-2 flex items-center justify-between gap-4">
+              <label className="font-mono text-mono-label uppercase text-text-muted" htmlFor="circuit-column">
+                Inspect state through column
+              </label>
+              <span className="readout font-mono text-small text-text-primary">{inspectColumn + 1} / 8</span>
+            </div>
+            <input id="circuit-column" className="slider" type="range" min={0} max={7} value={inspectColumn} onChange={(event) => setInspectColumn(Number(event.target.value))} />
+          </div>
         </div>
-      </div>
+
+        <div className="mt-12 grid gap-10 lg:grid-cols-2">
+          <div data-lab-visual="probabilities">
+            <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">
+              Probability Distribution
+            </p>
+            <Histogram basisLabels={result.basisLabels} probabilities={result.probabilities} />
+          </div>
+          <div>
+            <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Statevector</p>
+            <AmplitudeTable
+              basisLabels={result.basisLabels}
+              statevector={result.statevector}
+              probabilities={result.probabilities}
+            />
+          </div>
+        </div>
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

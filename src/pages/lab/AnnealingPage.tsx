@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import LabNarrative, { ANNEALING_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import { Segmented, SegmentedButton } from "../../components/Segmented.tsx";
 import {
@@ -64,6 +65,23 @@ export default function AnnealingPage() {
     }))
   );
   const acceptedCount = trace.filter((point) => point.accepted).length;
+  const acceptedRatio = trace.length > 0 ? acceptedCount / trace.length : 0;
+  const currentTemperature = initialTemperature * Math.pow(coolingRate, clampedCursor);
+  const bestEnergyRatio =
+    maxEnergy > minEnergy ? (current.bestEnergy - minEnergy) / (maxEnergy - minEnergy) : 0;
+  const narrativeCtx = {
+    step: clampedCursor,
+    temperature: currentTemperature,
+    acceptedRatio,
+    bestEnergyRatio,
+    accepted: current.accepted,
+    currentEnergy: current.energy,
+    bestEnergy: current.bestEnergy,
+    landscapeSlug,
+    initialTemperature,
+    coolingRate,
+    seed,
+  };
 
   const resetRun = () => {
     setSeed((value) => value + 1);
@@ -84,7 +102,7 @@ export default function AnnealingPage() {
       }
       panel={
         <>
-          <div>
+          <div data-lab-control="landscape">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Landscape</p>
             <Segmented>
               {ANNEALING_LANDSCAPES.map((item) => (
@@ -103,7 +121,7 @@ export default function AnnealingPage() {
             <p className="mt-3 text-small text-text-secondary">{landscape.description}</p>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="temperature">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Initial T</label>
               <span className="readout font-mono text-small text-text-primary">
@@ -121,7 +139,7 @@ export default function AnnealingPage() {
             />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="cooling">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Cooling</label>
               <span className="readout font-mono text-small text-text-primary">
@@ -139,7 +157,7 @@ export default function AnnealingPage() {
             />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="steps">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Steps</label>
               <span className="readout font-mono text-small text-text-primary">{steps}</span>
@@ -159,7 +177,7 @@ export default function AnnealingPage() {
             />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="trace">
             <div className="mb-2 flex items-center justify-between">
               <label className="font-mono text-mono-label uppercase text-text-muted">Trace</label>
               <span className="readout font-mono text-small text-text-primary">
@@ -223,36 +241,44 @@ export default function AnnealingPage() {
         </>
       }
     >
-      <section>
-        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Energy Landscape</p>
-        <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-border bg-readout-bg">
-          <path d={landscapePath} fill="none" stroke="#64748B" strokeWidth="2" />
-          <path d={tracePath} fill="none" stroke="#D946EF" strokeWidth="2.5" strokeLinejoin="round" />
-          <circle
-            cx={scaleX(current.x)}
-            cy={scaleY(current.energy, minEnergy, maxEnergy)}
-            r="7"
-            fill="#8B5CF6"
-            stroke="#F8FAFC"
-            strokeWidth="1.5"
-          />
-          <circle
-            cx={scaleX(current.bestX)}
-            cy={scaleY(current.bestEnergy, minEnergy, maxEnergy)}
-            r="5"
-            fill="#FCFDBF"
-          />
-        </svg>
-      </section>
+      <LabNarrative config={ANNEALING_NARRATIVE} ctx={narrativeCtx}>
+        <section data-lab-visual="landscape">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Energy Landscape</p>
+          <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Energy landscape. Current energy ${current.energy.toFixed(3)}, best ${current.bestEnergy.toFixed(3)}.`} className="w-full rounded-md border border-border bg-readout-bg">
+            <path d={landscapePath} fill="none" stroke="#64748B" strokeWidth="2" />
+            <path d={tracePath} fill="none" stroke="#D946EF" strokeWidth="2.5" strokeLinejoin="round" />
+            <circle
+              cx={scaleX(current.x)}
+              cy={scaleY(current.energy, minEnergy, maxEnergy)}
+              r="7"
+              fill="#8B5CF6"
+              stroke="#F8FAFC"
+              strokeWidth="1.5"
+            />
+            <circle
+              cx={scaleX(current.bestX)}
+              cy={scaleY(current.bestEnergy, minEnergy, maxEnergy)}
+              r="5"
+              fill="#FCFDBF"
+            />
+          </svg>
+          <div className="mt-4 grid gap-3 border-y border-border py-4 sm:grid-cols-4" aria-live="polite">
+            <div><p className="eyebrow">Delta E</p><p className="mt-1 font-mono text-small text-text-primary">{current.deltaEnergy.toFixed(3)}</p></div>
+            <div><p className="eyebrow">Temperature</p><p className="mt-1 font-mono text-small text-text-primary">{current.temperature.toFixed(3)}</p></div>
+            <div><p className="eyebrow">P(accept)</p><p className="mt-1 font-mono text-small text-text-primary">{current.acceptanceProbability.toFixed(3)}</p></div>
+            <div><p className="eyebrow">Result</p><p className={`mt-1 text-small font-medium ${current.accepted ? "text-accent" : "text-text-secondary"}`}>{current.accepted ? "Accepted" : "Rejected"}</p></div>
+          </div>
+        </section>
 
-      <section className="mt-10">
-        <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Best Energy Trace</p>
-        <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-border bg-readout-bg">
-          <path d={bestPath} fill="none" stroke="#8B5CF6" strokeWidth="2.5" />
-          <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#1E293B" />
-          <line x1={PAD} y1={PAD} x2={PAD} y2={H - PAD} stroke="#1E293B" />
-        </svg>
-      </section>
+        <section className="mt-10" data-lab-visual="best-trace">
+          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Best Energy Trace</p>
+          <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-border bg-readout-bg">
+            <path d={bestPath} fill="none" stroke="#8B5CF6" strokeWidth="2.5" />
+            <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#1E293B" />
+            <line x1={PAD} y1={PAD} x2={PAD} y2={H - PAD} stroke="#1E293B" />
+          </svg>
+        </section>
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

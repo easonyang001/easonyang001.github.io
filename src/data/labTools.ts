@@ -22,7 +22,7 @@ export const labTools: LabTool[] = [
       challenge: "Match a target state using the fewest gate operations.",
     },
     mathFocus: ["|psi> = alpha|0> + beta|1>", "P(0) = |alpha|^2", "P(1) = |beta|^2"],
-    roadmap: ["Add target-state challenges.", "Add gate history playback.", "Export state snapshots."],
+    roadmap: ["Add state snapshot export.", "Add hardware-noise comparison.", "Add multi-axis target sets."],
   },
   {
     slug: "circuit",
@@ -45,7 +45,7 @@ export const labTools: LabTool[] = [
       challenge: "Build a circuit that produces a requested distribution.",
     },
     mathFocus: ["Unitary evolution", "Tensor-product basis states", "Controlled operations"],
-    roadmap: ["Add measurement sampling.", "Add circuit export.", "Add step-by-step simulation playback."],
+    roadmap: ["Add measurement sampling.", "Add circuit export.", "Add hardware topology constraints."],
   },
   {
     slug: "vqc",
@@ -91,7 +91,7 @@ export const labTools: LabTool[] = [
       challenge: "Find a theta with error below a target threshold before optimizing.",
     },
     mathFocus: ["E(theta) = <psi(theta)|H|psi(theta)>", "Variational principle", "Ground-state energy"],
-    roadmap: ["Add optimizer traces.", "Add Pauli-term contribution view.", "Add ansatz comparison."],
+    roadmap: ["Add Pauli-term contribution view.", "Add ansatz comparison.", "Add shot-noise experiments."],
   },
   {
     slug: "qubo",

@@ -13,6 +13,8 @@ export interface QuboTemplate {
 export interface QuboSolution {
   bits: Bitstring;
   energy: number;
+  objectiveEnergy: number;
+  penaltyEnergy: number;
   feasible: boolean;
   violations: string[];
 }
@@ -82,7 +84,8 @@ export function enumerateBitstrings(size: number): Bitstring[] {
 
 export function evaluateQubo(
   matrix: QuboMatrix,
-  requiredCount: number | null = null
+  requiredCount: number | null = null,
+  penaltyStrength = 0
 ): QuboSolution[] {
   return enumerateBitstrings(matrix.length)
     .map((bits) => {
@@ -91,9 +94,13 @@ export function evaluateQubo(
         requiredCount !== null && selected !== requiredCount
           ? [`selected ${selected}, expected ${requiredCount}`]
           : [];
+      const objectiveEnergy = quboEnergy(bits, matrix);
+      const penaltyEnergy = requiredCount === null ? 0 : penaltyStrength * Math.pow(selected - requiredCount, 2);
       return {
         bits,
-        energy: quboEnergy(bits, matrix),
+        energy: objectiveEnergy + penaltyEnergy,
+        objectiveEnergy,
+        penaltyEnergy,
         feasible: violations.length === 0,
         violations,
       };
@@ -126,5 +133,6 @@ export function greedyQubo(matrix: QuboMatrix): QuboSolution {
     }
   }
 
-  return { bits, energy: quboEnergy(bits, matrix), feasible: true, violations: [] };
+  const energy = quboEnergy(bits, matrix);
+  return { bits, energy, objectiveEnergy: energy, penaltyEnergy: 0, feasible: true, violations: [] };
 }

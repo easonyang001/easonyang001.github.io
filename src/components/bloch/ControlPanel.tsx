@@ -55,7 +55,7 @@ export default function ControlPanel({
 }: ControlPanelProps) {
   return (
     <div className="flex flex-col gap-8">
-      <div>
+      <div data-lab-control="preset-state">
         <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">State</p>
         <Segmented>
           {PRESETS.map((preset) => (
@@ -67,7 +67,7 @@ export default function ControlPanel({
       </div>
 
       <div className="space-y-6">
-        <div>
+        <div data-lab-control="theta">
           <div className="mb-2 flex items-center justify-between">
             <label className="font-mono text-mono-label uppercase text-text-muted">Theta</label>
             <span className="readout font-mono text-small text-text-primary">
@@ -85,7 +85,7 @@ export default function ControlPanel({
           />
         </div>
 
-        <div>
+        <div data-lab-control="phi">
           <div className="mb-2 flex items-center justify-between">
             <label className="font-mono text-mono-label uppercase text-text-muted">Phi</label>
             <span className="readout font-mono text-small text-text-primary">
@@ -104,7 +104,7 @@ export default function ControlPanel({
         </div>
       </div>
 
-      <div>
+      <div data-lab-control="gate">
         <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Gate</p>
         <div className="flex flex-col gap-2">
           <Segmented>
@@ -123,7 +123,7 @@ export default function ControlPanel({
           </Segmented>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4" data-lab-control="rotation-angle">
           <div className="mb-2 flex items-center justify-between">
             <label className="font-mono text-mono-label uppercase text-text-muted">
               Rotation Angle ({ROTATION_GATES.join(", ")})

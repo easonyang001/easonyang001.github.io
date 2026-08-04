@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import LabNarrative, { QUBO_NARRATIVE } from "../../components/LabNarrative.tsx";
 import ToolPageLayout from "../../components/ToolPageLayout.tsx";
 import { Segmented, SegmentedButton } from "../../components/Segmented.tsx";
 import { downloadCsv } from "../../lib/csv.ts";
@@ -29,17 +30,44 @@ export default function QuboPage() {
   const template = QUBO_TEMPLATES.find((item) => item.slug === templateSlug) ?? QUBO_TEMPLATES[0];
   const [matrix, setMatrix] = useState<QuboMatrix>(() => cloneMatrix(template.matrix));
   const [requiredCount, setRequiredCount] = useState<number | null>(null);
+  const [penaltyStrength, setPenaltyStrength] = useState(0);
 
-  const solutions = useMemo(() => evaluateQubo(matrix, requiredCount), [matrix, requiredCount]);
+  const solutions = useMemo(
+    () => evaluateQubo(matrix, requiredCount, penaltyStrength),
+    [matrix, penaltyStrength, requiredCount]
+  );
   const best = solutions[0];
   const greedy = useMemo(() => greedyQubo(matrix), [matrix]);
   const { min, max } = matrixRange(matrix);
+  const energyTerms = matrix.flatMap((row, i) =>
+    row.slice(i).map((coefficient, offset) => {
+      const j = i + offset;
+      return {
+        label: i === j ? `Q${i}${i} x${i}` : `Q${i}${j} x${i}x${j}`,
+        value: coefficient * best.bits[i] * best.bits[j],
+      };
+    })
+  ).filter((term) => term.value !== 0);
+  const narrativeCtx = {
+    bestBits: formatBitstring(best.bits),
+    bestEnergy: best.energy,
+    bestFeasible: best.feasible,
+    greedyBits: formatBitstring(greedy.bits),
+    matrixSize: matrix.length,
+    templateSlug,
+    requiredCount,
+    feasibleCount: solutions.filter((solution) => solution.feasible).length,
+    energyGap: (solutions[1]?.energy ?? best.energy) - best.energy,
+    matrixEdited: JSON.stringify(matrix) !== JSON.stringify(template.matrix),
+    penaltyStrength,
+  };
 
   const handleTemplate = (slug: string) => {
     const next = QUBO_TEMPLATES.find((item) => item.slug === slug) ?? QUBO_TEMPLATES[0];
     setTemplateSlug(slug);
     setMatrix(cloneMatrix(next.matrix));
     setRequiredCount(null);
+    setPenaltyStrength(0);
   };
 
   const updateCell = (row: number, col: number, value: number) => {
@@ -75,7 +103,7 @@ export default function QuboPage() {
       }
       panel={
         <>
-          <div>
+          <div data-lab-control="template">
             <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Template</p>
             <Segmented>
               {QUBO_TEMPLATES.map((item) => (
@@ -91,7 +119,7 @@ export default function QuboPage() {
             <p className="mt-3 text-small text-text-secondary">{template.description}</p>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6" data-lab-control="constraint">
             <label className="mb-2 block font-mono text-mono-label uppercase text-text-muted">
               Feasible count
             </label>
@@ -110,6 +138,14 @@ export default function QuboPage() {
               ))}
               <option value={matrix.length}>Exactly {matrix.length}</option>
             </select>
+          </div>
+
+          <div className="mt-6" data-lab-control="penalty">
+            <div className="mb-2 flex items-center justify-between">
+              <label className="font-mono text-mono-label uppercase text-text-muted" htmlFor="qubo-penalty">Penalty strength</label>
+              <span className="readout font-mono text-small text-text-primary">{penaltyStrength.toFixed(1)}</span>
+            </div>
+            <input id="qubo-penalty" type="range" min={0} max={20} step={0.5} value={penaltyStrength} onChange={(event) => setPenaltyStrength(Number(event.target.value))} className="slider" disabled={requiredCount === null} />
           </div>
 
           <div className="mt-6 rounded-panel border border-panel-border divide-y divide-panel-divider">
@@ -142,75 +178,97 @@ export default function QuboPage() {
         </>
       }
     >
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <section>
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="font-mono text-mono-label uppercase text-text-muted">Q Matrix</p>
-              <p className="mt-1 text-small text-text-secondary">
-                Only the diagonal and upper triangle contribute to E(x) = x^T Q x.
-              </p>
+      <LabNarrative config={QUBO_NARRATIVE} ctx={narrativeCtx}>
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_360px]">
+          <section data-lab-visual="qubo-matrix">
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="font-mono text-mono-label uppercase text-text-muted">Q Matrix</p>
+                <p className="mt-1 text-small text-text-secondary">
+                  Only the diagonal and upper triangle contribute to E(x) = x^T Q x.
+                </p>
+              </div>
+              <span className="rounded-md border border-border px-2 py-1 font-mono text-mono-label uppercase text-text-muted">
+                {matrix.length} variables
+              </span>
             </div>
-            <span className="rounded-md border border-border px-2 py-1 font-mono text-mono-label uppercase text-text-muted">
-              {matrix.length} variables
-            </span>
-          </div>
 
-          <div
-            className="grid overflow-hidden rounded-md border border-border"
-            style={{ gridTemplateColumns: `repeat(${matrix.length + 1}, minmax(64px, 1fr))` }}
-          >
-            <div className="bg-readout-bg p-2" />
-            {template.variables.map((name) => (
-              <div key={name} className="bg-readout-bg p-2 text-center font-mono text-small text-text-muted">
-                {name}
-              </div>
-            ))}
-            {matrix.map((row, i) => [
-              <div key={`row-${i}`} className="bg-readout-bg p-2 font-mono text-small text-text-muted">
-                {template.variables[i]}
-              </div>,
-              ...row.map((value, j) => (
-                <input
-                  key={`${i}-${j}`}
-                  type="number"
-                  step={0.5}
-                  disabled={j < i}
-                  value={value}
-                  onChange={(event) => updateCell(i, j, Number(event.target.value))}
-                  className="min-w-0 border-l border-t border-border px-2 py-3 text-center font-mono text-small text-text-primary outline-none disabled:cursor-not-allowed disabled:text-text-muted"
-                  style={{
-                    backgroundColor: j < i ? "#060B18" : cellColor(value, min, max),
-                  }}
-                />
-              )),
-            ])}
-          </div>
-        </section>
-
-        <section>
-          <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Energy Ranking</p>
-          <div className="divide-y divide-border overflow-hidden rounded-md border border-border">
-            {solutions.slice(0, 8).map((solution, index) => (
-              <div
-                key={formatBitstring(solution.bits)}
-                className="grid grid-cols-[48px_1fr_auto] items-center gap-3 px-4 py-3"
-              >
-                <span className="font-mono text-small text-text-muted">#{index + 1}</span>
-                <div>
-                  <p className="font-mono text-body text-text-primary">{formatBitstring(solution.bits)}</p>
-                  <p className="text-small text-text-secondary">
-                    {solution.feasible ? "feasible" : solution.violations.join("; ")}
-                  </p>
+            <div
+              data-lab-control="matrix"
+              className="grid overflow-hidden rounded-md border border-border"
+              style={{ gridTemplateColumns: `repeat(${matrix.length + 1}, minmax(64px, 1fr))` }}
+            >
+              <div className="bg-readout-bg p-2" />
+              {template.variables.map((name) => (
+                <div key={name} className="bg-readout-bg p-2 text-center font-mono text-small text-text-muted">
+                  {name}
                 </div>
-                <span className="readout font-mono text-small text-text-primary">
-                  {solution.energy.toFixed(2)}
-                </span>
+              ))}
+              {matrix.map((row, i) => [
+                <div key={`row-${i}`} className="bg-readout-bg p-2 font-mono text-small text-text-muted">
+                  {template.variables[i]}
+                </div>,
+                ...row.map((value, j) => (
+                  <input
+                    key={`${i}-${j}`}
+                    type="number"
+                    step={0.5}
+                    disabled={j < i}
+                    value={value}
+                    onChange={(event) => updateCell(i, j, Number(event.target.value))}
+                    className="min-w-0 border-l border-t border-border px-2 py-3 text-center font-mono text-small text-text-primary outline-none disabled:cursor-not-allowed disabled:text-text-muted"
+                    style={{
+                      backgroundColor: j < i ? "#060B18" : cellColor(value, min, max),
+                    }}
+                  />
+                )),
+              ])}
+            </div>
+          </section>
+
+          <section data-lab-visual="energy-ranking">
+            <p className="mb-4 font-mono text-mono-label uppercase text-text-muted">Energy Ranking</p>
+            <div className="divide-y divide-border overflow-hidden rounded-md border border-border">
+              {solutions.slice(0, 8).map((solution, index) => (
+                <div
+                  key={formatBitstring(solution.bits)}
+                  className="grid grid-cols-[48px_1fr_auto] items-center gap-3 px-4 py-3"
+                >
+                  <span className="font-mono text-small text-text-muted">#{index + 1}</span>
+                  <div>
+                    <p className="font-mono text-body text-text-primary">{formatBitstring(solution.bits)}</p>
+                    <p className="text-small text-text-secondary">
+                      {solution.feasible ? "feasible" : solution.violations.join("; ")}
+                    </p>
+                  </div>
+                  <span className="readout font-mono text-small text-text-primary">
+                    {solution.energy.toFixed(2)}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 border-y border-border py-4">
+              <p className="font-mono text-mono-label uppercase text-text-muted">Best-solution energy decomposition</p>
+              <div className="mt-3 space-y-2">
+                {energyTerms.length > 0 ? energyTerms.map((term) => (
+                  <div key={term.label} className="flex items-center justify-between gap-4 text-small">
+                    <span className="font-mono text-text-secondary">{term.label}</span>
+                    <span className="font-mono text-text-primary">{term.value.toFixed(2)}</span>
+                  </div>
+                )) : <p className="text-small text-text-secondary">All active terms contribute zero.</p>}
+                {best.penaltyEnergy > 0 && (
+                  <div className="flex items-center justify-between gap-4 text-small text-[#EA580C]">
+                    <span>Constraint penalty</span><span className="font-mono">{best.penaltyEnergy.toFixed(2)}</span>
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        </section>
-      </div>
+              <div className="mt-3 flex items-center justify-between border-t border-border pt-3 text-small font-medium text-text-primary">
+                <span>Total</span><span className="font-mono">{best.energy.toFixed(2)}</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </LabNarrative>
     </ToolPageLayout>
   );
 }

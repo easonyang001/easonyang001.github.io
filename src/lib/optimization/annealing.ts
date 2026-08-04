@@ -13,6 +13,9 @@ export interface AnnealingPoint {
   bestEnergy: number;
   temperature: number;
   accepted: boolean;
+  deltaEnergy: number;
+  acceptanceProbability: number;
+  candidateEnergy: number;
 }
 
 export const ANNEALING_LANDSCAPES: AnnealingLandscape[] = [
@@ -88,7 +91,8 @@ export function runAnnealing({
     const candidateX = Math.max(0, Math.min(100, x + direction * jump));
     const candidateEnergy = landscape.energyAt(candidateX);
     const delta = candidateEnergy - energy;
-    const accepted = delta <= 0 || random() < Math.exp(-delta / temperature);
+    const acceptanceProbability = delta <= 0 ? 1 : Math.exp(-delta / temperature);
+    const accepted = delta <= 0 || random() < acceptanceProbability;
 
     if (accepted) {
       x = candidateX;
@@ -99,7 +103,10 @@ export function runAnnealing({
       }
     }
 
-    trace.push({ step, x, energy, bestX, bestEnergy, temperature, accepted });
+    trace.push({
+      step, x, energy, bestX, bestEnergy, temperature, accepted,
+      deltaEnergy: delta, acceptanceProbability, candidateEnergy,
+    });
   }
 
   return trace;
