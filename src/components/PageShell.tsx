@@ -1,13 +1,18 @@
 import type { ReactNode } from "react";
+import { useSeo } from "../lib/seo/useSeo.ts";
 
 interface PageShellProps {
   eyebrow?: string;
   title: string;
   description?: string;
   children?: ReactNode;
+  /** Canonical path for this page, e.g. "/contact". */
+  path: string;
 }
 
-export default function PageShell({ eyebrow, title, description, children }: PageShellProps) {
+export default function PageShell({ eyebrow, title, description, children, path }: PageShellProps) {
+  useSeo({ title, description, path });
+
   return (
     <section className="section-container border-t border-border">
       <div className="max-w-prose">

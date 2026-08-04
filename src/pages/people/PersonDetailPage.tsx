@@ -19,7 +19,12 @@ export default function PersonDetailPage() {
   ];
 
   return (
-    <DetailPageLayout title={person.name} meta={meta}>
+    <DetailPageLayout
+      title={person.name}
+      description={person.biography ?? `${person.roles.join(", ")} at Mrama Institute.`}
+      path={`/people/${person.slug}`}
+      meta={meta}
+    >
       {person.avatarUrl ? (
         <img src={person.avatarUrl} alt="" className="mb-6 h-20 w-20 rounded-full object-cover" />
       ) : (

@@ -27,6 +27,7 @@ export default function SolutionsPage() {
     <ListPageLayout
       title="Solutions"
       description="Solved optimization cases -- problem, approach, and measured improvement."
+      path="/solutions"
       resultCount={filtered.length}
       filters={
         <div>

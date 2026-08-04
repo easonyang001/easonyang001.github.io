@@ -35,6 +35,7 @@ export default function LabPage() {
       eyebrow="Interactive Lab"
       title="Explore quantum ideas by changing the system yourself"
       description="A hands-on workspace for quantum states, circuits, variational models, optimization, kernels, and trainability experiments."
+      path="/lab"
     >
       <div className="grid gap-4 border-y border-border py-6 sm:grid-cols-3">
         <div>

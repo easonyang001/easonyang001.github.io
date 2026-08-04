@@ -44,6 +44,7 @@ export default function LabToolPage() {
       eyebrow={tool.status === "published" ? "Published Lab" : "Planned Lab"}
       title={tool.name}
       description={tool.description}
+      path={`/lab/${tool.slug}`}
     >
       <Link
         to="/lab"

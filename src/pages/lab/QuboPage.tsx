@@ -65,6 +65,8 @@ export default function QuboPage() {
     <ToolPageLayout
       eyebrow="Optimization Lab"
       title="QUBO Solver"
+      path="/lab/qubo"
+      seoDescription="Build a small binary quadratic objective, inspect the Q matrix, and compare exact search against a greedy local-search baseline."
       description={
         <p className="mt-3 text-small text-text-secondary">
           Build a small binary quadratic objective, inspect the Q matrix, and compare exact search

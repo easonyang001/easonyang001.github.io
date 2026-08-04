@@ -1,20 +1,29 @@
 import type { ReactNode } from "react";
+import { useSeo } from "../lib/seo/useSeo.ts";
 
 interface ToolPageLayoutProps {
   eyebrow?: string;
   title: string;
   description?: ReactNode;
+  /** Plain-text description for meta tags -- `description` above is often JSX. */
+  seoDescription?: string;
   panel: ReactNode;
   children: ReactNode;
+  /** Canonical path for this page, e.g. "/lab/bloch-sphere". */
+  path: string;
 }
 
 export default function ToolPageLayout({
   eyebrow,
   title,
   description,
+  seoDescription,
   panel,
   children,
+  path,
 }: ToolPageLayoutProps) {
+  useSeo({ title, description: seoDescription, path });
+
   return (
     <div className="section-container border-t border-border">
       <div className="max-w-prose">

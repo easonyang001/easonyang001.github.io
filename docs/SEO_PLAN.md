@@ -130,18 +130,20 @@ Core Web Vitals：尚未量測
   ✅ 實際做法：見 2.1，已確認正確。
 - [x] 移除所有非正式頁面的 `noindex`，特別檢查預覽環境的設定有沒有洩漏到 production
   ✅ 實際做法：全站只有一份 `index.html`（無環境變體），`robots` meta 統一為 `index, follow`，沒有預覽環境洩漏的風險。
-- [ ] 每頁有唯一、正確的絕對路徑 `<link rel="canonical">`
-- [ ] 分頁、篩選、UTM 參數頁面的 canonical 指回主版本
+- [x] 每頁有唯一、正確的絕對路徑 `<link rel="canonical">`
+  ✅ 實際做法：全站原本共用同一份 `index.html` 靜態 meta，每個路由標題/描述都一樣。新增 `src/lib/seo/useSeo.ts`（輕量 hook，沒有另外裝 react-helmet 之類的套件），掛進三個共用 layout（`ListPageLayout`、`DetailPageLayout`、`ToolPageLayout`）加上 `PageShell`，`path` 設為必填 prop，逼 TypeScript 檢查漏掉哪個呼叫點都會報錯。約 28 個路由全部覆蓋，含首頁、About、及沒有共用 layout 的 SolutionDetailPage。用 Playwright 對 `/research`、`/research/quantum-annealing`、SPA 內部導航都驗證過 `document.title`/canonical/description 正確更新，且不會重複產生 `<link rel="canonical">`。
+- [x] 分頁、篩選、UTM 參數頁面的 canonical 指回主版本
+  ✅ 實際做法：篩選/排序狀態（Projects 的 status 篩選、Publications 的搜尋等）都是純前端 state，不寫進網址查詢參數，所以 canonical 天然就是同一個乾淨路徑，不需要額外處理。
 - [x] 建立 404 頁面，是真的 404（不是 200 的「軟 404」）
   ✅ 實際做法：`NotFoundPage` 走 `<Route path="*">`；GitHub Pages 對不存在路徑本來就回 404 狀態碼，而 `dist/404.html`（build 時從 index.html 複製）讓 SPA 路由在 404 狀態下仍能正確渲染對應頁面內容，兩者不衝突。
 - [ ] 若網域曾改版，建立 301 對照表（不適用——全新網域）
 
 ### 3.2 Sitemap 與結構
 
-- [ ] `sitemap.xml` 自動產生，不要手寫維護
-  目前是手寫的靜態檔案（本次擴充內容時也是手動編輯）。動態路由（research/:slug 等）目前完全沒進 sitemap。建議：寫一支 build script 從 `src/data/*.ts` 自動產生完整 sitemap，比照專案已有的 `scripts/copy-404.mjs`、`scripts/generate-case-validator.mjs` 慣例。**這是本輪待辦，不在這次順手做的範圍內，需要你確認要不要做。**
+- [x] `sitemap.xml` 自動產生，不要手寫維護
+  ✅ 實際做法：新增 `scripts/generate-sitemap.mjs`，從 `src/data/research.ts`、`projects.ts`、`people.ts`、`src/data/cases/*.json`（手動讀目錄，因為 `import.meta.glob` 是 Vite 專屬語法，獨立腳本裡跑不動）讀出所有 slug，跟靜態路由一起產生完整 sitemap，接進 `npm run build`。publications 和 news 沒有 detail route，故意不產生對應條目。目前產出 35 條 URL（13 靜態 + 22 動態）。
 - [x] sitemap 只包含 200 + 可索引 + canonical 指向自己的頁面
-  ✅ 實際做法：本次寫入的 13 條都是真實存在、回 200 的靜態路由，沒有 admin 或動態 slug 頁面混進去。
+  ✅ 實際做法：動態產生的每一條都對應真實存在的路由與資料，cases 只納入 `status === "published"` 的項目，跟網站本身 `/solutions` 列表的篩選邏輯一致。
 - [x] URL 結構乾淨：小寫、連字號分隔、無無意義參數、層級 ≤ 3
   ✅ 實際做法：既有路由本來就符合（`/research/quantum-annealing` 這種形式），本次沒有新增不符合的路由。
 - [x] 全站 HTTPS，無混合內容（mixed content）
@@ -172,9 +174,10 @@ Core Web Vitals：尚未量測
 
 （Claude Code 過程中發現、但不屬於當下 Phase 的事，寫這裡，不要留在程式碼裡當 TODO）
 
-- [ ] Sitemap 改成 build time 自動產生（從 `src/data/*.ts` 讀 slug），目前是手寫、動態路由頁面完全沒收錄
-- [ ] 每頁專屬 `<title>` / `<meta description>` / `<link rel="canonical">`——目前全站共用 `index.html` 同一份，所有路由標題相同，這對已索引後的排序會是扣分項
+- [x] ~~Sitemap 改成 build time 自動產生~~ — 已完成，見 3.2
+- [x] ~~每頁專屬 title / description / canonical~~ — 已完成，見 3.1
 - [ ] 提交 sitemap 到 Bing Webmaster Tools（可直接匯入 GSC 驗證，幾分鐘工作量）
+- [ ] og:image 目前是全站共用同一張（`/og-image.svg`），沒有隨路由換圖——Phase 3（結構化資料/OG）範圍，先記著
 - [ ] 是否要為 CSR 導入 SSR/SSG 或預渲染（prerender）——架構級決定，需要你明確拍板，見 3.3
 - [ ] Lighthouse 基準線還沒跑（2.3、3.3 的驗收都卡在這裡）
 - [ ] §1 站台設定值需要你填：`site_type` / `primary_goal` / `target_market` / `competitors` 等，Phase 3（On-Page 關鍵字）開始前必須先有這些

@@ -10,7 +10,7 @@ export default function EducationDetailPage() {
   if (!lesson) return <NotFoundPage />;
 
   return (
-    <PageShell title={lesson.title}>
+    <PageShell title={lesson.title} description={lesson.description} path={`/education/${lesson.slug}`}>
       <p className="max-w-prose text-body-lg text-text-secondary">{lesson.description}</p>
     </PageShell>
   );

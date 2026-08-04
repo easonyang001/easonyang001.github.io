@@ -51,6 +51,8 @@ export default function QuantumKernelPage() {
     <ToolPageLayout
       eyebrow="Quantum Machine Learning"
       title="Quantum Kernel Explorer"
+      path="/lab/quantum-kernel"
+      seoDescription="Compare a quantum-inspired feature-map kernel with a classical RBF kernel using a pairwise similarity heatmap."
       description={
         <p className="mt-3 text-small text-text-secondary">
           Compare a quantum-inspired feature-map kernel with a classical RBF kernel. The heatmap

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useSeo } from "../lib/seo/useSeo.ts";
 
 interface MetaItem {
   label: string;
@@ -8,11 +9,16 @@ interface MetaItem {
 interface DetailPageLayoutProps {
   eyebrow?: string;
   title: string;
+  description?: string;
   meta?: MetaItem[];
   children?: ReactNode;
+  /** Canonical path for this page, e.g. `/research/${slug}`. */
+  path: string;
 }
 
-export default function DetailPageLayout({ eyebrow, title, meta = [], children }: DetailPageLayoutProps) {
+export default function DetailPageLayout({ eyebrow, title, description, meta = [], children, path }: DetailPageLayoutProps) {
+  useSeo({ title, description, path });
+
   return (
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">

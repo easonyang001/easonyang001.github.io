@@ -83,6 +83,8 @@ export default function CircuitPage() {
   return (
     <ToolPageLayout
       title="Circuit Playground"
+      path="/lab/circuit"
+      seoDescription="Build a small quantum circuit gate by gate and inspect the resulting state."
       description={
         <p className="mt-2 text-small text-text-secondary">
           Pick a gate, click a wire to place it. For CNOT, click the control qubit first, then the

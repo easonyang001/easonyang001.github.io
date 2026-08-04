@@ -3,6 +3,7 @@ import NotFoundPage from "../NotFoundPage.tsx";
 import ImprovementSummary from "../../components/case/ImprovementSummary.tsx";
 import FigureRenderer from "../../components/case/figures/FigureRenderer.tsx";
 import { publishedCases } from "../../data/cases/index.ts";
+import { useSeo } from "../../lib/seo/useSeo.ts";
 
 const KIND_LABELS: Record<string, string> = {
   classical: "Classical",
@@ -15,6 +16,8 @@ const KIND_LABELS: Record<string, string> = {
 export default function SolutionDetailPage() {
   const { slug } = useParams();
   const c = publishedCases.find((item) => item.meta.slug === slug);
+
+  useSeo({ title: c?.meta.title, description: c?.meta.oneLiner, path: `/solutions/${slug}` });
 
   if (!c) return <NotFoundPage />;
 

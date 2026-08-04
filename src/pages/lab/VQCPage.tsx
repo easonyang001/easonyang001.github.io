@@ -88,6 +88,8 @@ export default function VQCPage() {
   return (
     <ToolPageLayout
       title="Variational Quantum Classifier"
+      path="/lab/vqc"
+      seoDescription="Train a 2-qubit variational quantum classifier with the parameter-shift rule and watch the decision boundary form live."
       description={
         <p className="mt-2 text-small text-text-secondary">
           A 2-qubit classifier trained with the parameter-shift rule. Watch the decision boundary

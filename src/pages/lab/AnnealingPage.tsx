@@ -74,6 +74,8 @@ export default function AnnealingPage() {
     <ToolPageLayout
       eyebrow="Optimization Lab"
       title="Annealing Simulator"
+      path="/lab/annealing"
+      seoDescription="Explore how temperature controls stochastic search in simulated annealing, from exploration to exploitation."
       description={
         <p className="mt-3 text-small text-text-secondary">
           Explore how temperature controls stochastic search. Accepted uphill moves help the solver
