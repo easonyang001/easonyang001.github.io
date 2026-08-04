@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/generate-case-validator.mjs && tsx scripts/generate-sitemap.mjs && tsc --noEmit && vite build && node scripts/copy-404.mjs && node scripts/prerender.mjs",
+    "vercel-build": "playwright install chromium && npm run build",
     "preview": "vite preview",
     "test": "vitest run",
     "digest": "tsx scripts/fetch-arxiv.ts",
