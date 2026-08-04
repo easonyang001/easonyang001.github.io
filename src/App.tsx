@@ -22,6 +22,10 @@ const BlochSpherePage = lazy(() => import("./pages/lab/BlochSpherePage.tsx"));
 const CircuitPage = lazy(() => import("./pages/lab/CircuitPage.tsx"));
 const VQCPage = lazy(() => import("./pages/lab/VQCPage.tsx"));
 const VQEH2Page = lazy(() => import("./pages/lab/VQEH2Page.tsx"));
+const QuboPage = lazy(() => import("./pages/lab/QuboPage.tsx"));
+const AnnealingPage = lazy(() => import("./pages/lab/AnnealingPage.tsx"));
+const QuantumKernelPage = lazy(() => import("./pages/lab/QuantumKernelPage.tsx"));
+const BarrenPlateauPage = lazy(() => import("./pages/lab/BarrenPlateauPage.tsx"));
 const LabToolPage = lazy(() => import("./pages/lab/LabToolPage.tsx"));
 const AdminPage = lazy(() => import("./pages/AdminPage.tsx"));
 const SolutionsPage = lazy(() => import("./pages/solutions/SolutionsPage.tsx"));
@@ -54,6 +58,10 @@ export default function App() {
             <Route path="lab/circuit" element={<CircuitPage />} />
             <Route path="lab/vqc" element={<VQCPage />} />
             <Route path="lab/vqe-h2" element={<VQEH2Page />} />
+            <Route path="lab/qubo" element={<QuboPage />} />
+            <Route path="lab/annealing" element={<AnnealingPage />} />
+            <Route path="lab/quantum-kernel" element={<QuantumKernelPage />} />
+            <Route path="lab/barren-plateau" element={<BarrenPlateauPage />} />
             <Route path="lab/:toolSlug" element={<LabToolPage />} />
             <Route path="admin" element={<AdminPage />} />
             <Route path="solutions" element={<SolutionsPage />} />

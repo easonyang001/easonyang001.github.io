@@ -120,6 +120,19 @@ export interface LabTool {
   name: string;
   description: string;
   status: "coming-soon" | "published";
+  category?: string;
+  difficulty?: "introductory" | "intermediate" | "advanced";
+  objectives?: string[];
+  workflow?: string[];
+  visualizations?: string[];
+  controls?: string[];
+  modes?: {
+    educational: string;
+    research: string;
+    challenge: string;
+  };
+  mathFocus?: string[];
+  roadmap?: string[];
 }
 
 /** One arXiv listing in a weekly digest. No abstract text is ever stored. */
