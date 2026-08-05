@@ -107,7 +107,7 @@ export default function LabPage() {
       <section className="mt-12 border-b border-border pb-12">
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
-            <p className="eyebrow">Learning paths</p>
+            <p className="text-small font-medium text-text-muted">Learning paths</p>
             <h2 className="mt-3 text-h2 text-text-primary">Choose a scientific question</h2>
           </div>
           <Route className="hidden text-accent md:block" size={26} />
@@ -159,7 +159,7 @@ export default function LabPage() {
       <section className="mt-14">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="eyebrow">Tools</p>
+            <p className="text-small font-medium text-text-muted">Tools</p>
             <h2 className="mt-3 text-h2 text-text-primary">Lab roadmap</h2>
           </div>
           <FlaskConical className="hidden text-accent md:block" size={28} />

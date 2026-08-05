@@ -66,7 +66,7 @@ export default function ContactPage() {
 
           <section className="grid gap-8 border-t border-border pt-12 lg:grid-cols-2">
             <div>
-              <p className="eyebrow">What to include</p>
+              <p className="text-small font-medium text-text-muted">What to include</p>
               <h2 className="mt-4 text-h2 text-text-primary">Make the next step obvious.</h2>
               <p className="mt-4 text-body text-text-secondary">
                 Contact works best when it is practical. Keep the message brief, but make the request,
@@ -87,7 +87,7 @@ export default function ContactPage() {
           </section>
 
           <section className="border-t border-border pt-12">
-            <p className="eyebrow">Email format</p>
+            <p className="text-small font-medium text-text-muted">Email format</p>
             <div className="mt-4 rounded-md border border-border bg-readout-bg p-5 font-mono text-small text-text-secondary">
               <p>Subject: [Request type] - [topic]</p>
               <br />
