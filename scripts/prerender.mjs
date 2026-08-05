@@ -90,6 +90,17 @@ async function main() {
 
   try {
     const page = await browser.newPage();
+    // Hero's intro overlay (src/components/Hero.tsx) portals a full-screen,
+    // pointer-events:auto div directly onto document.body -- a sibling of
+    // #root, outside anything React's client-side render ever touches. If a
+    // route gets captured mid-intro, that div is baked into the static HTML
+    // permanently and no client-side render can ever remove it. Mark the
+    // intro as already-seen (same sessionStorage key/value Hero itself
+    // writes once the intro finishes) before every navigation so it never
+    // mounts during prerendering.
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem("mrama-intro-seen", "1");
+    });
     let failures = 0;
 
     for (const routePath of routePaths) {
