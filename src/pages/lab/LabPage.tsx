@@ -81,7 +81,6 @@ export default function LabPage() {
 
   return (
     <PageShell
-      eyebrow="Interactive Lab"
       title="Explore quantum ideas by changing the system yourself"
       description="A hands-on workspace for quantum states, circuits, variational models, optimization, kernels, and trainability experiments."
       path="/lab"
