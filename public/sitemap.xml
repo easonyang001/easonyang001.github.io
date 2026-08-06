@@ -171,6 +171,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://mrama.org/people/alexandre-lam</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://mrama.org/news/a</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
