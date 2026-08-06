@@ -12,7 +12,7 @@ const TIMELINE = [
 export default function AboutNetwork() {
   return (
     <section className="section-container border-t border-border">
-      <p className="text-small font-medium text-text-muted">Research Network</p>
+      <p className="section-kicker">Research Network</p>
       <h2 className="mt-4 text-h2 text-text-primary">Who's involved</h2>
       <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
         Mrama is small by design today — this map and list grow as people join.
@@ -49,7 +49,7 @@ export default function AboutNetwork() {
         </div>
 
         <div>
-          <p className="text-small font-medium text-text-muted">Timeline</p>
+          <p className="section-kicker">Timeline</p>
           <div className="relative mt-6 border-l border-border pl-8">
             {TIMELINE.map((item) => (
               <div key={item.label} className="relative mb-8 last:mb-0">

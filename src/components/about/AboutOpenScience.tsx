@@ -9,7 +9,7 @@ const CHANNELS = [
 export default function AboutOpenScience() {
   return (
     <section className="section-container border-t border-border">
-      <p className="text-small font-medium text-text-muted">Open Science</p>
+      <p className="section-kicker">Open Science</p>
       <h2 className="mt-4 text-h2 text-text-primary">Published in the open</h2>
       <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
         Papers, code, and working demos are released publicly so results can be checked and built on.

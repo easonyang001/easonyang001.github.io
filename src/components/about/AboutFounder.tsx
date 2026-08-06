@@ -22,7 +22,7 @@ export default function AboutFounder() {
 
   return (
     <section className="section-container border-t border-border">
-      <p className="text-small font-medium text-text-muted">Founder</p>
+      <p className="section-kicker">Founder</p>
       <div className="glass-card mt-6 max-w-prose p-8">
         {founder.avatarUrl ? (
           <img src={founder.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" />
@@ -49,7 +49,7 @@ export default function AboutFounder() {
         )}
 
         <div className="mt-6 border-t border-border pt-6">
-          <p className="text-small font-medium text-text-muted">Responsibilities</p>
+          <p className="section-kicker">Responsibilities</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {RESPONSIBILITIES.map((item) => (
               <span

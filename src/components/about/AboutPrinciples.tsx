@@ -19,7 +19,7 @@ const CORE_VALUES = [
 export default function AboutPrinciples() {
   return (
     <section className="section-container border-t border-border">
-      <p className="text-small font-medium text-text-muted">Research Areas</p>
+      <p className="section-kicker">Research Areas</p>
       <h2 className="mt-4 text-h2 text-text-primary">What we work on</h2>
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {researchAreas.map((area) => {
@@ -36,7 +36,7 @@ export default function AboutPrinciples() {
 
       <div className="mt-16 grid grid-cols-1 gap-12 border-t border-border pt-12 lg:grid-cols-2">
         <div>
-          <p className="text-small font-medium text-text-muted">Why Mrama</p>
+          <p className="section-kicker">Why Mrama</p>
           <div className="mt-6 space-y-6">
             {WHY_MRAMA.map((item) => (
               <div key={item.title}>
@@ -48,7 +48,7 @@ export default function AboutPrinciples() {
         </div>
 
         <div>
-          <p className="text-small font-medium text-text-muted">Core Values</p>
+          <p className="section-kicker">Core Values</p>
           <ul className="mt-6 space-y-3">
             {CORE_VALUES.map((value) => (
               <li key={value} className="flex gap-3 text-body text-text-secondary">
