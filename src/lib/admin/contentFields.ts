@@ -28,7 +28,7 @@ export interface ContentTypeConfig {
 
 const NEWS_CATEGORIES = ["Publication", "Research Update", "Project", "Announcement", "Event"];
 const PROJECT_STATUSES = ["Active", "Completed", "On Hold"];
-const PUB_TYPES = ["Journal Article", "Conference Paper", "Full Paper", "Poster", "Workshop Paper", "Preprint", "Research Note"];
+const PUB_TYPES = ["Journal Article", "Conference Paper", "Full Paper", "Poster", "Workshop Paper", "Oral Presentation", "Preprint", "Research Note"];
 const PUB_STATUSES = ["Published", "Under Review", "Accepted", "Preprint"];
 
 export const CONTENT_TYPES: ContentTypeConfig[] = [

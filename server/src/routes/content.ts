@@ -41,6 +41,7 @@ const PUB_TYPES = [
   "Full Paper",
   "Poster",
   "Workshop Paper",
+  "Oral Presentation",
   "Preprint",
   "Research Note",
 ] as const;
