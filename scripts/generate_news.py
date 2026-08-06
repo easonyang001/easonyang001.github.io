@@ -73,12 +73,14 @@ def main() -> int:
     args = parser.parse_args()
 
     week_label = get_week_label()
-    supabase = init_supabase_client()
+    supabase = None
+    if not args.dry_run:
+        supabase = init_supabase_client()
 
-    existing = check_existing_draft(supabase, week_label)
-    if existing and not args.force:
-        print(f"本週草稿已存在（{week_label}），跳過。使用 --force 強制重新生成。")
-        return 0
+        existing = check_existing_draft(supabase, week_label)
+        if existing and not args.force:
+            print(f"本週草稿已存在（{week_label}），跳過。使用 --force 強制重新生成。")
+            return 0
 
     papers = fetch_arxiv_papers(days_back=7)
     news = fetch_news_items()
@@ -88,8 +90,9 @@ def main() -> int:
     for item in news:
         item["score"] = score_item(item, ["title", "snippet"])
 
-    papers = filter_seen(papers, supabase)
-    news = filter_seen(news, supabase)
+    if supabase is not None:
+        papers = filter_seen(papers, supabase)
+        news = filter_seen(news, supabase)
 
     selected = select_top_items(papers, news)
     if selected is None:
@@ -104,6 +107,7 @@ def main() -> int:
     content = generate_draft(prompt, model=GENERATION_MODEL)
     title = generate_title(content, week_label, model=GENERATION_MODEL)
 
+    assert supabase is not None
     draft_id = save_draft(
         supabase,
         {
@@ -133,6 +137,6 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except Exception as error:  # noqa: BLE001 -- pipeline failure must never crash the Actions job
+    except Exception as error:  # noqa: BLE001 -- report a concise failure before exiting non-zero
         print(f"News automation failed: {error}", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(1)
