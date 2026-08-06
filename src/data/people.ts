@@ -2,25 +2,19 @@ import type { Person } from "../types/index.ts";
 
 export const people: Person[] = [
   {
-    slug: "chia-chen-yang",
-    name: "Chia-Chen Yang",
-    roles: ["Founder"],
-    biography: null,
-    researchInterests: [
-      "Quantum Machine Learning",
-      "Quantum Optimization",
-      "Quantum Annealing",
-      "Artificial Intelligence",
-      "Operations Research",
-    ],
+    slug: "002",
+    name: "alexandre Lam ",
+    roles: ["Co-Founder"],
+    biography: "mines nancy",
+    researchInterests: ["quantum"],
     avatarUrl: null,
-    avatarInitials: "CY",
+    avatarInitials: "AL",
     email: null,
     githubUrl: null,
     scholarUrl: null,
     linkedinUrl: null,
     orcid: null,
-    locationCountry: "Taiwan",
-    locationCity: null,
-  },
+    locationCountry: "France",
+    locationCity: "Paris",
+  }
 ];
