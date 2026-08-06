@@ -42,6 +42,12 @@ export default function AboutHero() {
               international in spirit, and driven by the belief that ambitious science can begin
               with a small team and genuine passion.
             </p>
+            <p>
+              Inside that story is the image of one dragon: a single continuous path linking
+              imagination, research, software, education, and public knowledge. For Mrama, the
+              dragon is not decoration. It is a promise that ideas should travel all the way from a
+              first question to a working, shareable system.
+            </p>
           </div>
         </div>
 
@@ -51,7 +57,8 @@ export default function AboutHero() {
             Mrama Institute is an independent, self-funded research project co-founded across
             Taiwan and France. It is not yet a registered legal entity. Its work focuses on
             practical research in quantum information, quantum optimization, quantum machine
-            learning, and intelligent systems.
+            learning, intelligent systems, and one-dragon workflows that connect research,
+            engineering, education, and open-source publication.
           </p>
         </div>
       </motion.div>

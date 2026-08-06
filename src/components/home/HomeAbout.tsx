@@ -12,7 +12,8 @@ export default function HomeAbout() {
       <p className="max-w-prose text-body-lg text-text-secondary">
         Founded by Chia-Chen in Taiwan and Alexandre in France, Mrama grew from their shared passion
         for quantum science, intelligent systems, and research that can move from ideas into
-        practical experimentation.
+        practical experimentation. Its founding story follows a one-dragon path: one continuous line
+        from imagination to research, software, education, and open knowledge.
       </p>
 
       <div className="glass-card mt-8 max-w-prose p-8">

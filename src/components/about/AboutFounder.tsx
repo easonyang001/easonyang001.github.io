@@ -9,6 +9,7 @@ const RESPONSIBILITIES = [
   "Website Development",
   "Education",
   "Institutional Development",
+  "One-Dragon Research Workflows",
 ];
 
 function FounderCard({ founder }: { founder: Person }) {
@@ -81,7 +82,9 @@ export default function AboutFounder() {
       <h2 className="mt-4 text-h2 text-text-primary">One institute, built across two cultures</h2>
       <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
         Mrama's co-founders bring together perspectives from Taiwan and France, united by a shared
-        commitment to rigorous research, open knowledge, and practical experimentation.
+        commitment to rigorous research, open knowledge, practical experimentation, and a
+        one-dragon way of working that carries ideas from theory into software, education, and
+        public release.
       </p>
 
       <div className="mt-8 grid max-w-4xl gap-6 md:grid-cols-2">

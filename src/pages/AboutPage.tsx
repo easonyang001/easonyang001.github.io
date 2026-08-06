@@ -13,7 +13,7 @@ export default function AboutPage() {
   useSeo({
     title: "About",
     description:
-      "Co-founded by two young researchers from Taiwan and France, Mrama Institute advances quantum information science, quantum machine learning, and intelligent optimization.",
+      "Co-founded by Chia-Chen Yang in Taiwan and Alexandre Lam in France, Mrama Institute advances quantum science through one-dragon research, software, education, and open knowledge.",
     path: "/about",
   });
 
