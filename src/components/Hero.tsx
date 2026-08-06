@@ -138,7 +138,7 @@ export default function Hero() {
         src="/visuals/taipei-skyline.webp"
         alt=""
         aria-hidden="true"
-        className="hero-skyline pointer-events-none absolute bottom-0 left-0 h-[85%] w-[62%] object-cover object-left-bottom opacity-[0.16] md:w-[52%]"
+        className="hero-skyline pointer-events-none absolute bottom-0 left-0 h-[380px] w-[220px] object-cover object-left-bottom opacity-[0.14] md:h-[clamp(500px,80vh,760px)] md:w-[clamp(380px,42vw,680px)] md:opacity-[0.34]"
       />
 
       <motion.div
@@ -147,7 +147,8 @@ export default function Hero() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         className="relative w-full px-6 md:px-12"
       >
-        <div className="mx-auto max-w-content">
+        <div className="mx-auto max-w-content md:flex md:justify-end">
+        <div className="w-full md:max-w-[620px]">
           <h1 className="max-w-[800px] text-display text-text-primary md:text-display-lg">
             {site.name}
           </h1>
@@ -158,7 +159,7 @@ export default function Hero() {
 
           <p className="mt-8 max-w-[500px] text-body-lg text-text-secondary">{site.description}</p>
 
-          <div className="mt-12 ml-24 flex flex-col items-start gap-6">
+          <div className="mt-12 flex flex-col items-start gap-6">
             <Link
               to="/solutions"
               className="hero-nav-link group inline-flex w-fit items-center gap-2 text-body-lg font-medium text-text-primary transition-colors duration-200 ease-out hover:text-white"
@@ -198,6 +199,7 @@ export default function Hero() {
               />
             </a>
           </div>
+        </div>
         </div>
       </motion.div>
     </section>

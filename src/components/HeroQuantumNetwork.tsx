@@ -1,9 +1,11 @@
 /**
  * Sparse node/link network -- reads as information transfer / quantum
  * connectivity, not a blockchain diagram. Spans the full Hero background;
- * a left-side mask fades it out behind the text column so it reads as
- * "everywhere" without fighting text legibility. Mostly static; a few
- * links carry a slow traveling light packet via SVG animateMotion.
+ * a right-side mask fades it out behind the text column (now right-aligned)
+ * and keeps it fully visible over the skyline photo on the left, so it
+ * reads as an overlay on the image rather than fighting text legibility.
+ * Mostly static; a few links carry a slow traveling light packet via SVG
+ * animateMotion.
  */
 const NODES = [
   { x: 4, y: 18 }, { x: 14, y: 34 }, { x: 9, y: 55 }, { x: 20, y: 8 },
@@ -30,10 +32,10 @@ export default function HeroQuantumNetwork() {
       aria-hidden="true"
       viewBox="0 0 100 75"
       preserveAspectRatio="xMidYMid slice"
-      className="pointer-events-none absolute inset-0 hidden h-full w-full opacity-70 md:block"
+      className="pointer-events-none absolute inset-0 hidden h-full w-full opacity-60 md:block"
       style={{
-        maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 22%, black 45%)",
-        WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 22%, black 45%)",
+        maskImage: "linear-gradient(to left, transparent 0%, rgba(0,0,0,0.35) 22%, black 45%)",
+        WebkitMaskImage: "linear-gradient(to left, transparent 0%, rgba(0,0,0,0.35) 22%, black 45%)",
       }}
     >
       <defs>
