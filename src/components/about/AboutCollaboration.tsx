@@ -19,7 +19,7 @@ export default function AboutCollaboration() {
           <div className="mt-6 space-y-5">
             {AUDIENCES.map((audience) => (
               <div key={audience.name}>
-                <h3 className="text-h4 text-text-primary">{audience.name}</h3>
+                <h3 className="text-h3 text-text-primary">{audience.name}</h3>
                 <p className="mt-1 text-small text-text-secondary">
                   {audience.opportunities.join(" · ")}
                 </p>

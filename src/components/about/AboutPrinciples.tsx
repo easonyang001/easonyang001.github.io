@@ -40,7 +40,7 @@ export default function AboutPrinciples() {
           <div className="mt-6 space-y-6">
             {WHY_MRAMA.map((item) => (
               <div key={item.title}>
-                <h3 className="text-h4 text-text-primary">{item.title}</h3>
+                <h3 className="text-h3 text-text-primary">{item.title}</h3>
                 <p className="mt-1 text-small text-text-secondary">{item.description}</p>
               </div>
             ))}
