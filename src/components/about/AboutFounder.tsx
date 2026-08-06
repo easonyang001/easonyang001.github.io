@@ -77,7 +77,7 @@ export default function AboutFounder() {
 
   return (
     <section className="section-container border-t border-border">
-      <p className="text-small font-medium text-text-muted">Founding Team</p>
+      <p className="section-kicker">Founding Team</p>
       <h2 className="mt-4 text-h2 text-text-primary">One institute, built across two cultures</h2>
       <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
         Mrama's co-founders bring together perspectives from Taiwan and France, united by a shared
@@ -91,7 +91,7 @@ export default function AboutFounder() {
       </div>
 
       <div className="mt-8 max-w-4xl border-t border-border pt-6">
-        <p className="text-small font-medium text-text-muted">Shared Responsibilities</p>
+        <p className="section-kicker">Shared Responsibilities</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {RESPONSIBILITIES.map((item) => (
             <span key={item} className="rounded-md border border-border px-2 py-1 text-small text-text-secondary">

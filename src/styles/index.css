@@ -29,6 +29,33 @@ h4 {
   @apply font-mono text-mono-label uppercase text-text-muted;
 }
 
+.section-kicker {
+  @apply relative inline-block overflow-hidden pb-2 text-body-lg font-bold text-text-primary;
+}
+
+.section-kicker::before,
+.section-kicker::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 999px;
+}
+
+.section-kicker::before {
+  background: linear-gradient(90deg, #FDBA74, #EA580C);
+  opacity: 0.9;
+}
+
+.section-kicker::after {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 247, 237, 0.95) 50%, transparent 100%);
+  opacity: 0.9;
+  transform: translateX(-110%);
+  animation: section-kicker-sweep 2.8s ease-in-out infinite;
+}
+
 .glass-card {
   @apply relative rounded-lg border border-border bg-surface transition-colors duration-150;
 }
@@ -89,6 +116,17 @@ h4 {
 @keyframes bloch-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes section-kicker-sweep {
+  0%,
+  22% {
+    transform: translateX(-110%);
+  }
+  58%,
+  100% {
+    transform: translateX(110%);
   }
 }
 

@@ -23,7 +23,7 @@ export default function AboutHero() {
         </p>
 
         <div className="mt-8 max-w-prose">
-          <p className="text-small font-medium text-text-muted">Our Story</p>
+          <p className="section-kicker">Our Story</p>
           <div className="mt-4 space-y-4 text-body-lg text-text-secondary">
             <p>
               Mrama began with Chia-Chen in Taiwan and Alexandre in France, two young researchers
@@ -46,7 +46,7 @@ export default function AboutHero() {
         </div>
 
         <div className="mt-8 max-w-prose">
-          <p className="text-small font-medium text-text-muted">Organization</p>
+          <p className="section-kicker">Organization</p>
           <p className="mt-4 text-body-lg text-text-secondary">
             Mrama Institute is an independent, self-funded research project co-founded across
             Taiwan and France. It is not yet a registered legal entity. Its work focuses on

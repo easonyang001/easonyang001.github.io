@@ -66,7 +66,7 @@ export default function ContactPage() {
 
           <section className="grid gap-8 border-t border-border pt-12 lg:grid-cols-2">
             <div>
-              <p className="text-small font-medium text-text-muted">What to include</p>
+              <p className="section-kicker">What to include</p>
               <h2 className="mt-4 text-h2 text-text-primary">Make the next step obvious.</h2>
               <p className="mt-4 text-body text-text-secondary">
                 Contact works best when it is practical. Keep the message brief, but make the request,
@@ -87,7 +87,7 @@ export default function ContactPage() {
           </section>
 
           <section className="border-t border-border pt-12">
-            <p className="text-small font-medium text-text-muted">Email format</p>
+            <p className="section-kicker">Email format</p>
             <div className="mt-4 rounded-md border border-border bg-readout-bg p-5 font-mono text-small text-text-secondary">
               <p>Subject: [Request type] - [topic]</p>
               <br />
@@ -109,14 +109,14 @@ export default function ContactPage() {
 
         <aside className="space-y-8">
           <div className="glass-card p-6">
-            <p className="eyebrow">Direct contact</p>
+            <p className="section-kicker">Direct contact</p>
             <div className="mt-6">
               <ContactInfo />
             </div>
           </div>
 
           <div className="glass-card p-6">
-            <p className="eyebrow">Response window</p>
+            <p className="section-kicker">Response window</p>
             <p className="mt-4 text-body text-text-primary">Usually within 3-5 business days.</p>
             <p className="mt-2 text-small text-text-secondary">
               Time-sensitive requests should include the date, event, or decision deadline near the
@@ -125,7 +125,7 @@ export default function ContactPage() {
           </div>
 
           <div className="glass-card p-6">
-            <p className="eyebrow">Explore first</p>
+            <p className="section-kicker">Explore first</p>
             <div className="mt-4 divide-y divide-border">
               {QUICK_LINKS.map(({ label, href, icon: Icon }) => (
                 <Link
@@ -145,7 +145,7 @@ export default function ContactPage() {
 
           {site.location && (
             <div className="border-t border-border pt-6">
-              <p className="eyebrow">Base</p>
+              <p className="section-kicker">Base</p>
               <p className="mt-3 text-small text-text-secondary">
                 Mrama Institute is based in {site.location} and works with collaborators remotely.
               </p>
