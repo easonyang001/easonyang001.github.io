@@ -23,21 +23,35 @@ export default function AboutHero() {
         </p>
 
         <div className="mt-8 max-w-prose">
-          <p className="text-small font-medium text-text-muted">Why Mrama</p>
-          <p className="mt-4 text-body-lg text-text-secondary">
-            Most quantum computing research happens inside universities and large corporate labs,
-            where the agenda follows department priorities or product roadmaps. Mrama started as a
-            way to work on quantum optimization and quantum machine learning problems on their own
-            terms — driven by the problems themselves, not by where a funding cycle points next.
-          </p>
+          <p className="text-small font-medium text-text-muted">Our Story</p>
+          <div className="mt-4 space-y-4 text-body-lg text-text-secondary">
+            <p>
+              Mrama began with Chia-Chen in Taiwan and Alexandre in France, two young researchers
+              who found in each other the same passion for understanding difficult problems and
+              building ideas that could move beyond the page.
+            </p>
+            <p>
+              Across different cultures, languages, and time zones, their conversations kept
+              returning to the same questions: how quantum information could reshape computation,
+              how intelligent systems could help solve real-world problems, and how research could
+              remain open, curious, and useful.
+            </p>
+            <p>
+              That shared curiosity became a commitment. Together, they founded Mrama as the kind
+              of research institute they wanted to see in the world: independent in thought,
+              international in spirit, and driven by the belief that ambitious science can begin
+              with a small team and genuine passion.
+            </p>
+          </div>
         </div>
 
         <div className="mt-8 max-w-prose">
           <p className="text-small font-medium text-text-muted">Organization</p>
           <p className="mt-4 text-body-lg text-text-secondary">
-            Mrama Institute is an independent research project, currently led by a single
-            researcher, self-funded, and not a registered legal entity. Research is focused on
-            practical applications of quantum optimization and quantum machine learning.
+            Mrama Institute is an independent, self-funded research project co-founded across
+            Taiwan and France. It is not yet a registered legal entity. Its work focuses on
+            practical research in quantum information, quantum optimization, quantum machine
+            learning, and intelligent systems.
           </p>
         </div>
       </motion.div>

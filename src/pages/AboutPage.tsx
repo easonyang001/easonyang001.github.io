@@ -13,12 +13,12 @@ export default function AboutPage() {
   useSeo({
     title: "About",
     description:
-      "Mrama Institute is an independent, self-funded research initiative advancing quantum information science, quantum machine learning, and intelligent optimization.",
+      "Co-founded by two young researchers from Taiwan and France, Mrama Institute advances quantum information science, quantum machine learning, and intelligent optimization.",
     path: "/about",
   });
 
   return (
-    <>
+    <div className="overflow-x-clip">
       <AboutHero />
       <AboutGlance />
 
@@ -29,6 +29,6 @@ export default function AboutPage() {
       <AboutFounder />
       <AboutCollaboration />
       <AboutFAQ />
-    </>
+    </div>
   );
 }

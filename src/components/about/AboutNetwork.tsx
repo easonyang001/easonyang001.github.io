@@ -4,7 +4,11 @@ import { site } from "../../data/site.ts";
 import WorldMap from "./WorldMap.tsx";
 
 const TIMELINE = [
-  { year: "2026", label: "Founded", description: `Mrama Institute established, based in ${site.location}.` },
+  {
+    year: "2026",
+    label: "Founded",
+    description: `Co-founded across Taiwan and France, with its base in ${site.location}.`,
+  },
   { year: "2026", label: "Website Launched", description: "Public site introducing the research program." },
   { year: "Ongoing", label: "Active Research", description: "Quantum optimization, annealing, and hybrid solvers." },
 ];
