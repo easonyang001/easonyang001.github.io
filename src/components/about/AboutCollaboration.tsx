@@ -14,7 +14,7 @@ export default function AboutCollaboration() {
     <section className="section-container border-t border-border">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div>
-          <p className="text-small font-medium text-text-muted">Collaboration</p>
+          <p className="section-kicker">Collaboration</p>
           <h2 className="mt-4 text-h2 text-text-primary">Who we work with</h2>
           <div className="mt-6 space-y-5">
             {AUDIENCES.map((audience) => (
@@ -29,7 +29,7 @@ export default function AboutCollaboration() {
         </div>
 
         <div>
-          <p className="text-small font-medium text-text-muted">Join Mrama</p>
+          <p className="section-kicker">Join Mrama</p>
           <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
             Reach out if you'd like to collaborate on research, contribute code, or discuss a project.
           </p>
