@@ -206,6 +206,21 @@ Core Web Vitals（mobile, lab data）：LCP 6.5s / CLS 0 / TBT 80ms
 - [ ] `npm run build` 現在多了一個 Playwright 開瀏覽器跑 35 個路由的步驟，本機/CI 的 build 時間會變長（CI 另外加了 `playwright install --with-deps chromium` 的安裝步驟）——如果之後路由數量大幅增加，這個步驟的耗時要留意
 - [ ] Prerender 只走過一次 CSP 驗證（zero console 錯誤），但沒有針對「每個路由」逐一人工檢查畫面——目前是抽測幾個 + 自動化 title/canonical 驗證，如果之後發現特定頁面畫面跑掉，回來看是不是那個頁面本身的元件有 SSR-unsafe 的邏輯（例如直接讀 `window`/`document` 而沒做防呆）
 
+### 關鍵字定位評估（2026-08-06）
+
+Google 已經能查到「mrama quantum」找到本站。使用者接下來的目標是純「mrama」一個字也要出現，這裡記錄實際查證後的評估，避免之後重新花時間查一次。
+
+查證發現：純 "mrama" 這個字**已經被多個長期存在、跟量子研究完全無關的東西佔用**：
+- Wiktionary 收錄「mrama」為史瓦希里語字彙（船隻偏航、失控之意）——字典類搜尋很難被其他網站打敗。
+- 一個辦到第 23 屆的學術研討會系列直接叫 "MRAMA workshop"（Barcelona UAB 主辦），累積十幾年學術網域權重與外部連結。
+- 音樂團體 MRAMA DIVISION（IG/Bandcamp/SoundCloud）、IMDB 短片、遊戲 mod 作者等也用同名。
+
+mrama.org 是 2026 年才成立的新網域，網域年齡與外部連結數目前完全無法對比那個辦 23 屆的學術研討會站台。
+
+**短期目標（可控，優先）**：鞏固已經領先、沒有老牌競爭者的複合詞——「mrama quantum」「mrama institute」「mrama research」。持續累積這些詞的內容深度與內部連結，這是目前投入報酬率最高的地方。
+
+**長期目標（不可控，放著累積即可）**：純「mrama」擠進第一頁（不是衝第一名）。做法不是靠站內優化，是靠外部真實連結（學術合作、論文作者頁互連、GitHub README 引用等）與網站年齡自然累積，急不來，不用特別排 Phase。
+
 ---
 
 ## 12. Claude Code 起手式指令範例
