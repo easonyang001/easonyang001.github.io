@@ -17,14 +17,7 @@ import ImageUpload from "../components/admin/ImageUpload.tsx";
 import RichTextEditor from "../components/admin/RichTextEditor.tsx";
 import TagInput from "../components/admin/TagInput.tsx";
 import NewsDraftsAdmin from "../components/admin/NewsDraftsAdmin.tsx";
-
-/** Normalizes free typing into the ^[a-z0-9-]+$ shape the backend requires. */
-function slugify(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/[\s_]+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
-}
+import { nextAvailableSlug, slugify } from "../lib/admin/slugs.ts";
 
 function LoginForm({
   onLogin,
@@ -122,12 +115,24 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
 
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [formValues, setFormValues] = useState<Record<string, unknown> | null>(null);
+  const [autoGenerateId, setAutoGenerateId] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const [publishingId, setPublishingId] = useState<string | null>(null);
   const [publishResult, setPublishResult] = useState<{ prUrl: string } | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+
+  const formIdValue = String(formValues?.[config.idKey] ?? "");
+  const conflictingDraft = formIdValue
+    ? drafts?.find((item) => item.id !== editingId && String(item[config.idKey] ?? "") === formIdValue)
+    : undefined;
+  const suggestedId = conflictingDraft
+    ? nextAvailableSlug(
+        formIdValue,
+        drafts?.map((item) => item[config.idKey]) ?? []
+      )
+    : "";
 
   const load = async () => {
     setLoading(true);
@@ -153,6 +158,7 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
   const startNew = () => {
     setFormValues(config.emptyItem());
     setEditingId("new");
+    setAutoGenerateId(true);
     setSaveError(null);
   };
 
@@ -162,6 +168,7 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
       const draft = await getDraft(token, typeKey, id);
       setFormValues(draft);
       setEditingId(id);
+      setAutoGenerateId(false);
     } catch (err) {
       setActionError(err instanceof Error ? err.message : String(err));
     }
@@ -175,6 +182,14 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
 
   const saveForm = async () => {
     if (!formValues) return;
+    if (conflictingDraft) {
+      setSaveError(
+        `Slug "${formIdValue}" is already used by ${String(
+          conflictingDraft[config.titleKey] ?? "another entry"
+        )}. Use a unique slug${suggestedId ? ` such as "${suggestedId}"` : ""}.`
+      );
+      return;
+    }
     setSaving(true);
     setSaveError(null);
     try {
@@ -436,14 +451,42 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
                 <input
                   type="text"
                   value={String(formValues[field.key] ?? "")}
-                  onChange={(e) =>
-                    setFormValues({
-                      ...formValues,
-                      [field.key]: field.slugify ? slugify(e.target.value) : e.target.value,
-                    })
-                  }
+                  onChange={(e) => {
+                    const value = field.slugify ? slugify(e.target.value) : e.target.value;
+                    const nextValues = { ...formValues, [field.key]: value };
+
+                    if (field.key === config.idKey) setAutoGenerateId(false);
+                    if (editingId === "new" && autoGenerateId && field.key === config.titleKey) {
+                      nextValues[config.idKey] = nextAvailableSlug(
+                        value,
+                        drafts?.map((item) => item[config.idKey]) ?? []
+                      );
+                    }
+                    setSaveError(null);
+                    setFormValues(nextValues);
+                  }}
+                  aria-invalid={field.key === config.idKey && Boolean(conflictingDraft)}
                   className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50"
                 />
+              )}
+
+              {field.key === config.idKey && conflictingDraft && (
+                <p role="alert" className="mt-2 text-small text-text-secondary">
+                  This slug is already used by {String(conflictingDraft[config.titleKey] ?? "another entry")}.
+                  {suggestedId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormValues({ ...formValues, [config.idKey]: suggestedId });
+                        setAutoGenerateId(false);
+                        setSaveError(null);
+                      }}
+                      className="ml-2 font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
+                    >
+                      Use {suggestedId}
+                    </button>
+                  )}
+                </p>
               )}
             </div>
           ))}
@@ -453,7 +496,7 @@ function ContentAdmin({ token, onLogout }: { token: string; onLogout: () => void
           <div className="flex gap-2 pt-2">
             <button
               onClick={() => void saveForm()}
-              disabled={saving}
+              disabled={saving || Boolean(conflictingDraft)}
               className="rounded-md bg-accent px-4 py-2 text-small font-medium text-text-primary transition-colors duration-150 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
             >
               {saving ? "Saving…" : "Save Draft"}

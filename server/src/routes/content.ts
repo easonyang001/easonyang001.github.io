@@ -264,7 +264,12 @@ contentRouter.post("/:type/drafts", async (req, res) => {
 
   if (error) {
     if (error.code === "23505") {
-      res.status(409).json({ error: `${spec.idColumn} already exists` });
+      const value = body[spec.idColumn];
+      res.status(409).json({
+        error: `${spec.idColumn} "${typeof value === "string" ? value : ""}" already exists`,
+        field: spec.idColumn,
+        value,
+      });
       return;
     }
     console.error("Content create failed:", error);
@@ -292,7 +297,12 @@ contentRouter.put("/:type/drafts/:id", async (req, res) => {
 
   if (error) {
     if (error.code === "23505") {
-      res.status(409).json({ error: `${spec.idColumn} already exists` });
+      const value = body[spec.idColumn];
+      res.status(409).json({
+        error: `${spec.idColumn} "${typeof value === "string" ? value : ""}" already exists`,
+        field: spec.idColumn,
+        value,
+      });
       return;
     }
     console.error("Content update failed:", error);
