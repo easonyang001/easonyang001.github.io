@@ -4,37 +4,57 @@ from __future__ import annotations
 
 import hashlib
 
-ABSTRACT_MAX_CHARS = 500
+ABSTRACT_MAX_CHARS = 800
 MAX_AUTHORS_SHOWN = 3
 
-SYSTEM_TEMPLATE = """你是量子研究機構 Mrama Institute 的編輯助理。
-根據以下本週（{week_label}）的論文與新聞，撰寫一篇中文量子週報。
+SYSTEM_TEMPLATE = """You are the research editor for Mrama Institute.
+Create a multilingual weekly quantum research brief for {week_label} using only the supplied sources.
 
-【嚴格規則，不得違反】
-1. 只能寫來源資料中的內容，不得補充你自己的知識
-2. arXiv 論文必須標注「尚未經同行審查」
-3. 不得使用「突破」「革命性」「顛覆」等詞，除非原文明確如此表述
-4. 每個技術主張後面引用（來源：論文/新聞標題）標注
-5. 不確定的內容寧可省略，不要猜測或臆測
-6. 論文作者的 affiliation 不要翻譯，保留英文
+STRICT EDITORIAL RULES
+1. Use only claims supported by the supplied source titles, snippets, and abstracts. Never add outside facts.
+2. State that every arXiv item is a preprint that has not been peer reviewed.
+3. Avoid hype such as breakthrough, revolutionary, or disruptive unless the source explicitly supports it.
+4. Attribute every item by its exact source title and include the supplied URL as a Markdown link.
+5. Clearly distinguish reported results from editorial interpretation. Omit uncertain details.
+6. Keep author names and affiliations in their original form.
+7. The three translations must communicate the same evidence and conclusions.
 
-【格式】
-- 總長度：400–600 字
-- 開頭：一段 2–3 句的本週摘要
-- 論文精選：3–5 篇，每篇 2–3 句說明重點
-- 產業動態：2–3 條，每條 1–2 句
-- 結尾：一句話說明下週值得關注的方向（若來源中有線索）
-- 使用 Markdown 格式（## 標題、- 列表）
+REQUIRED DOCUMENT
+Return one JSON object only. Do not wrap it in a Markdown code fence.
+Use this exact shape and include every field:
+{{
+  "format": "mrama-weekly-brief-v1",
+  "contentType": "markdown",
+  "translations": {{
+    "zh-TW": {{
+      "title": "Traditional Chinese issue title",
+      "summary": "2-3 sentence issue summary",
+      "sections": {{
+        "weeklyNews": "Markdown",
+        "selectedPapers": "Markdown",
+        "literatureDeepDive": "Markdown"
+      }}
+    }},
+    "en": {{ "title": "...", "summary": "...", "sections": {{ "weeklyNews": "...", "selectedPapers": "...", "literatureDeepDive": "..." }} }},
+    "fr": {{ "title": "...", "summary": "...", "sections": {{ "weeklyNews": "...", "selectedPapers": "...", "literatureDeepDive": "..." }} }}
+  }}
+}}
 
-【本週來源】
+SECTION REQUIREMENTS FOR EACH LANGUAGE
+- weeklyNews: 3-5 items when sources permit. Summarize what happened, why it matters, and link the source.
+- selectedPapers: 5-8 papers when sources permit. For each, summarize the question, method, result, and limitation. Include the arXiv link and peer-review warning.
+- literatureDeepDive: choose exactly one supplied paper. Explain the research question, method, evidence, limitations, and what to read next. Be explicit when the abstract does not provide enough detail.
+- Use Markdown paragraphs and lists inside each section value, but do not repeat section headings inside the values.
+- Aim for useful synthesis rather than a list of rewritten titles.
 
-=== 論文（{paper_count} 篇）===
+SUPPLIED SOURCES
+
+=== PAPERS ({paper_count}) ===
 {formatted_papers}
 
-=== 新聞（{news_count} 則）===
+=== NEWS ({news_count}) ===
 {formatted_news}
-
-現在請撰寫週報："""
+"""
 
 
 def _format_authors(authors: list[str]) -> str:
@@ -45,9 +65,11 @@ def _format_authors(authors: list[str]) -> str:
 
 def _format_papers(papers: list[dict]) -> str:
     blocks = [
-        f"[{p['arxiv_id']}] {p['title']}\n"
-        f"作者：{_format_authors(p['authors'])}\n"
-        f"摘要：{p['abstract'][:ABSTRACT_MAX_CHARS]}\n"
+        f"ID: {p['arxiv_id']}\n"
+        f"Title: {p['title']}\n"
+        f"Authors: {_format_authors(p['authors'])}\n"
+        f"URL: {p['url']}\n"
+        f"Abstract: {p['abstract'][:ABSTRACT_MAX_CHARS]}\n"
         "---"
         for p in papers
     ]
@@ -56,7 +78,8 @@ def _format_papers(papers: list[dict]) -> str:
 
 def _format_news(news: list[dict]) -> str:
     blocks = [
-        f"來源：{n['source']}\n標題：{n['title']}\n內容：{n['snippet']}\n---" for n in news
+        f"Source: {n['source']}\nTitle: {n['title']}\nURL: {n['url']}\nSnippet: {n['snippet']}\n---"
+        for n in news
     ]
     return "\n".join(blocks)
 

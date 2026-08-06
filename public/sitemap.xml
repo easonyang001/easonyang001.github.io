@@ -171,6 +171,16 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://mrama.org/news/a</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://mrama.org/news/weekly-quantum-news-2026-w32</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://mrama.org/solutions/example-full-case</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

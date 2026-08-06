@@ -35,6 +35,7 @@ export async function getAllRoutePaths(repoRoot) {
   const { researchAreas } = await import(pathToFileURL(resolve(repoRoot, "src/data/research.ts")).href);
   const { projects } = await import(pathToFileURL(resolve(repoRoot, "src/data/projects.ts")).href);
   const { people } = await import(pathToFileURL(resolve(repoRoot, "src/data/people.ts")).href);
+  const { news } = await import(pathToFileURL(resolve(repoRoot, "src/data/news.ts")).href);
 
   // src/data/cases/index.ts uses Vite's import.meta.glob, which only works
   // inside a Vite build -- read the same directory by hand here instead.
@@ -44,12 +45,13 @@ export async function getAllRoutePaths(repoRoot) {
     .map((f) => JSON.parse(readFileSync(resolve(casesDir, f), "utf-8")))
     .filter((c) => c.meta?.status === "published");
 
-  // publications and news have no individual detail routes (single-page
-  // timeline layouts) -- only research/projects/people/solutions do.
+  // Publications remain a single-page timeline. News entries with article
+  // content have individual, crawlable detail pages.
   const dynamicPaths = [
     ...researchAreas.map((r) => `/research/${r.slug}`),
     ...projects.map((p) => `/projects/${p.slug}`),
     ...people.map((p) => `/people/${p.slug}`),
+    ...news.filter((item) => item.content).map((item) => `/news/${item.slug}`),
     ...publishedCases.map((c) => `/solutions/${c.meta.slug}`),
   ];
 

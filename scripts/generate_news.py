@@ -20,7 +20,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from scripts.generation.prompt import build_prompt
-from scripts.generation.writer import generate_draft, generate_title
+from scripts.generation.brief import parse_generated_brief, serialize_brief
+from scripts.generation.writer import generate_draft
 from scripts.processing.dedup import filter_seen
 from scripts.processing.filter import select_top_items
 from scripts.processing.score import score_item
@@ -90,7 +91,7 @@ def main() -> int:
     for item in news:
         item["score"] = score_item(item, ["title", "snippet"])
 
-    if supabase is not None:
+    if supabase is not None and not args.force:
         papers = filter_seen(papers, supabase)
         news = filter_seen(news, supabase)
 
@@ -104,8 +105,9 @@ def main() -> int:
         return 0
 
     prompt, prompt_hash = build_prompt(selected["papers"], selected["news"], week_label)
-    content = generate_draft(prompt, model=GENERATION_MODEL)
-    title = generate_title(content, week_label, model=GENERATION_MODEL)
+    generated = generate_draft(prompt, model=GENERATION_MODEL)
+    brief = parse_generated_brief(generated)
+    title = brief["translations"]["zh-TW"]["title"]
 
     assert supabase is not None
     draft_id = save_draft(
@@ -113,11 +115,12 @@ def main() -> int:
         {
             "week_label": week_label,
             "title": title,
-            "content_md": content,
+            "content_md": serialize_brief(brief),
             "sources": _build_sources(selected["papers"], selected["news"]),
             "model": GENERATION_MODEL,
             "prompt_hash": prompt_hash,
         },
+        force=args.force,
     )
 
     # Only mark items as seen once the draft has actually been saved, so a

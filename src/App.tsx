@@ -12,6 +12,7 @@ const PublicationsPage = lazy(() => import("./pages/PublicationsPage.tsx"));
 const PeoplePage = lazy(() => import("./pages/people/PeoplePage.tsx"));
 const PersonDetailPage = lazy(() => import("./pages/people/PersonDetailPage.tsx"));
 const NewsPage = lazy(() => import("./pages/NewsPage.tsx"));
+const NewsDetailPage = lazy(() => import("./pages/NewsDetailPage.tsx"));
 const DigestPage = lazy(() => import("./pages/DigestPage.tsx"));
 const ContactPage = lazy(() => import("./pages/ContactPage.tsx"));
 const EducationPage = lazy(() => import("./pages/education/EducationPage.tsx"));
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="people" element={<PeoplePage />} />
             <Route path="people/:slug" element={<PersonDetailPage />} />
             <Route path="news" element={<NewsPage />} />
+            <Route path="news/:slug" element={<NewsDetailPage />} />
             <Route path="digest" element={<DigestPage />} />
             <Route path="contact" element={<ContactPage />} />
             <Route path="education" element={<EducationPage />} />
