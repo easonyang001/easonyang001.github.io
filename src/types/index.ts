@@ -44,6 +44,7 @@ export type PublicationType =
   | "Full Paper"
   | "Poster"
   | "Workshop Paper"
+  | "Oral Presentation"
   | "Preprint"
   | "Research Note";
 
