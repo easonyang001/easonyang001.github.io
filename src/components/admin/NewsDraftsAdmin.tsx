@@ -9,6 +9,8 @@ import {
   type NewsDraftStatus,
   type NewsDraftSummary,
 } from "../../lib/admin/newsDrafts.ts";
+import { parseWeeklyBrief } from "../../lib/news/weeklyBrief.ts";
+import WeeklyBriefEditor from "./WeeklyBriefEditor.tsx";
 
 const STATUS_LABEL_CLASS: Record<NewsDraftStatus, string> = {
   draft: "text-text-muted",
@@ -119,6 +121,7 @@ export default function NewsDraftsAdmin({ token }: { token: string }) {
 
   if (openId && detail) {
     const editable = detail.status === "draft";
+    const weeklyBrief = parseWeeklyBrief(contentMd);
     return (
       <div className="mt-8 max-w-2xl">
         <button
@@ -133,27 +136,40 @@ export default function NewsDraftsAdmin({ token }: { token: string }) {
             {detail.week_label} · <span className={STATUS_LABEL_CLASS[detail.status]}>{detail.status}</span>
           </p>
 
-          <div>
-            <label className="mb-1 block text-small text-text-secondary">Title</label>
-            <input
-              type="text"
-              value={title}
+          {weeklyBrief ? (
+            <WeeklyBriefEditor
+              brief={weeklyBrief}
               disabled={!editable}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50 disabled:opacity-60"
+              onChange={(serialized, primaryTitle) => {
+                setContentMd(serialized);
+                setTitle(primaryTitle);
+              }}
             />
-          </div>
+          ) : (
+            <>
+              <div>
+                <label className="mb-1 block text-small text-text-secondary">Title</label>
+                <input
+                  type="text"
+                  value={title}
+                  disabled={!editable}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full rounded-md border border-border bg-surface px-4 py-2 text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50 disabled:opacity-60"
+                />
+              </div>
 
-          <div>
-            <label className="mb-1 block text-small text-text-secondary">Content (Markdown)</label>
-            <textarea
-              rows={16}
-              value={contentMd}
-              disabled={!editable}
-              onChange={(e) => setContentMd(e.target.value)}
-              className="w-full rounded-md border border-border bg-surface px-4 py-2 font-mono text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50 disabled:opacity-60"
-            />
-          </div>
+              <div>
+                <label className="mb-1 block text-small text-text-secondary">Content (Markdown)</label>
+                <textarea
+                  rows={16}
+                  value={contentMd}
+                  disabled={!editable}
+                  onChange={(e) => setContentMd(e.target.value)}
+                  className="w-full rounded-md border border-border bg-surface px-4 py-2 font-mono text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50 disabled:opacity-60"
+                />
+              </div>
+            </>
+          )}
 
           {editable && (
             <button

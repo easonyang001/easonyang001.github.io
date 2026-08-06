@@ -5,6 +5,7 @@ import { supabase } from "../supabase.js";
 import { publishFileChange } from "../github.js";
 import { sanitizeRichText } from "../sanitize.js";
 import { newsToTypeScript, type NewsRow } from "../contentConverters.js";
+import { parseWeeklyBrief, renderWeeklyBrief } from "../weeklyBrief.js";
 
 const NEWS_CATEGORY = "Research Update";
 const SUMMARY_MAX_CHARS = 500;
@@ -161,31 +162,44 @@ newsAutomationRouter.patch("/drafts/:id/approve", async (req, res) => {
     return;
   }
 
-  const html = sanitizeRichText(await marked.parse(draft.content_md));
-  const summary = extractSummary(draft.content_md, draft.title);
+  let publishedTitle = draft.title;
+  let summary: string;
+  let content: string;
+  try {
+    const brief = parseWeeklyBrief(draft.content_md);
+    if (brief) {
+      const publishedBrief = await renderWeeklyBrief(brief);
+      const primary = publishedBrief.translations["zh-TW"];
+      publishedTitle = primary.title.slice(0, TITLE_MAX_CHARS);
+      summary = primary.summary.slice(0, SUMMARY_MAX_CHARS);
+      content = JSON.stringify(publishedBrief);
+    } else {
+      content = sanitizeRichText(await marked.parse(draft.content_md));
+      summary = extractSummary(draft.content_md, draft.title);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error instanceof Error ? error.message : "Invalid weekly brief" });
+    return;
+  }
   const newsId = slugFromWeekLabel(draft.week_label);
 
-  const { error: insertError } = await supabase.from("content_news").insert({
+  const { error: insertError } = await supabase.from("content_news").upsert({
     status: "published",
     news_id: newsId,
     date: new Date().toISOString().slice(0, 10),
     category: NEWS_CATEGORY,
-    title: draft.title,
+    title: publishedTitle,
     summary,
-    content: html,
+    content,
     cover_image_url: null,
     related_project_id: null,
     related_publication_id: null,
     external_url: null,
-  });
+  }, { onConflict: "news_id" });
 
   if (insertError) {
-    if (insertError.code === "23505") {
-      res.status(409).json({ error: "A News entry for this week already exists" });
-      return;
-    }
-    console.error("News draft approve (content_news insert) failed:", insertError);
-    res.status(502).json({ error: "Failed to create the News entry" });
+    console.error("News draft approve (content_news upsert) failed:", insertError);
+    res.status(502).json({ error: "Failed to save the News entry" });
     return;
   }
 

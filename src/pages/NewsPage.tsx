@@ -59,11 +59,27 @@ export default function NewsPage() {
                 <span>&middot;</span>
                 <span className="text-accent">{item.category}</span>
               </div>
-              <h2 className="mt-1 text-h3 text-text-primary">{item.title}</h2>
+              <h2 className="mt-1 text-h3 text-text-primary">
+                {item.content ? (
+                  <Link to={`/news/${item.slug}`} className="transition-colors hover:text-accent">
+                    {item.title}
+                  </Link>
+                ) : (
+                  item.title
+                )}
+              </h2>
               <div
                 className="mt-2 text-small text-text-secondary [&_a]:text-accent [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-5 [&_p+p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5"
                 dangerouslySetInnerHTML={{ __html: sanitizeRichText(item.summary) }}
               />
+              {item.content && (
+                <Link
+                  to={`/news/${item.slug}`}
+                  className="mt-3 inline-block text-small font-medium text-accent transition-colors hover:text-accent-hover"
+                >
+                  Read article &rarr;
+                </Link>
+              )}
             </div>
           ))}
         </div>

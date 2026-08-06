@@ -70,7 +70,7 @@ jobs:
         run: |
           WEEK="${{ steps.generate.outputs.week_label }}"
           DRAFT_ID="${{ steps.generate.outputs.draft_id }}"
-          BRANCH="news/auto-${WEEK}"
+          BRANCH="news/auto-${WEEK}-${GITHUB_RUN_ID}"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
