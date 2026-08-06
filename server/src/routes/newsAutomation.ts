@@ -25,8 +25,13 @@ function extractSummary(markdown: string, fallback: string): string {
   return summary.length > SUMMARY_MAX_CHARS ? `${summary.slice(0, SUMMARY_MAX_CHARS - 1)}…` : summary;
 }
 
-function slugFromWeekLabel(weekLabel: string): string {
-  return `weekly-quantum-news-${weekLabel.toLowerCase()}`;
+type DraftKind = "weekly" | "paper_deep_dive";
+
+function newsIdFor(kind: DraftKind, weekLabel: string): string {
+  const week = weekLabel.toLowerCase();
+  return kind === "paper_deep_dive"
+    ? `weekly-quantum-paper-deep-dive-${week}`
+    : `weekly-quantum-news-${week}`;
 }
 
 export const newsAutomationRouter = Router();
@@ -35,7 +40,7 @@ newsAutomationRouter.use(requireAuth);
 newsAutomationRouter.get("/drafts", async (_req, res) => {
   const { data, error } = await supabase
     .from("news_drafts")
-    .select("id, week_label, title, status, created_at, reviewed_at")
+    .select("id, week_label, kind, title, status, created_at, reviewed_at")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -163,28 +168,33 @@ newsAutomationRouter.patch("/drafts/:id/approve", async (req, res) => {
 
   const html = sanitizeRichText(await marked.parse(draft.content_md));
   const summary = extractSummary(draft.content_md, draft.title);
-  const newsId = slugFromWeekLabel(draft.week_label);
+  const newsId = newsIdFor(draft.kind as DraftKind, draft.week_label);
 
-  const { error: insertError } = await supabase.from("content_news").insert({
-    status: "published",
-    news_id: newsId,
-    date: new Date().toISOString().slice(0, 10),
-    category: NEWS_CATEGORY,
-    title: draft.title,
-    summary,
-    content: html,
-    cover_image_url: null,
-    related_project_id: null,
-    related_publication_id: null,
-    external_url: null,
-  });
+  // Upsert on news_id rather than insert: if a previous approve attempt got
+  // as far as writing this row but then failed to open the GitHub PR (token
+  // issue, network blip), the row is left behind with nothing actually
+  // published. A plain insert would hit the unique constraint on news_id
+  // and permanently block retrying this week's draft. Upserting lets a
+  // retry overwrite that orphaned row and continue on to the PR step.
+  const { error: insertError } = await supabase.from("content_news").upsert(
+    {
+      status: "published",
+      news_id: newsId,
+      date: new Date().toISOString().slice(0, 10),
+      category: NEWS_CATEGORY,
+      title: draft.title,
+      summary,
+      content: html,
+      cover_image_url: null,
+      related_project_id: null,
+      related_publication_id: null,
+      external_url: null,
+    },
+    { onConflict: "news_id" }
+  );
 
   if (insertError) {
-    if (insertError.code === "23505") {
-      res.status(409).json({ error: "A News entry for this week already exists" });
-      return;
-    }
-    console.error("News draft approve (content_news insert) failed:", insertError);
+    console.error("News draft approve (content_news upsert) failed:", insertError);
     res.status(502).json({ error: "Failed to create the News entry" });
     return;
   }

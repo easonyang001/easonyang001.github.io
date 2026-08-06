@@ -1,10 +1,12 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export type NewsDraftStatus = "draft" | "approved" | "published" | "rejected";
+export type NewsDraftKind = "weekly" | "paper_deep_dive";
 
 export interface NewsDraftSummary {
   id: string;
   week_label: string;
+  kind: NewsDraftKind;
   title: string;
   status: NewsDraftStatus;
   created_at: string;

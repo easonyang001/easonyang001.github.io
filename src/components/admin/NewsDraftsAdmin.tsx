@@ -17,6 +17,11 @@ const STATUS_LABEL_CLASS: Record<NewsDraftStatus, string> = {
   rejected: "text-text-muted line-through",
 };
 
+const KIND_LABEL: Record<NewsDraftSummary["kind"], string> = {
+  weekly: "週報",
+  paper_deep_dive: "論文精讀",
+};
+
 export default function NewsDraftsAdmin({ token }: { token: string }) {
   const [drafts, setDrafts] = useState<NewsDraftSummary[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -130,7 +135,8 @@ export default function NewsDraftsAdmin({ token }: { token: string }) {
 
         <div className="glass-card mt-6 space-y-5 p-8">
           <p className="font-mono text-mono-label uppercase text-text-muted">
-            {detail.week_label} · <span className={STATUS_LABEL_CLASS[detail.status]}>{detail.status}</span>
+            {detail.week_label} · {KIND_LABEL[detail.kind]} ·{" "}
+            <span className={STATUS_LABEL_CLASS[detail.status]}>{detail.status}</span>
           </p>
 
           <div>
@@ -227,7 +233,8 @@ export default function NewsDraftsAdmin({ token }: { token: string }) {
               <div>
                 <p className="text-body text-text-primary">{item.title}</p>
                 <p className="font-mono text-mono-label uppercase text-text-muted">
-                  {item.week_label} · <span className={STATUS_LABEL_CLASS[item.status]}>{item.status}</span>
+                  {item.week_label} · {KIND_LABEL[item.kind]} ·{" "}
+                  <span className={STATUS_LABEL_CLASS[item.status]}>{item.status}</span>
                 </p>
               </div>
               <button

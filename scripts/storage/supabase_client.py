@@ -15,9 +15,14 @@ def init_supabase_client() -> Client:
     return create_client(url, service_key)
 
 
-def check_existing_draft(supabase: Client, week_label: str) -> dict | None:
+def check_existing_draft(supabase: Client, week_label: str, kind: str = "weekly") -> dict | None:
     response = (
-        supabase.table("news_drafts").select("*").eq("week_label", week_label).limit(1).execute()
+        supabase.table("news_drafts")
+        .select("*")
+        .eq("week_label", week_label)
+        .eq("kind", kind)
+        .limit(1)
+        .execute()
     )
     return response.data[0] if response.data else None
 
@@ -25,6 +30,10 @@ def check_existing_draft(supabase: Client, week_label: str) -> dict | None:
 def save_draft(supabase: Client, draft: dict) -> str:
     response = supabase.table("news_drafts").insert(draft).execute()
     return response.data[0]["id"]
+
+
+def delete_draft(supabase: Client, draft_id: str) -> None:
+    supabase.table("news_drafts").delete().eq("id", draft_id).execute()
 
 
 def mark_as_seen(supabase: Client, papers: list[dict], news: list[dict]) -> None:

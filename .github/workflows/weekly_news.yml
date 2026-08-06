@@ -52,7 +52,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           WEEK="${{ steps.generate.outputs.week_label }}"
-          DRAFT_ID="${{ steps.generate.outputs.draft_id }}"
+          DRAFT_IDS="${{ steps.generate.outputs.draft_ids }}"
           BRANCH="news/auto-${WEEK}"
 
           git config user.name "github-actions[bot]"
@@ -68,8 +68,10 @@ jobs:
           {
             echo "## 本週量子新聞草稿已就緒"
             echo ""
-            echo "**草稿 ID**：\`${DRAFT_ID}\`"
+            echo "**草稿 ID**：\`${DRAFT_IDS}\`"
             echo "**週次**：${WEEK}"
+            echo ""
+            echo "可能包含週報與論文精讀兩篇草稿（視本週論文數量而定）。"
             echo ""
             echo "### 下一步"
             echo "1. 到 [Admin → News](https://mrama.org/admin) 審核草稿"

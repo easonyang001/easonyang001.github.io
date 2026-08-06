@@ -14,6 +14,13 @@ TITLE_PROMPT_TEMPLATE = """以下是一篇量子週報，請為它產生一個�
 週報內容：
 {content}"""
 
+DEEP_DIVE_TITLE_PROMPT_TEMPLATE = """以下是一篇「論文精讀」文章，逐篇深度分析本週幾篇量子相關論文。
+請產生一個具體中文標題，10–20 字，反映這幾篇論文共同的主題或技術方向。
+只回傳標題本身，不要加引號或其他文字。
+
+文章內容：
+{content}"""
+
 
 def generate_draft(prompt: str, model: str = "gpt-4o-mini") -> str:
     """Call OpenAI to generate the weekly draft. Raises on empty response."""
@@ -52,6 +59,27 @@ def generate_title(content: str, week_label: str, model: str = "gpt-4o-mini") ->
             {
                 "role": "user",
                 "content": TITLE_PROMPT_TEMPLATE.format(content=content[:500]),
+            }
+        ],
+        temperature=0.3,
+        max_tokens=60,
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    title = (response.choices[0].message.content or "").strip()
+    if not title:
+        raise ValueError("OpenAI returned empty title")
+    return title
+
+
+def generate_paper_deep_dive_title(content: str, week_label: str, model: str = "gpt-4o-mini") -> str:
+    """Call OpenAI to generate a specific Chinese title for the paper deep-dive article."""
+    client = openai.OpenAI()
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": DEEP_DIVE_TITLE_PROMPT_TEMPLATE.format(content=content[:500]),
             }
         ],
         temperature=0.3,
