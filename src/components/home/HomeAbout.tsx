@@ -10,9 +10,9 @@ export default function HomeAbout() {
       viewAllLabel="Full story"
     >
       <p className="max-w-prose text-body-lg text-text-secondary">
-        Mrama Institute for Quantum Information and Intelligence is an independent research
-        initiative dedicated to advancing quantum information science, quantum machine learning,
-        intelligent optimization, and hybrid quantum-classical computing.
+        Founded by Chia-Chen in Taiwan and Alexandre in France, Mrama grew from their shared passion
+        for quantum science, intelligent systems, and research that can move from ideas into
+        practical experimentation.
       </p>
 
       <div className="glass-card mt-8 max-w-prose p-8">

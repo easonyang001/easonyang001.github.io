@@ -1,5 +1,6 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import { people } from "../../data/people.ts";
+import type { Person } from "../../types/index.ts";
 
 const RESPONSIBILITIES = [
   "Research",
@@ -10,10 +11,7 @@ const RESPONSIBILITIES = [
   "Institutional Development",
 ];
 
-export default function AboutFounder() {
-  const founder = people[0];
-  if (!founder) return null;
-
+function FounderCard({ founder }: { founder: Person }) {
   const links = [
     founder.email && { label: "Email", href: `mailto:${founder.email}`, icon: Mail },
     founder.githubUrl && { label: "GitHub", href: founder.githubUrl, icon: Github },
@@ -21,70 +19,86 @@ export default function AboutFounder() {
   ].filter((link): link is { label: string; href: string; icon: typeof Mail } => Boolean(link));
 
   return (
-    <section className="section-container border-t border-border">
-      <p className="text-small font-medium text-text-muted">Founder</p>
-      <div className="glass-card mt-6 max-w-prose p-8">
-        {founder.avatarUrl ? (
-          <img src={founder.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" />
-        ) : (
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-subtle text-h4 text-accent">
-            {founder.avatarInitials}
-          </div>
-        )}
-        <h2 className="mt-5 text-h3 text-text-primary">{founder.name}</h2>
-        <p className="mt-1 text-small font-medium text-accent">{founder.roles.join(", ")}</p>
-        {founder.biography && <p className="mt-4 text-small text-text-secondary">{founder.biography}</p>}
-
-        {founder.researchInterests.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {founder.researchInterests.map((interest) => (
-              <span
-                key={interest}
-                className="rounded-md border border-border px-2 py-1 font-mono text-mono-label uppercase text-text-secondary"
-              >
-                {interest}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-6 border-t border-border pt-6">
-          <p className="text-small font-medium text-text-muted">Responsibilities</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {RESPONSIBILITIES.map((item) => (
-              <span
-                key={item}
-                className="rounded-md border border-border px-2 py-1 text-small text-text-secondary"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
+    <article className="glass-card p-8">
+      {founder.avatarUrl ? (
+        <img src={founder.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" />
+      ) : (
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-subtle text-h4 text-accent">
+          {founder.avatarInitials}
         </div>
+      )}
+      <h3 className="mt-5 text-h3 text-text-primary">{founder.name}</h3>
+      <p className="mt-1 text-small font-medium text-accent">{founder.roles.join(", ")}</p>
+      {founder.biography && <p className="mt-4 text-small text-text-secondary">{founder.biography}</p>}
 
-        {founder.scholarUrl && (
-          <a
-            href={founder.scholarUrl}
-            className="mt-4 inline-block text-small font-medium text-accent hover:text-accent-hover"
-          >
-            Google Scholar &rarr;
-          </a>
-        )}
-        {founder.orcid && <p className="mt-1 font-mono text-mono-label text-text-muted">ORCID {founder.orcid}</p>}
+      {founder.researchInterests.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {founder.researchInterests.map((interest) => (
+            <span
+              key={interest}
+              className="rounded-md border border-border px-2 py-1 font-mono text-mono-label uppercase text-text-secondary"
+            >
+              {interest}
+            </span>
+          ))}
+        </div>
+      )}
 
-        {links.length > 0 && (
-          <div className="mt-5 flex gap-4 border-t border-border pt-5">
-            {links.map(({ label, href, icon: Icon }) => (
-              <a
-                key={label}
-                href={href}
-                className="flex items-center gap-1.5 text-small font-medium text-text-secondary transition-colors duration-150 hover:text-accent"
-              >
-                <Icon size={14} /> {label}
-              </a>
-            ))}
-          </div>
-        )}
+      {founder.scholarUrl && (
+        <a
+          href={founder.scholarUrl}
+          className="mt-4 inline-block text-small font-medium text-accent hover:text-accent-hover"
+        >
+          Google Scholar &rarr;
+        </a>
+      )}
+      {founder.orcid && <p className="mt-1 font-mono text-mono-label text-text-muted">ORCID {founder.orcid}</p>}
+
+      {links.length > 0 && (
+        <div className="mt-5 flex flex-wrap gap-4 border-t border-border pt-5">
+          {links.map(({ label, href, icon: Icon }) => (
+            <a
+              key={label}
+              href={href}
+              className="flex items-center gap-1.5 text-small font-medium text-text-secondary transition-colors duration-150 hover:text-accent"
+            >
+              <Icon size={14} /> {label}
+            </a>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+export default function AboutFounder() {
+  const founders = people.filter((person) => person.roles.some((role) => /founder/i.test(role)));
+  if (founders.length === 0) return null;
+
+  return (
+    <section className="section-container border-t border-border">
+      <p className="text-small font-medium text-text-muted">Founding Team</p>
+      <h2 className="mt-4 text-h2 text-text-primary">One institute, built across two cultures</h2>
+      <p className="mt-4 max-w-prose text-body-lg text-text-secondary">
+        Mrama's co-founders bring together perspectives from Taiwan and France, united by a shared
+        commitment to rigorous research, open knowledge, and practical experimentation.
+      </p>
+
+      <div className="mt-8 grid max-w-4xl gap-6 md:grid-cols-2">
+        {founders.map((founder) => (
+          <FounderCard key={founder.slug} founder={founder} />
+        ))}
+      </div>
+
+      <div className="mt-8 max-w-4xl border-t border-border pt-6">
+        <p className="text-small font-medium text-text-muted">Shared Responsibilities</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {RESPONSIBILITIES.map((item) => (
+            <span key={item} className="rounded-md border border-border px-2 py-1 text-small text-text-secondary">
+              {item}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

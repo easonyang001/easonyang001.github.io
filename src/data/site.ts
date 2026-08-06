@@ -6,7 +6,7 @@ export const site: SiteConfig = {
   tagline: "for Quantum Information and Intelligence",
   description:
     "Advancing Quantum Information, Artificial Intelligence, and Intelligent Optimization.",
-  aboutBlurb: "An independent, self-funded research initiative founded in 2026, based in Taiwan.",
+  aboutBlurb: "An independent research initiative co-founded across Taiwan and France in 2026.",
   foundedYear: 2026,
   email: "contact@mrama-institute.org",
   githubUrl: "https://github.com/easonyang001",

@@ -18,7 +18,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "How is Mrama funded?",
-    answer: "Mrama is currently self-funded by its founder. It does not receive external grants, venture funding, or institutional backing at this stage.",
+    answer: "Mrama is currently self-funded by its founding team. It does not receive external grants, venture funding, or institutional backing at this stage.",
   },
   {
     question: "Where is Mrama based?",
