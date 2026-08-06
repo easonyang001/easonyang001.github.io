@@ -60,6 +60,8 @@ const DESKTOP_TIMELINE = { waves: [0.3, 1.4, 2.5], fadeoutStart: 4.0, maskExitSt
 const MOBILE_TIMELINE = { waves: [0.3, 1.3], fadeoutStart: 2.8, maskExitStart: 3.1, end: 3.8 };
 const TRACK_CLEARANCE_MS = 2000;
 const SKIP_FADE_MS = 400;
+const FONT_READY_TIMEOUT_MS = 1000;
+const INTRO_FAILSAFE_MS = 8000;
 
 function buildLines(isMobile: boolean): LineDef[] {
   if (!isMobile) {
@@ -148,8 +150,11 @@ export default function IntroOverlay({ onExitStart, onDone }: IntroOverlayProps)
 
   useEffect(() => {
     let cancelled = false;
-    document.fonts.ready.then(() => {
-      if (cancelled) return;
+    let started = false;
+
+    const startTimeline = () => {
+      if (cancelled || started) return;
+      started = true;
       startRef.current = Date.now();
       timeline.waves.forEach((s, i) => {
         timersRef.current.push(window.setTimeout(() => spawnWave(i), s * 1000));
@@ -168,7 +173,24 @@ export default function IntroOverlay({ onExitStart, onDone }: IntroOverlayProps)
         }, timeline.end * 1000)
       );
       timersRef.current.push(window.setTimeout(() => setShowSkipHint(true), 1000));
-    });
+    };
+
+    // FontFaceSet.ready can remain pending in some browser/network failure
+    // states. Never let font loading keep the full-screen overlay mounted.
+    timersRef.current.push(window.setTimeout(startTimeline, FONT_READY_TIMEOUT_MS));
+    void document.fonts?.ready.then(startTimeline, startTimeline);
+
+    // This is deliberately independent of the animation timeline. Even if a
+    // browser stalls font or animation work, the site must become usable.
+    timersRef.current.push(
+      window.setTimeout(() => {
+        if (cancelled) return;
+        setMounted(false);
+        onExitStart();
+        onDone();
+      }, INTRO_FAILSAFE_MS)
+    );
+
     return () => {
       cancelled = true;
       timersRef.current.forEach(clearTimeout);
