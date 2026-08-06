@@ -43,7 +43,7 @@ Use this exact shape and include every field:
 SECTION REQUIREMENTS FOR EACH LANGUAGE
 - weeklyNews: 3-5 items when sources permit. Summarize what happened, why it matters, and link the source.
 - selectedPapers: 5-8 papers when sources permit. For each, summarize the question, method, result, and limitation. Include the arXiv link and peer-review warning.
-- literatureDeepDive: choose exactly one supplied paper. Explain the research question, method, evidence, limitations, and what to read next. Be explicit when the abstract does not provide enough detail.
+- literatureDeepDive: choose the 2-4 most significant supplied papers (fewer only if fewer are supplied). For each, use its own sub-heading and cover: research question, method, evidence/results, limitations, and why it matters. Be explicit when the abstract does not provide enough detail for a given point rather than inferring it. This section is republished on its own as a standalone "Paper Deep Dive" article, so it must read as a complete, self-contained piece independent of the weeklyNews and selectedPapers sections.
 - Use Markdown paragraphs and lists inside each section value, but do not repeat section headings inside the values.
 - Aim for useful synthesis rather than a list of rewritten titles.
 
