@@ -5,7 +5,8 @@ export const people: Person[] = [
     slug: "chia-chen-yang",
     name: "Chia-Chen Yang",
     roles: ["Founder"],
-    biography: null,
+    biography:
+      "Founder of Mrama Institute in Taiwan, building the institute around quantum machine learning, optimization, open research, and the one-dragon path from idea to working system.",
     researchInterests: [
       "Quantum Machine Learning",
       "Quantum Optimization",
@@ -28,8 +29,8 @@ export const people: Person[] = [
     name: "Alexandre Lam",
     roles: ["Co-Founder"],
     biography:
-      "Co-founder of Mrama Institute with a background at Mines Nancy and an interest in quantum research.",
-    researchInterests: ["Quantum Computing"],
+      "Co-founder of Mrama Institute in France, bringing a Mines Nancy background and a shared commitment to quantum research, engineering, and the institute's Taiwan-France founding story.",
+    researchInterests: ["Quantum Computing", "Quantum Research", "Scientific Software"],
     avatarUrl: null,
     avatarInitials: "AL",
     email: null,
