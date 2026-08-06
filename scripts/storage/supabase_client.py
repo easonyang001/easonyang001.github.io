@@ -22,22 +22,8 @@ def check_existing_draft(supabase: Client, week_label: str) -> dict | None:
     return response.data[0] if response.data else None
 
 
-def save_draft(supabase: Client, draft: dict, *, force: bool = False) -> str:
-    if force:
-        draft = {
-            **draft,
-            "status": "draft",
-            "reviewed_by": None,
-            "reviewed_at": None,
-            "published_at": None,
-        }
-        response = (
-            supabase.table("news_drafts")
-            .upsert(draft, on_conflict="week_label")
-            .execute()
-        )
-    else:
-        response = supabase.table("news_drafts").insert(draft).execute()
+def save_draft(supabase: Client, draft: dict) -> str:
+    response = supabase.table("news_drafts").insert(draft).execute()
     return response.data[0]["id"]
 
 

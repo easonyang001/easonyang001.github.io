@@ -26,12 +26,20 @@ function extractSummary(markdown: string, fallback: string): string {
   return summary.length > SUMMARY_MAX_CHARS ? `${summary.slice(0, SUMMARY_MAX_CHARS - 1)}…` : summary;
 }
 
-function slugFromWeekLabel(weekLabel: string): string {
-  return `weekly-quantum-news-${weekLabel.toLowerCase()}`;
+// news_drafts no longer enforces one row per week_label (see migration 008)
+// -- a manual --force run can add another draft for a week that already has
+// one. The published slug is keyed off the draft id too, not just the week,
+// so two drafts from the same week don't overwrite each other's News entry.
+function shortDraftId(draftId: string): string {
+  return draftId.replace(/-/g, "").slice(0, 8);
 }
 
-function deepDiveSlugFromWeekLabel(weekLabel: string): string {
-  return `weekly-quantum-paper-deep-dive-${weekLabel.toLowerCase()}`;
+function slugFromWeekLabel(weekLabel: string, draftId: string): string {
+  return `weekly-quantum-news-${weekLabel.toLowerCase()}-${shortDraftId(draftId)}`;
+}
+
+function deepDiveSlugFromWeekLabel(weekLabel: string, draftId: string): string {
+  return `weekly-quantum-paper-deep-dive-${weekLabel.toLowerCase()}-${shortDraftId(draftId)}`;
 }
 
 export const newsAutomationRouter = Router();
@@ -200,9 +208,16 @@ newsAutomationRouter.patch("/drafts/:id/approve", async (req, res) => {
   }
 
   const entries = [
-    { news_id: slugFromWeekLabel(draft.week_label), title: publishedTitle, summary, content },
+    { news_id: slugFromWeekLabel(draft.week_label, draft.id), title: publishedTitle, summary, content },
     ...(deepDive
-      ? [{ news_id: deepDiveSlugFromWeekLabel(draft.week_label), title: deepDive.title, summary: deepDive.summary, content: deepDive.content }]
+      ? [
+          {
+            news_id: deepDiveSlugFromWeekLabel(draft.week_label, draft.id),
+            title: deepDive.title,
+            summary: deepDive.summary,
+            content: deepDive.content,
+          },
+        ]
       : []),
   ];
 

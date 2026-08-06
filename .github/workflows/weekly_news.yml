@@ -11,7 +11,7 @@ on:
         default: "false"
         type: boolean
       force:
-        description: "Force regenerate even if this week's draft exists"
+        description: "Add another draft even if this week already has one"
         required: false
         default: "false"
         type: boolean

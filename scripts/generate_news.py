@@ -4,7 +4,7 @@ Weekly quantum news generation pipeline.
 Usage:
     python scripts/generate_news.py              # normal run
     python scripts/generate_news.py --dry-run    # fetch & score but skip OpenAI & Supabase
-    python scripts/generate_news.py --force      # ignore dedup, regenerate even if this week exists
+    python scripts/generate_news.py --force      # add another draft even if this week already has one
 """
 
 from __future__ import annotations
@@ -120,7 +120,6 @@ def main() -> int:
             "model": GENERATION_MODEL,
             "prompt_hash": prompt_hash,
         },
-        force=args.force,
     )
 
     # Only mark items as seen once the draft has actually been saved, so a
