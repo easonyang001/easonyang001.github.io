@@ -16,5 +16,21 @@ export const publications: Publication[] = [
     doiUrl: "None",
     codeUrl: "None",
     bibtex: null,
+  },
+  {
+    slug: "aqc2026",
+    title: "Large-Scale AED Deployment via QUBO: Coupling-Density Analysis and Benchmarking of Quantum, Quantum-Inspired, and Classical Solvers",
+    authors: [],
+    year: 2026,
+    venue: "Adiabatic Quantum Computing (AQC) 2026",
+    type: "Conference Paper",
+    status: "Published",
+    abstract: "This paper proposes a Quadratic Unconstrained Bi\nnary Optimization (QUBO) framework for large-scale Automated\nExternal Defibrillator (AED) deployment, integrating distance\ndecay probabilistic coverage with demographic weighting in a\ncompact binary formulation. Taipei City, with up to 12,000\ndemand points and 1,458 candidate sites, serves as the real\nworld testbed. A central structural observation is that a slack\npenalized budget/cardinality constraint expands into nc\n2\nall\nto-all ZZ couplings in the corresponding Ising form, creating\nan O(n2\nc) dense interaction block. We show that this density is\nconsistently associated with (i) practical minor-embedding failure\non D-Wave Pegasus P16 beyond a moderate candidate-set size\nand (ii) degraded feasibility in shallow, penalty-based QAOA\ncircuits, suggesting a shared graph-structure explanation for both\nobserved behaviors.",
+    keywords: ["AED deployment", "QPU embedding"],
+    researchAreas: ["quantum annealing"],
+    pdfUrl: null,
+    doiUrl: null,
+    codeUrl: null,
+    bibtex: null,
   }
 ];
