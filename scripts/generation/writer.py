@@ -20,7 +20,7 @@ def generate_draft(prompt: str, model: str = "gpt-4o-mini") -> str:
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.3,
                 response_format={"type": "json_object"},
-                max_tokens=7000,
+                max_tokens=10000,
                 timeout=REQUEST_TIMEOUT_SECONDS,
             )
             break

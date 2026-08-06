@@ -30,6 +30,10 @@ function slugFromWeekLabel(weekLabel: string): string {
   return `weekly-quantum-news-${weekLabel.toLowerCase()}`;
 }
 
+function deepDiveSlugFromWeekLabel(weekLabel: string): string {
+  return `weekly-quantum-paper-deep-dive-${weekLabel.toLowerCase()}`;
+}
+
 export const newsAutomationRouter = Router();
 newsAutomationRouter.use(requireAuth);
 
@@ -165,6 +169,10 @@ newsAutomationRouter.patch("/drafts/:id/approve", async (req, res) => {
   let publishedTitle = draft.title;
   let summary: string;
   let content: string;
+  // literatureDeepDive is written to read as a complete, self-contained
+  // piece (see the prompt), so a weekly brief also gets republished a
+  // second time as its own standalone "Paper Deep Dive" News entry.
+  let deepDive: { title: string; summary: string; content: string } | null = null;
   try {
     const brief = parseWeeklyBrief(draft.content_md);
     if (brief) {
@@ -173,6 +181,15 @@ newsAutomationRouter.patch("/drafts/:id/approve", async (req, res) => {
       publishedTitle = primary.title.slice(0, TITLE_MAX_CHARS);
       summary = primary.summary.slice(0, SUMMARY_MAX_CHARS);
       content = JSON.stringify(publishedBrief);
+
+      deepDive = {
+        title: `論文精讀｜${primary.title}`.slice(0, TITLE_MAX_CHARS),
+        summary: extractSummary(brief.translations["zh-TW"].sections.literatureDeepDive, primary.summary).slice(
+          0,
+          SUMMARY_MAX_CHARS
+        ),
+        content: primary.sections.literatureDeepDive,
+      };
     } else {
       content = sanitizeRichText(await marked.parse(draft.content_md));
       summary = extractSummary(draft.content_md, draft.title);
@@ -181,26 +198,42 @@ newsAutomationRouter.patch("/drafts/:id/approve", async (req, res) => {
     res.status(400).json({ error: error instanceof Error ? error.message : "Invalid weekly brief" });
     return;
   }
-  const newsId = slugFromWeekLabel(draft.week_label);
 
-  const { error: insertError } = await supabase.from("content_news").upsert({
-    status: "published",
-    news_id: newsId,
-    date: new Date().toISOString().slice(0, 10),
-    category: NEWS_CATEGORY,
-    title: publishedTitle,
-    summary,
-    content,
-    cover_image_url: null,
-    related_project_id: null,
-    related_publication_id: null,
-    external_url: null,
-  }, { onConflict: "news_id" });
+  const entries = [
+    { news_id: slugFromWeekLabel(draft.week_label), title: publishedTitle, summary, content },
+    ...(deepDive
+      ? [{ news_id: deepDiveSlugFromWeekLabel(draft.week_label), title: deepDive.title, summary: deepDive.summary, content: deepDive.content }]
+      : []),
+  ];
 
-  if (insertError) {
-    console.error("News draft approve (content_news upsert) failed:", insertError);
-    res.status(502).json({ error: "Failed to save the News entry" });
-    return;
+  for (const entry of entries) {
+    // Upsert on news_id rather than insert: if a prior approve attempt got
+    // this far but then failed before opening the GitHub PR, the row is
+    // left behind with nothing actually published. A plain insert would
+    // hit the unique constraint on news_id and permanently block retrying
+    // this week's draft, so upsert lets a retry overwrite it and continue.
+    const { error: insertError } = await supabase.from("content_news").upsert(
+      {
+        status: "published",
+        news_id: entry.news_id,
+        date: new Date().toISOString().slice(0, 10),
+        category: NEWS_CATEGORY,
+        title: entry.title,
+        summary: entry.summary,
+        content: entry.content,
+        cover_image_url: null,
+        related_project_id: null,
+        related_publication_id: null,
+        external_url: null,
+      },
+      { onConflict: "news_id" }
+    );
+
+    if (insertError) {
+      console.error("News draft approve (content_news upsert) failed:", insertError);
+      res.status(502).json({ error: "Failed to save the News entry" });
+      return;
+    }
   }
 
   const { data: allPublished, error: listError } = await supabase
