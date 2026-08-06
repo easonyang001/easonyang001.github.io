@@ -55,7 +55,7 @@ export default function AboutNetwork() {
               <div key={item.label} className="relative mb-8 last:mb-0">
                 <span className="absolute -left-[2.35rem] top-1.5 h-3 w-3 rounded-full border-2 border-background bg-accent" />
                 <p className="font-mono text-mono-label uppercase text-accent">{item.year}</p>
-                <h3 className="mt-1 text-h4 text-text-primary">{item.label}</h3>
+                <h3 className="mt-1 text-h3 text-text-primary">{item.label}</h3>
                 <p className="mt-1 text-small text-text-secondary">{item.description}</p>
               </div>
             ))}

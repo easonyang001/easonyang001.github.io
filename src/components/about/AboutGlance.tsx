@@ -15,7 +15,7 @@ export default function AboutGlance() {
         {STATS.map((stat) => (
           <div key={stat.label}>
             <p className="text-small font-medium text-text-muted">{stat.label}</p>
-            <p className="mt-2 text-h4 text-text-primary">{stat.value}</p>
+            <p className="mt-2 text-h2 text-text-primary">{stat.value}</p>
           </div>
         ))}
       </div>
