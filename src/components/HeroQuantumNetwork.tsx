@@ -1,11 +1,11 @@
 /**
  * Sparse node/link network -- reads as information transfer / quantum
  * connectivity, not a blockchain diagram. Spans the full Hero background;
- * a right-side mask fades it out behind the text column (now right-aligned)
- * and keeps it fully visible over the skyline photo on the left, so it
- * reads as an overlay on the image rather than fighting text legibility.
- * Mostly static; a few links carry a slow traveling light packet via SVG
- * animateMotion.
+ * a right-side mask fades it out behind the text column so it reads as
+ * "everywhere" without fighting text legibility, staying visible over the
+ * skyline photo on the left (see Hero.tsx's scrim, which darkens the same
+ * right side for the same reason). Mostly static; a few links carry a slow
+ * traveling light packet via SVG animateMotion.
  */
 const NODES = [
   { x: 4, y: 18 }, { x: 14, y: 34 }, { x: 9, y: 55 }, { x: 20, y: 8 },

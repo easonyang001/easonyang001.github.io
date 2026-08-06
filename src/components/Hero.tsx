@@ -27,7 +27,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="hero-scientific relative isolate flex min-h-screen flex-col justify-center overflow-x-hidden bg-background pt-[120px] pb-16 md:pt-[136px] md:pb-24"
+      className="hero-scientific relative isolate flex w-full min-h-screen flex-col justify-center overflow-hidden bg-background pt-[120px] pb-16 md:pt-[136px] md:pb-24"
     >
       {/*
         "Scientific elegance" background composition -- quantum network +
@@ -75,25 +75,6 @@ export default function Hero() {
           }
         }
 
-        .hero-skyline {
-          mask-image: linear-gradient(
-            to bottom right,
-            black 0%,
-            black 40%,
-            transparent 78%
-          ),
-          linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-          mask-composite: intersect;
-          -webkit-mask-image: linear-gradient(
-            to bottom right,
-            black 0%,
-            black 40%,
-            transparent 78%
-          ),
-          linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-          -webkit-mask-composite: source-in;
-        }
-
         /* Homepage Hero nav links only (Solutions / Publications) -- an
            underline + arrow style replacing the old filled/bordered
            buttons. Each instance sets --nav-grad-from/--nav-grad-to via
@@ -119,27 +100,35 @@ export default function Hero() {
         />
       )}
 
+      {/*
+        Background image layer -- pure full-bleed background (position:
+        absolute, inset:0, z-index:-1), not a positioned box competing with
+        the text column for horizontal space. Text is right-aligned, so the
+        scrim darkens the RIGHT side (behind the text) and leaves the photo
+        visible on the left -- which is also where Taipei 101 actually sits
+        in the source photo, so the tower stays the visible subject instead
+        of being cropped out or hidden under the scrim.
+      */}
+      <div className="pointer-events-none absolute inset-0 z-[-1]">
+        <img
+          src="/visuals/taipei-skyline.webp"
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full max-w-full object-cover object-left-top opacity-30 md:opacity-90"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to right, transparent 20%, #020617 65%)" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
+      </div>
+
       <div
         aria-hidden="true"
         className="hero-ambient-light pointer-events-none absolute left-[8%] top-[30%] h-[420px] w-[420px] md:h-[560px] md:w-[560px]"
       />
       <HeroParticles />
       <HeroQuantumNetwork />
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
-
-      {/*
-        Taipei skyline photo, left side, low opacity -- masked so it fades
-        out toward the right/top/bottom instead of showing a hard rectangle
-        edge. Renders after the fade-to-background overlay so that overlay
-        doesn't wash it out the way it did the earlier SVG horizon.
-      */}
-      <img
-        src="/visuals/taipei-skyline.webp"
-        alt=""
-        aria-hidden="true"
-        className="hero-skyline pointer-events-none absolute bottom-0 left-0 h-[380px] w-[220px] object-cover object-left-bottom opacity-[0.14] md:h-[clamp(500px,80vh,760px)] md:w-[clamp(380px,42vw,680px)] md:opacity-[0.34]"
-      />
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -148,58 +137,60 @@ export default function Hero() {
         className="relative w-full px-6 md:px-12"
       >
         <div className="mx-auto max-w-content md:flex md:justify-end">
-        <div className="w-full md:max-w-[620px]">
-          <h1 className="max-w-[800px] text-display text-text-primary md:text-display-lg">
-            {site.name}
-          </h1>
+          <div className="w-full max-w-[720px] overflow-visible">
+            <h1 className="whitespace-normal overflow-visible text-[40px] font-medium leading-[0.95] tracking-[-0.035em] text-text-primary md:text-[clamp(56px,7vw,96px)]">
+              {site.name}
+            </h1>
 
-          <p className="mt-4 max-w-[800px] text-[26px] font-normal text-text-primary">
-            {site.tagline}
-          </p>
+            <p className="mt-4 whitespace-normal text-[clamp(1.25rem,1.1rem_+_0.6vw,1.625rem)] font-normal text-text-primary">
+              {site.tagline}
+            </p>
 
-          <p className="mt-8 max-w-[500px] text-body-lg text-text-secondary">{site.description}</p>
+            <p className="mt-8 text-[clamp(1rem,0.95rem_+_0.2vw,1.125rem)] leading-[1.6] text-text-secondary">
+              {site.description}
+            </p>
 
-          <div className="mt-12 flex flex-col items-start gap-6">
-            <Link
-              to="/solutions"
-              className="hero-nav-link group inline-flex w-fit items-center gap-2 text-body-lg font-medium text-text-primary transition-colors duration-200 ease-out hover:text-white"
-              style={{
-                ["--nav-grad-from" as string]: "#FDBA74",
-                ["--nav-grad-to" as string]: "#EA580C",
-              }}
-            >
-              <span className="relative inline-block pb-1">
-                Solutions
-                <span className="hero-nav-underline-base pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px]" />
-                <span className="hero-nav-underline-fill pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px] origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
-              </span>
-              <ArrowRight
-                size={16}
-                strokeWidth={1.5}
-                className="text-text-primary transition-transform duration-200 ease-out group-hover:translate-x-1.5"
-              />
-            </Link>
-            <a
-              href="#publications"
-              className="hero-nav-link group inline-flex w-fit items-center gap-2 text-body-lg font-medium text-text-primary transition-colors duration-200 ease-out hover:text-white"
-              style={{
-                ["--nav-grad-from" as string]: "#3B82F6",
-                ["--nav-grad-to" as string]: "#8B5CF6",
-              }}
-            >
-              <span className="relative inline-block pb-1">
-                Publications
-                <span className="hero-nav-underline-base pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px]" />
-                <span className="hero-nav-underline-fill pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px] origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
-              </span>
-              <ArrowRight
-                size={16}
-                strokeWidth={1.5}
-                className="text-text-primary transition-transform duration-200 ease-out group-hover:translate-x-1.5"
-              />
-            </a>
+            <div className="mt-12 flex flex-col items-start gap-6">
+              <Link
+                to="/solutions"
+                className="hero-nav-link group inline-flex w-fit items-center gap-2 text-body-lg font-medium text-text-primary transition-colors duration-200 ease-out hover:text-white"
+                style={{
+                  ["--nav-grad-from" as string]: "#FDBA74",
+                  ["--nav-grad-to" as string]: "#EA580C",
+                }}
+              >
+                <span className="relative inline-block pb-1">
+                  Solutions
+                  <span className="hero-nav-underline-base pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px]" />
+                  <span className="hero-nav-underline-fill pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px] origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                </span>
+                <ArrowRight
+                  size={16}
+                  strokeWidth={1.5}
+                  className="text-text-primary transition-transform duration-200 ease-out group-hover:translate-x-1.5"
+                />
+              </Link>
+              <a
+                href="#publications"
+                className="hero-nav-link group inline-flex w-fit items-center gap-2 text-body-lg font-medium text-text-primary transition-colors duration-200 ease-out hover:text-white"
+                style={{
+                  ["--nav-grad-from" as string]: "#3B82F6",
+                  ["--nav-grad-to" as string]: "#8B5CF6",
+                }}
+              >
+                <span className="relative inline-block pb-1">
+                  Publications
+                  <span className="hero-nav-underline-base pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px]" />
+                  <span className="hero-nav-underline-fill pointer-events-none absolute inset-x-0 bottom-0 block h-[1.5px] origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                </span>
+                <ArrowRight
+                  size={16}
+                  strokeWidth={1.5}
+                  className="text-text-primary transition-transform duration-200 ease-out group-hover:translate-x-1.5"
+                />
+              </a>
+            </div>
           </div>
-        </div>
         </div>
       </motion.div>
     </section>
