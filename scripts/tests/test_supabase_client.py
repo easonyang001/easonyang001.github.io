@@ -5,18 +5,11 @@ class Query:
     def __init__(self) -> None:
         self.operation = ""
         self.payload = None
-        self.conflict = None
         self.data = [{"id": "draft-id"}]
 
     def insert(self, payload: dict):
         self.operation = "insert"
         self.payload = payload
-        return self
-
-    def upsert(self, payload: dict, on_conflict: str):
-        self.operation = "upsert"
-        self.payload = payload
-        self.conflict = on_conflict
         return self
 
     def execute(self):
@@ -31,18 +24,13 @@ class Supabase:
         return self.query
 
 
-def test_force_save_resets_review_and_upserts_by_week() -> None:
+def test_save_draft_always_inserts() -> None:
+    # news_drafts no longer enforces one row per week_label (see migration
+    # 008), so a manual --force run can add another draft for a week that
+    # already has one -- save_draft has no special-case branch for that.
     supabase = Supabase()
-    result = save_draft(supabase, {"week_label": "2026-W32"}, force=True)
+    result = save_draft(supabase, {"week_label": "2026-W32"})
 
     assert result == "draft-id"
-    assert supabase.query.operation == "upsert"
-    assert supabase.query.conflict == "week_label"
-    assert supabase.query.payload["status"] == "draft"
-    assert supabase.query.payload["published_at"] is None
-
-
-def test_normal_save_remains_an_insert() -> None:
-    supabase = Supabase()
-    save_draft(supabase, {"week_label": "2026-W33"})
     assert supabase.query.operation == "insert"
+    assert supabase.query.payload == {"week_label": "2026-W32"}
