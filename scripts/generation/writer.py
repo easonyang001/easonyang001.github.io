@@ -26,7 +26,11 @@ def generate_draft(prompt: str, model: str = "gpt-4o-mini") -> str:
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.3,
                 response_format={"type": "json_object"},
-                max_tokens=10000,
+                # gpt-4o-mini's hard ceiling is 16384; the brief asks for a
+                # multi-paper literatureDeepDive across three languages on
+                # top of weeklyNews and selectedPapers, which came close to
+                # or past 10000 and got cut off mid-JSON in practice.
+                max_tokens=16000,
                 timeout=REQUEST_TIMEOUT_SECONDS,
             )
             break
@@ -36,6 +40,11 @@ def generate_draft(prompt: str, model: str = "gpt-4o-mini") -> str:
                 raise
     else:
         raise RuntimeError("OpenAI request failed") from last_error
+
+    if response.choices[0].finish_reason == "length":
+        raise ValueError(
+            "OpenAI response was truncated by max_tokens before the brief JSON was complete"
+        )
 
     content = (response.choices[0].message.content or "").strip()
     if not content:
