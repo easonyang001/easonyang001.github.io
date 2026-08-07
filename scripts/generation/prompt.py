@@ -18,6 +18,7 @@ STRICT EDITORIAL RULES
 5. Clearly distinguish reported results from editorial interpretation. Omit uncertain details.
 6. Keep author names and affiliations in their original form.
 7. The three translations must communicate the same evidence and conclusions.
+8. Every section value in every language must be non-empty. selectedPapers and literatureDeepDive intentionally cover overlapping papers -- never shorten or omit a section because its content is also covered elsewhere.
 
 REQUIRED DOCUMENT
 Return one JSON object only. Do not wrap it in a Markdown code fence.
@@ -44,6 +45,7 @@ SECTION REQUIREMENTS FOR EACH LANGUAGE
 - weeklyNews: 3-5 items when sources permit. Summarize what happened, why it matters, and link the source.
 - selectedPapers: 5-8 papers when sources permit. For each, summarize the question, method, result, and limitation. Include the arXiv link and peer-review warning.
 - literatureDeepDive: choose the 2-4 most significant supplied papers (fewer only if fewer are supplied). For each, use its own sub-heading and cover: research question, method, evidence/results, limitations, and why it matters. Be explicit when the abstract does not provide enough detail for a given point rather than inferring it. This section is republished on its own as a standalone "Paper Deep Dive" article, so it must read as a complete, self-contained piece independent of the weeklyNews and selectedPapers sections.
+- A paper selected for literatureDeepDive must still get its own full entry in selectedPapers. Do not treat coverage in one section as a reason to shorten, merge, or skip it in the other -- each section is read independently by different readers.
 - Use Markdown paragraphs and lists inside each section value, but do not repeat section headings inside the values.
 - Aim for useful synthesis rather than a list of rewritten titles.
 
