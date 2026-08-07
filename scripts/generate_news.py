@@ -35,6 +35,7 @@ from scripts.storage.supabase_client import (
 )
 
 GENERATION_MODEL = "gpt-4o-mini"
+MAX_BRIEF_ATTEMPTS = 3
 
 
 def _build_sources(papers: list[dict], news: list[dict]) -> list[dict]:
@@ -65,6 +66,25 @@ def get_week_label(today: date | None = None) -> str:
     today = today or date.today()
     iso_year, iso_week, _ = today.isocalendar()
     return f"{iso_year}-W{iso_week:02d}"
+
+
+def _generate_valid_brief(prompt: str) -> dict:
+    """Generate a brief and retry if it fails validation.
+
+    An empty section or truncated JSON is stochastic content quality, not a
+    network failure, so generate_draft's own timeout-retry loop doesn't
+    cover it -- this is a separate retry layer on top.
+    """
+    last_error: ValueError | None = None
+    for attempt in range(1, MAX_BRIEF_ATTEMPTS + 1):
+        generated = generate_draft(prompt, model=GENERATION_MODEL)
+        try:
+            return parse_generated_brief(generated)
+        except ValueError as error:
+            last_error = error
+            print(f"生成的週報未通過驗證（第 {attempt} 次嘗試）：{error}")
+    assert last_error is not None
+    raise last_error
 
 
 def main() -> int:
@@ -105,8 +125,7 @@ def main() -> int:
         return 0
 
     prompt, prompt_hash = build_prompt(selected["papers"], selected["news"], week_label)
-    generated = generate_draft(prompt, model=GENERATION_MODEL)
-    brief = parse_generated_brief(generated)
+    brief = _generate_valid_brief(prompt)
     title = brief["translations"]["zh-TW"]["title"]
 
     assert supabase is not None
