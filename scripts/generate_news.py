@@ -19,8 +19,8 @@ from pathlib import Path
 # same way pytest (run from the repo root) does.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from scripts.generation.prompt import build_prompt
-from scripts.generation.brief import parse_generated_brief, serialize_brief
+from scripts.generation.prompt import build_prompts
+from scripts.generation.brief import LANGUAGES, assemble_brief, parse_generated_translation, serialize_brief
 from scripts.generation.writer import generate_draft
 from scripts.processing.dedup import filter_seen
 from scripts.processing.filter import select_top_items
@@ -68,23 +68,29 @@ def get_week_label(today: date | None = None) -> str:
     return f"{iso_year}-W{iso_week:02d}"
 
 
-def _generate_valid_brief(prompt: str) -> dict:
-    """Generate a brief and retry if it fails validation.
+def _generate_valid_translation(language: str, prompt: str) -> dict:
+    """Generate one language's translation and retry if it fails validation.
 
     An empty section or truncated JSON is stochastic content quality, not a
     network failure, so generate_draft's own timeout-retry loop doesn't
-    cover it -- this is a separate retry layer on top.
+    cover it -- this is a separate retry layer on top, scoped to a single
+    language so one bad language doesn't force redoing the other two.
     """
     last_error: ValueError | None = None
     for attempt in range(1, MAX_BRIEF_ATTEMPTS + 1):
         try:
             generated = generate_draft(prompt, model=GENERATION_MODEL)
-            return parse_generated_brief(generated)
+            return parse_generated_translation(language, generated)
         except ValueError as error:
             last_error = error
-            print(f"生成的週報未通過驗證（第 {attempt} 次嘗試）：{error}")
+            print(f"{language} 翻譯未通過驗證（第 {attempt} 次嘗試）：{error}")
     assert last_error is not None
     raise last_error
+
+
+def _generate_valid_brief(prompts: dict[str, str]) -> dict:
+    translations = {language: _generate_valid_translation(language, prompts[language]) for language in LANGUAGES}
+    return assemble_brief(translations)
 
 
 def main() -> int:
@@ -124,8 +130,8 @@ def main() -> int:
         print(f"Dry run 完成。選出 {len(selected['papers'])} 篇論文、{len(selected['news'])} 則新聞。")
         return 0
 
-    prompt, prompt_hash = build_prompt(selected["papers"], selected["news"], week_label)
-    brief = _generate_valid_brief(prompt)
+    prompts, prompt_hash = build_prompts(selected["papers"], selected["news"], week_label)
+    brief = _generate_valid_brief(prompts)
     title = brief["translations"]["zh-TW"]["title"]
 
     assert supabase is not None

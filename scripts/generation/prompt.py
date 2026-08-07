@@ -1,14 +1,30 @@
-"""Build the prompt sent to OpenAI."""
+"""Build the per-language prompts sent to OpenAI.
+
+Each language is requested in its own API call rather than all three
+crammed into one JSON response -- gpt-4o-mini's 16384-token output ceiling
+can't reliably fit a full weeklyNews + selectedPapers + literatureDeepDive
+brief three times over in a single response, which was causing systematic
+truncation. Generating one language per call gives each one the full token
+budget to itself.
+"""
 
 from __future__ import annotations
 
 import hashlib
 
+from scripts.generation.brief import LANGUAGES
+
 ABSTRACT_MAX_CHARS = 800
 MAX_AUTHORS_SHOWN = 3
 
+LANGUAGE_LABELS = {
+    "zh-TW": "Traditional Chinese",
+    "en": "English",
+    "fr": "French",
+}
+
 SYSTEM_TEMPLATE = """You are the research editor for Mrama Institute.
-Create a multilingual weekly quantum research brief for {week_label} using only the supplied sources.
+Create the {language_label} translation of a weekly quantum research brief for {week_label} using only the supplied sources.
 
 STRICT EDITORIAL RULES
 1. Use only claims supported by the supplied source titles, snippets, and abstracts. Never add outside facts.
@@ -17,31 +33,22 @@ STRICT EDITORIAL RULES
 4. Attribute every item by its exact source title and include the supplied URL as a Markdown link.
 5. Clearly distinguish reported results from editorial interpretation. Omit uncertain details.
 6. Keep author names and affiliations in their original form.
-7. The three translations must communicate the same evidence and conclusions.
-8. Every section value in every language must be non-empty. selectedPapers and literatureDeepDive intentionally cover overlapping papers -- never shorten or omit a section because its content is also covered elsewhere.
+7. Every section value must be non-empty. selectedPapers and literatureDeepDive intentionally cover overlapping papers -- never shorten or omit a section because its content is also covered elsewhere.
 
 REQUIRED DOCUMENT
-Return one JSON object only. Do not wrap it in a Markdown code fence.
+Return one JSON object only, written in {language_label}. Do not wrap it in a Markdown code fence.
 Use this exact shape and include every field:
 {{
-  "format": "mrama-weekly-brief-v1",
-  "contentType": "markdown",
-  "translations": {{
-    "zh-TW": {{
-      "title": "Traditional Chinese issue title",
-      "summary": "2-3 sentence issue summary",
-      "sections": {{
-        "weeklyNews": "Markdown",
-        "selectedPapers": "Markdown",
-        "literatureDeepDive": "Markdown"
-      }}
-    }},
-    "en": {{ "title": "...", "summary": "...", "sections": {{ "weeklyNews": "...", "selectedPapers": "...", "literatureDeepDive": "..." }} }},
-    "fr": {{ "title": "...", "summary": "...", "sections": {{ "weeklyNews": "...", "selectedPapers": "...", "literatureDeepDive": "..." }} }}
+  "title": "{language_label} issue title",
+  "summary": "2-3 sentence issue summary",
+  "sections": {{
+    "weeklyNews": "Markdown",
+    "selectedPapers": "Markdown",
+    "literatureDeepDive": "Markdown"
   }}
 }}
 
-SECTION REQUIREMENTS FOR EACH LANGUAGE
+SECTION REQUIREMENTS
 - weeklyNews: 3-5 items when sources permit. Summarize what happened, why it matters, and link the source.
 - selectedPapers: 4-6 papers when sources permit. For each, summarize the question, method, result, and limitation. Include the arXiv link and peer-review warning.
 - literatureDeepDive: choose the 2-3 most significant supplied papers (fewer only if fewer are supplied). For each, use its own sub-heading and cover: research question, method, evidence/results, limitations, and why it matters. Be explicit when the abstract does not provide enough detail for a given point rather than inferring it. This section is republished on its own as a standalone "Paper Deep Dive" article, so it must read as a complete, self-contained piece independent of the weeklyNews and selectedPapers sections.
@@ -86,14 +93,22 @@ def _format_news(news: list[dict]) -> str:
     return "\n".join(blocks)
 
 
-def build_prompt(papers: list[dict], news: list[dict], week_label: str) -> tuple[str, str]:
-    """Build the OpenAI prompt and return (prompt, prompt_hash)."""
-    prompt = SYSTEM_TEMPLATE.format(
-        week_label=week_label,
-        paper_count=len(papers),
-        formatted_papers=_format_papers(papers),
-        news_count=len(news),
-        formatted_news=_format_news(news),
-    )
-    prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
-    return prompt, prompt_hash
+def build_prompts(papers: list[dict], news: list[dict], week_label: str) -> tuple[dict[str, str], str]:
+    """Build one OpenAI prompt per language and return ({language: prompt}, prompt_hash)."""
+    formatted_papers = _format_papers(papers)
+    formatted_news = _format_news(news)
+
+    prompts = {
+        language: SYSTEM_TEMPLATE.format(
+            language_label=LANGUAGE_LABELS[language],
+            week_label=week_label,
+            paper_count=len(papers),
+            formatted_papers=formatted_papers,
+            news_count=len(news),
+            formatted_news=formatted_news,
+        )
+        for language in LANGUAGES
+    }
+    combined = "\n".join(prompts[language] for language in LANGUAGES)
+    prompt_hash = hashlib.sha256(combined.encode("utf-8")).hexdigest()
+    return prompts, prompt_hash
