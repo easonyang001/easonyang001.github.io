@@ -67,6 +67,26 @@ def test_generate_valid_brief_retries_after_a_bad_response(monkeypatch, capsys) 
     assert "未通過驗證" in capsys.readouterr().out
 
 
+def test_generate_valid_brief_retries_when_generate_draft_itself_raises(monkeypatch) -> None:
+    # generate_draft can raise ValueError directly too (e.g. a truncated,
+    # unparseable response) -- that must be retried the same as a
+    # well-formed-but-invalid response, not propagate straight out.
+    calls = {"count": 0}
+
+    def fake_generate_draft(*args, **kwargs):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise ValueError("OpenAI response was truncated by max_tokens before the brief JSON was complete")
+        return _brief_json()
+
+    monkeypatch.setattr(generate_news, "generate_draft", fake_generate_draft)
+
+    brief = generate_news._generate_valid_brief("prompt")
+
+    assert brief["translations"]["zh-TW"]["title"] == "Title"
+    assert calls["count"] == 2
+
+
 def test_generate_valid_brief_gives_up_after_max_attempts(monkeypatch) -> None:
     monkeypatch.setattr(generate_news, "generate_draft", lambda *args, **kwargs: _brief_json(empty_section=True))
 
