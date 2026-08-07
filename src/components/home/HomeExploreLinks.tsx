@@ -32,7 +32,8 @@ export default function HomeExploreLinks() {
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-slate-950/42" />
+      <div className="absolute inset-0 bg-slate-950/68" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/42 via-transparent to-slate-950/70" />
       <div className="relative mx-auto w-full max-w-content px-6 py-24 md:px-12 md:py-32">
         <div className="border-t border-white/20 pt-14">
           <div className="grid gap-8">
