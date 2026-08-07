@@ -8,24 +8,17 @@ import pytest
 from scripts import generate_news
 
 
-def _brief_json(*, empty_section: bool = False) -> str:
-    def translation() -> dict:
-        return {
-            "title": "Title",
-            "summary": "Summary",
-            "sections": {
-                "weeklyNews": "News",
-                "selectedPapers": "" if empty_section else "Papers",
-                "literatureDeepDive": "Deep read",
-            },
-        }
-
-    brief = {
-        "format": "mrama-weekly-brief-v1",
-        "contentType": "markdown",
-        "translations": {language: translation() for language in ("zh-TW", "en", "fr")},
+def _translation_json(*, empty_section: bool = False) -> str:
+    translation = {
+        "title": "Title",
+        "summary": "Summary",
+        "sections": {
+            "weeklyNews": "News",
+            "selectedPapers": "" if empty_section else "Papers",
+            "literatureDeepDive": "Deep read",
+        },
     }
-    return json.dumps(brief)
+    return json.dumps(translation)
 
 
 def test_dry_run_does_not_initialize_supabase_or_openai(monkeypatch, capsys) -> None:
@@ -53,21 +46,21 @@ def test_dry_run_does_not_initialize_supabase_or_openai(monkeypatch, capsys) -> 
     assert "Dry run" in capsys.readouterr().out
 
 
-def test_generate_valid_brief_retries_after_a_bad_response(monkeypatch, capsys) -> None:
+def test_generate_valid_translation_retries_after_a_bad_response(monkeypatch, capsys) -> None:
     # An empty section is stochastic content quality (the model returned
     # well-formed but incomplete JSON), not a network failure -- confirm
     # this is retried as its own layer, separate from generate_draft's
     # timeout handling.
-    responses = iter([_brief_json(empty_section=True), _brief_json()])
+    responses = iter([_translation_json(empty_section=True), _translation_json()])
     monkeypatch.setattr(generate_news, "generate_draft", lambda *args, **kwargs: next(responses))
 
-    brief = generate_news._generate_valid_brief("prompt")
+    translation = generate_news._generate_valid_translation("en", "prompt")
 
-    assert brief["translations"]["zh-TW"]["sections"]["selectedPapers"] == "Papers"
+    assert translation["sections"]["selectedPapers"] == "Papers"
     assert "未通過驗證" in capsys.readouterr().out
 
 
-def test_generate_valid_brief_retries_when_generate_draft_itself_raises(monkeypatch) -> None:
+def test_generate_valid_translation_retries_when_generate_draft_itself_raises(monkeypatch) -> None:
     # generate_draft can raise ValueError directly too (e.g. a truncated,
     # unparseable response) -- that must be retried the same as a
     # well-formed-but-invalid response, not propagate straight out.
@@ -77,18 +70,41 @@ def test_generate_valid_brief_retries_when_generate_draft_itself_raises(monkeypa
         calls["count"] += 1
         if calls["count"] == 1:
             raise ValueError("OpenAI response was truncated by max_tokens before the brief JSON was complete")
-        return _brief_json()
+        return _translation_json()
 
     monkeypatch.setattr(generate_news, "generate_draft", fake_generate_draft)
 
-    brief = generate_news._generate_valid_brief("prompt")
+    translation = generate_news._generate_valid_translation("fr", "prompt")
 
-    assert brief["translations"]["zh-TW"]["title"] == "Title"
+    assert translation["title"] == "Title"
     assert calls["count"] == 2
 
 
-def test_generate_valid_brief_gives_up_after_max_attempts(monkeypatch) -> None:
-    monkeypatch.setattr(generate_news, "generate_draft", lambda *args, **kwargs: _brief_json(empty_section=True))
+def test_generate_valid_translation_gives_up_after_max_attempts(monkeypatch) -> None:
+    monkeypatch.setattr(
+        generate_news, "generate_draft", lambda *args, **kwargs: _translation_json(empty_section=True)
+    )
 
     with pytest.raises(ValueError, match="selectedPapers must be non-empty"):
-        generate_news._generate_valid_brief("prompt")
+        generate_news._generate_valid_translation("zh-TW", "prompt")
+
+
+def test_generate_valid_brief_generates_each_language_independently(monkeypatch) -> None:
+    # One language failing validation on its first attempt shouldn't force
+    # regenerating the other two languages -- each language has its own
+    # prompt and its own retry budget.
+    calls: dict[str, int] = {}
+
+    def fake_generate_draft(prompt, **kwargs):
+        language = prompt  # the fake prompts below are just the language code
+        calls[language] = calls.get(language, 0) + 1
+        if language == "en" and calls[language] == 1:
+            return _translation_json(empty_section=True)
+        return _translation_json()
+
+    monkeypatch.setattr(generate_news, "generate_draft", fake_generate_draft)
+
+    brief = generate_news._generate_valid_brief({"zh-TW": "zh-TW", "en": "en", "fr": "fr"})
+
+    assert set(brief["translations"]) == {"zh-TW", "en", "fr"}
+    assert calls == {"zh-TW": 1, "en": 2, "fr": 1}

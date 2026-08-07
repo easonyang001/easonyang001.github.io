@@ -1,7 +1,7 @@
-from scripts.generation.prompt import build_prompt
+from scripts.generation.prompt import build_prompts
 
 
-def test_prompt_requires_languages_sections_and_source_links() -> None:
+def test_prompts_are_built_per_language_and_include_source_links() -> None:
     papers = [
         {
             "arxiv_id": "2608.00001",
@@ -20,10 +20,17 @@ def test_prompt_requires_languages_sections_and_source_links() -> None:
         }
     ]
 
-    prompt, prompt_hash = build_prompt(papers, news, "2026-W32")
+    prompts, prompt_hash = build_prompts(papers, news, "2026-W32")
 
-    for required in ("zh-TW", '"en"', '"fr"', "weeklyNews", "selectedPapers", "literatureDeepDive"):
-        assert required in prompt
-    assert papers[0]["url"] in prompt
-    assert news[0]["url"] in prompt
+    assert set(prompts) == {"zh-TW", "en", "fr"}
+    for language, prompt in prompts.items():
+        assert "weeklyNews" in prompt
+        assert "selectedPapers" in prompt
+        assert "literatureDeepDive" in prompt
+        assert papers[0]["url"] in prompt
+        assert news[0]["url"] in prompt
+        # Each language's prompt asks only for that language, not all three.
+        assert "translations" not in prompt
+
+    assert prompts["fr"] != prompts["en"]
     assert len(prompt_hash) == 64
