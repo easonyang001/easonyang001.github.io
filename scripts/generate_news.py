@@ -77,8 +77,8 @@ def _generate_valid_brief(prompt: str) -> dict:
     """
     last_error: ValueError | None = None
     for attempt in range(1, MAX_BRIEF_ATTEMPTS + 1):
-        generated = generate_draft(prompt, model=GENERATION_MODEL)
         try:
+            generated = generate_draft(prompt, model=GENERATION_MODEL)
             return parse_generated_brief(generated)
         except ValueError as error:
             last_error = error
