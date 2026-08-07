@@ -4,13 +4,19 @@ from __future__ import annotations
 
 import openai
 
-MAX_RETRIES = 2
-REQUEST_TIMEOUT_SECONDS = 60
+MAX_RETRIES = 1
+REQUEST_TIMEOUT_SECONDS = 240
 
 
 def generate_draft(prompt: str, model: str = "gpt-4o-mini") -> str:
     """Call OpenAI to generate the weekly draft. Raises on empty response."""
-    client = openai.OpenAI()
+    # The brief now asks for a deep, multi-paper literatureDeepDive across
+    # three languages, which can legitimately take well over a minute to
+    # generate. max_retries=0 because generate_draft already retries on
+    # timeout itself -- letting the SDK also retry underneath stacks two
+    # retry loops and turns one slow-but-real timeout into a ~9 minute wait
+    # before the failure ever surfaces.
+    client = openai.OpenAI(max_retries=0)
 
     last_error: Exception | None = None
     for attempt in range(MAX_RETRIES + 1):
