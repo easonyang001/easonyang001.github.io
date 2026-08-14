@@ -12,6 +12,11 @@ interface Translation {
   title: string;
   summary: string;
   sections: Record<Section, string>;
+  // Optional, not part of `Section`/`SECTIONS`: added after brief-format
+  // articles were already published, so it must stay optional or those
+  // already-stored records fail validation and mis-render. See
+  // docs/architecture/news-automation.md Phase 4.
+  conceptOfTheWeek?: string;
 }
 
 export interface WeeklyBrief {
@@ -57,6 +62,9 @@ export function parseWeeklyBrief(raw: string): WeeklyBrief | null {
         throw new Error(`Weekly brief ${language}.${section} is missing`);
       }
     }
+    if (translation.conceptOfTheWeek !== undefined && !isText(translation.conceptOfTheWeek)) {
+      throw new Error(`Weekly brief ${language}.conceptOfTheWeek must be a non-empty string when present`);
+    }
   }
   return value as unknown as WeeklyBrief;
 }
@@ -71,7 +79,14 @@ export async function renderWeeklyBrief(brief: WeeklyBrief): Promise<WeeklyBrief
     for (const section of SECTIONS) {
       sections[section] = sanitizeRichText(await marked.parse(source.sections[section]));
     }
-    translations[language] = { title: source.title.trim(), summary: source.summary.trim(), sections };
+    translations[language] = {
+      title: source.title.trim(),
+      summary: source.summary.trim(),
+      sections,
+      ...(source.conceptOfTheWeek !== undefined && {
+        conceptOfTheWeek: sanitizeRichText(await marked.parse(source.conceptOfTheWeek)),
+      }),
+    };
   }
 
   return { format: FORMAT, contentType: "html", translations };

@@ -19,6 +19,17 @@ export interface NewsDraftSource {
   relevanceScore: number;
 }
 
+export interface QaReport {
+  status: "pass" | "needs_review";
+  score: number;
+  unsupported_claims: string[];
+  numerical_mismatches: string[];
+  missing_caveats: string[];
+  overclaiming: string[];
+  other_issues: string[];
+  summary: string;
+}
+
 export interface NewsDraftRecord extends NewsDraftSummary {
   content_md: string;
   sources: NewsDraftSource[];
@@ -26,6 +37,10 @@ export interface NewsDraftRecord extends NewsDraftSummary {
   prompt_hash: string;
   reviewed_by: string | null;
   published_at: string | null;
+  // Optional: predates this field (see supabase/migrations/010_qa_report.sql),
+  // and even a fresh draft can be missing a language if that language's
+  // critic call failed. Review aid only, never part of published output.
+  qa_report: Partial<Record<"zh-TW" | "en" | "fr", QaReport>> | null;
 }
 
 async function request(path: string, token: string, init: RequestInit = {}): Promise<Response> {

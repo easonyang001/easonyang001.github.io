@@ -41,6 +41,15 @@ export default function WeeklyBriefEditor({ brief, disabled, onChange }: Props) 
     onChange(serializeWeeklyBrief(next), next.translations["zh-TW"].title);
   };
 
+  // conceptOfTheWeek is optional and lives outside `sections` (see
+  // docs/architecture/news-automation.md Phase 4), so it needs its own
+  // setter rather than fitting updateSection.
+  const updateConcept = (value: string) => {
+    const next = structuredClone(brief);
+    next.translations[language].conceptOfTheWeek = value;
+    onChange(serializeWeeklyBrief(next), next.translations["zh-TW"].title);
+  };
+
   return (
     <div className="space-y-5">
       <Segmented>
@@ -85,6 +94,17 @@ export default function WeeklyBriefEditor({ brief, disabled, onChange }: Props) 
           />
         </label>
       ))}
+
+      <label className="block text-small text-text-secondary">
+        <span className="mb-1 block">Concept of the Week (optional)</span>
+        <textarea
+          rows={10}
+          value={translation.conceptOfTheWeek ?? ""}
+          disabled={disabled}
+          onChange={(event) => updateConcept(event.target.value)}
+          className="w-full rounded-md border border-border bg-surface px-4 py-2 font-mono text-small text-text-primary outline-none transition-colors duration-150 focus:border-accent focus:ring-2 focus:ring-accent/50 disabled:opacity-60"
+        />
+      </label>
     </div>
   );
 }

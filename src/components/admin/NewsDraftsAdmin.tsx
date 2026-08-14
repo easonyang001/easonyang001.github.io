@@ -8,6 +8,7 @@ import {
   type NewsDraftRecord,
   type NewsDraftStatus,
   type NewsDraftSummary,
+  type QaReport,
 } from "../../lib/admin/newsDrafts.ts";
 import { parseWeeklyBrief } from "../../lib/news/weeklyBrief.ts";
 import WeeklyBriefEditor from "./WeeklyBriefEditor.tsx";
@@ -196,6 +197,46 @@ export default function NewsDraftsAdmin({ token }: { token: string }) {
               ))}
             </ul>
           </div>
+
+          {detail.qa_report && Object.keys(detail.qa_report).length > 0 && (
+            <div className="border-t border-border pt-5">
+              <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">QA Report</p>
+              <div className="space-y-4">
+                {(Object.entries(detail.qa_report) as [string, QaReport][]).map(([language, report]) => (
+                  <div key={language} className="text-small text-text-secondary">
+                    <p>
+                      <span className="font-mono text-mono-label uppercase text-text-muted">{language}</span>{" "}
+                      <span className={report.status === "pass" ? "text-text-muted" : "text-accent"}>
+                        {report.status}
+                      </span>{" "}
+                      <span className="text-text-muted">({report.score.toFixed(2)})</span>
+                    </p>
+                    <p className="mt-1">{report.summary}</p>
+                    {(
+                      [
+                        ["Unsupported claims", report.unsupported_claims],
+                        ["Numerical mismatches", report.numerical_mismatches],
+                        ["Missing caveats", report.missing_caveats],
+                        ["Overclaiming", report.overclaiming],
+                        ["Other issues", report.other_issues],
+                      ] as [string, string[]][]
+                    )
+                      .filter(([, items]) => items.length > 0)
+                      .map(([label, items]) => (
+                        <div key={label} className="mt-1">
+                          <span className="text-text-muted">{label}:</span>
+                          <ul className="list-disc pl-5">
+                            {items.map((item, index) => (
+                              <li key={index}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {actionError && <p className="text-small text-text-secondary">Error: {actionError}</p>}
           {prUrl && (
