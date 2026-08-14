@@ -48,5 +48,21 @@ export const publications: Publication[] = [
     doiUrl: null,
     codeUrl: null,
     bibtex: null,
+  },
+  {
+    slug: "5",
+    title: "Decision-Function Stability of a Small Quantum Classifier under Training-Sample Variation",
+    authors: ["Chia Chen Yang"],
+    year: 2026,
+    venue: null,
+    type: "Preprint",
+    status: "Preprint",
+    abstract: "Learning systems may need to operate before labeled data from a newly encountered or\nunder-observed environment have accumulated at scale. Reliability then depends not only on\naverage accuracy, but also on whether the learned decision function changes substantially\nwith the particular small training subset observed. We compare a four-qubit variational\nclassifier with a 33-parameter linear classifier across 30 balanced training subsets and a\nfixed 200-point unseen evaluation set. At ten training examples, mean accuracy is 0.9988\nversus 0.9172, while normalized decision-function drift is 0.0505 versus 0.5007. A seed-\nblock bootstrap gives a 95% confidence interval of [−0.5550,−0.3111] for the quantum-\nminus-classical drift contrast, and a within-seed block-permutation test that recomputes all\npairwise comparisons gives p = 2.0 × 10−5.\nThe stability difference persists against a best-classical envelope that includes a parameter-\nnear MLP, RBF SVM, RBF kernel ridge classifier, and regularized linear classifier, including\noptimizer-matched Adam configurations. It is nevertheless conditional: predictive differ-\nences narrow as labels accumulate, and stability collapses gradually near a critical decision\nboundary. Representation choice also materially changes transfer to real tabular data.\nAngle-encoded accuracy exceeds the best-classical envelope on four of five datasets, but a\njoint accuracy-and-stability advantage appears on only Breast Cancer and Spambase (2/5).\nWe therefore report training-sample-induced decision-function stability as a useful empirical\nevaluation axis for quantum machine learning, while making no claim of universal quantum\nadvantage, a causal mechanism, complete domain adaptation, or hardware performance.",
+    keywords: ["quantum machine learning"],
+    researchAreas: ["quantum machine learnnig"],
+    pdfUrl: "https://online.fliphtml5.com/qrvsx/mlst_manuscript/",
+    doiUrl: null,
+    codeUrl: null,
+    bibtex: null,
   }
 ];
