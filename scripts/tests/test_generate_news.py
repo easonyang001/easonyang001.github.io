@@ -147,17 +147,19 @@ def _brief_with_basic_deep_dive() -> dict:
     }
 
 
-def test_write_deep_dive_walkthroughs_overwrites_every_language(monkeypatch) -> None:
-    monkeypatch.setattr(generate_news, "write_deep_dive", lambda deep_dive, title, language: f"taught {language}")
+def test_write_deep_dive_walkthroughs_writes_canonical_once_and_translates(monkeypatch) -> None:
+    monkeypatch.setattr(generate_news, "write_deep_dive", lambda deep_dive, title, language: "canonical walkthrough")
+    monkeypatch.setattr(generate_news, "translate_markdown", lambda text, language: f"{text} ({language})")
 
     brief = _brief_with_basic_deep_dive()
     generate_news._write_deep_dive_walkthroughs(brief, {}, "Paper title")
 
-    for language in ("zh-TW", "en", "fr"):
-        assert brief["translations"][language]["sections"]["literatureDeepDive"] == f"taught {language}"
+    assert brief["translations"]["en"]["sections"]["literatureDeepDive"] == "canonical walkthrough"
+    assert brief["translations"]["zh-TW"]["sections"]["literatureDeepDive"] == "canonical walkthrough (zh-TW)"
+    assert brief["translations"]["fr"]["sections"]["literatureDeepDive"] == "canonical walkthrough (fr)"
 
 
-def test_write_deep_dive_walkthroughs_keeps_basic_version_on_failure(monkeypatch, capsys) -> None:
+def test_write_deep_dive_walkthroughs_keeps_basic_version_when_canonical_fails(monkeypatch, capsys) -> None:
     def boom(deep_dive, title, language):
         raise ValueError("model refused")
 
@@ -171,23 +173,48 @@ def test_write_deep_dive_walkthroughs_keeps_basic_version_on_failure(monkeypatch
     assert "保留原本版本" in capsys.readouterr().out
 
 
+def test_write_deep_dive_walkthroughs_keeps_basic_version_for_a_language_whose_translation_fails(
+    monkeypatch, capsys
+) -> None:
+    monkeypatch.setattr(generate_news, "write_deep_dive", lambda deep_dive, title, language: "canonical walkthrough")
+
+    def maybe_boom(text, language):
+        if language == "fr":
+            raise ValueError("model refused")
+        return f"{text} ({language})"
+
+    monkeypatch.setattr(generate_news, "translate_markdown", maybe_boom)
+
+    brief = _brief_with_basic_deep_dive()
+    generate_news._write_deep_dive_walkthroughs(brief, {}, "Paper title")
+
+    assert brief["translations"]["en"]["sections"]["literatureDeepDive"] == "canonical walkthrough"
+    assert brief["translations"]["zh-TW"]["sections"]["literatureDeepDive"] == "canonical walkthrough (zh-TW)"
+    assert brief["translations"]["fr"]["sections"]["literatureDeepDive"] == "basic fr version"
+    assert "保留原本版本" in capsys.readouterr().out
+
+
 def _brief_without_concept() -> dict:
     return {"translations": {language: {"sections": {}} for language in ("zh-TW", "en", "fr")}}
 
 
-def test_write_concept_of_the_week_sets_field_per_language(monkeypatch) -> None:
-    monkeypatch.setattr(
-        generate_news, "write_concept_of_the_week", lambda papers, news, language: f"concept {language}"
-    )
+def test_write_concept_of_the_week_selects_once_and_translates(monkeypatch) -> None:
+    # The point of this rewrite: selection happens exactly once (canonical),
+    # not independently per language, so every language describes the same
+    # concept -- previously each language's independent selection could
+    # pick a different one.
+    monkeypatch.setattr(generate_news, "write_concept_of_the_week", lambda papers, news, language: "canonical concept")
+    monkeypatch.setattr(generate_news, "translate_markdown", lambda text, language: f"{text} ({language})")
 
     brief = _brief_without_concept()
     generate_news._write_concept_of_the_week(brief, [], [])
 
-    for language in ("zh-TW", "en", "fr"):
-        assert brief["translations"][language]["conceptOfTheWeek"] == f"concept {language}"
+    assert brief["translations"]["en"]["conceptOfTheWeek"] == "canonical concept"
+    assert brief["translations"]["zh-TW"]["conceptOfTheWeek"] == "canonical concept (zh-TW)"
+    assert brief["translations"]["fr"]["conceptOfTheWeek"] == "canonical concept (fr)"
 
 
-def test_write_concept_of_the_week_leaves_field_absent_on_failure(monkeypatch, capsys) -> None:
+def test_write_concept_of_the_week_leaves_field_absent_when_canonical_fails(monkeypatch, capsys) -> None:
     def boom(papers, news, language):
         raise ValueError("model refused")
 
@@ -198,6 +225,27 @@ def test_write_concept_of_the_week_leaves_field_absent_on_failure(monkeypatch, c
 
     for language in ("zh-TW", "en", "fr"):
         assert "conceptOfTheWeek" not in brief["translations"][language]
+    assert "略過此欄位" in capsys.readouterr().out
+
+
+def test_write_concept_of_the_week_leaves_field_absent_for_a_language_whose_translation_fails(
+    monkeypatch, capsys
+) -> None:
+    monkeypatch.setattr(generate_news, "write_concept_of_the_week", lambda papers, news, language: "canonical concept")
+
+    def maybe_boom(text, language):
+        if language == "fr":
+            raise ValueError("model refused")
+        return f"{text} ({language})"
+
+    monkeypatch.setattr(generate_news, "translate_markdown", maybe_boom)
+
+    brief = _brief_without_concept()
+    generate_news._write_concept_of_the_week(brief, [], [])
+
+    assert brief["translations"]["en"]["conceptOfTheWeek"] == "canonical concept"
+    assert brief["translations"]["zh-TW"]["conceptOfTheWeek"] == "canonical concept (zh-TW)"
+    assert "conceptOfTheWeek" not in brief["translations"]["fr"]
     assert "略過此欄位" in capsys.readouterr().out
 
 
@@ -233,22 +281,46 @@ def test_build_qa_report_omits_a_language_whose_review_fails(monkeypatch, capsys
     assert "QA report 產生失敗" in capsys.readouterr().out
 
 
-def test_generate_valid_brief_generates_each_language_independently(monkeypatch) -> None:
-    # One language failing validation on its first attempt shouldn't force
-    # regenerating the other two languages -- each language has its own
-    # prompt and its own retry budget.
-    calls: dict[str, int] = {}
+def test_generate_valid_brief_generates_canonical_once_and_translates(monkeypatch) -> None:
+    # Phase 6: only the canonical (English) language is independently
+    # generated; zh-TW/fr come from translating that canonical result, not
+    # from their own independent generation -- this is what actually fixes
+    # cross-language divergence (e.g. concept.py picking a different topic
+    # per language under the old independent-per-language approach).
+    generate_draft_calls: list[str] = []
 
     def fake_generate_draft(prompt, **kwargs):
-        language = prompt  # the fake prompts below are just the language code
-        calls[language] = calls.get(language, 0) + 1
-        if language == "en" and calls[language] == 1:
-            return _translation_json(empty_section=True)
+        generate_draft_calls.append(prompt)
         return _translation_json()
 
+    translate_calls: list[str] = []
+
+    def fake_translate(canonical, language):
+        translate_calls.append(language)
+        return {**canonical, "title": f"{canonical['title']} ({language})"}
+
     monkeypatch.setattr(generate_news, "generate_draft", fake_generate_draft)
+    monkeypatch.setattr(generate_news, "translate_brief_translation", fake_translate)
 
-    brief = generate_news._generate_valid_brief({"zh-TW": "zh-TW", "en": "en", "fr": "fr"})
+    brief = generate_news._generate_valid_brief({"zh-TW": "zh-TW prompt", "en": "en prompt", "fr": "fr prompt"})
 
+    assert generate_draft_calls == ["en prompt"]  # only the canonical language calls the model directly
+    assert set(translate_calls) == {"zh-TW", "fr"}
     assert set(brief["translations"]) == {"zh-TW", "en", "fr"}
-    assert calls == {"zh-TW": 1, "en": 2, "fr": 1}
+    assert brief["translations"]["fr"]["title"] == "Title (fr)"
+
+
+def test_generate_valid_brief_propagates_a_translation_failure(monkeypatch) -> None:
+    # Unlike the optional enrichments (deep-dive walkthrough, concept of the
+    # week), the core brief sections are required -- a translation failure
+    # must fail the run rather than silently save a two-language draft the
+    # frontend would reject outright.
+    monkeypatch.setattr(generate_news, "generate_draft", lambda prompt, **kwargs: _translation_json())
+    monkeypatch.setattr(
+        generate_news,
+        "translate_brief_translation",
+        lambda canonical, language: (_ for _ in ()).throw(ValueError("translation refused")),
+    )
+
+    with pytest.raises(ValueError, match="translation refused"):
+        generate_news._generate_valid_brief({"zh-TW": "zh-TW prompt", "en": "en prompt", "fr": "fr prompt"})

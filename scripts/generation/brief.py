@@ -23,7 +23,7 @@ def _strip_code_fence(raw: str) -> str:
     return text
 
 
-def _validate_translation(language: str, translation: dict) -> None:
+def validate_translation(language: str, translation: dict) -> None:
     for field, max_chars in (("title", TITLE_MAX_CHARS), ("summary", SUMMARY_MAX_CHARS)):
         if not isinstance(translation.get(field), str) or not translation[field].strip():
             raise ValueError(f"Weekly brief {language}.{field} must be a non-empty string")
@@ -52,7 +52,7 @@ def parse_generated_translation(language: str, raw: str) -> dict:
 
     if not isinstance(translation, dict):
         raise ValueError(f"Weekly brief {language} translation must be an object")
-    _validate_translation(language, translation)
+    validate_translation(language, translation)
     return translation
 
 

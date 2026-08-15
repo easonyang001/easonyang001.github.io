@@ -30,6 +30,35 @@ export interface QaReport {
   summary: string;
 }
 
+export interface PaperIntelligenceEvidence {
+  claim: string;
+  evidence: string;
+  strength: "strong" | "moderate" | "weak" | "unsupported";
+}
+
+export interface PaperIntelligence {
+  research_question: string;
+  motivation: string;
+  research_gap: string;
+  core_contribution: string;
+  method: {
+    core_idea: string;
+    quantum_component: string;
+    classical_component: string;
+  };
+  experiments: {
+    datasets: string[];
+    baselines: string[];
+    metrics: string[];
+    hardware_or_simulator: string;
+  };
+  key_results: string[];
+  author_claims: string[];
+  limitations: string[];
+  unsupported_or_weak_claims: string[];
+  evidence: PaperIntelligenceEvidence[];
+}
+
 export interface NewsDraftRecord extends NewsDraftSummary {
   content_md: string;
   sources: NewsDraftSource[];
@@ -41,6 +70,14 @@ export interface NewsDraftRecord extends NewsDraftSummary {
   // and even a fresh draft can be missing a language if that language's
   // critic call failed. Review aid only, never part of published output.
   qa_report: Partial<Record<"zh-TW" | "en" | "fr", QaReport>> | null;
+  // Optional: predates this field (see
+  // supabase/migrations/011_deep_dive_arxiv_id.sql), and null whenever
+  // there was no deep-dive candidate that week or its analysis failed.
+  deep_dive_arxiv_id: string | null;
+  // Looked up server-side from deep_dive_arxiv_id -- see
+  // server/src/routes/newsAutomation.ts's GET /drafts/:id. Null whenever
+  // deep_dive_arxiv_id is null, or no matching row exists yet.
+  paper_intelligence: PaperIntelligence | null;
 }
 
 async function request(path: string, token: string, init: RequestInit = {}): Promise<Response> {
