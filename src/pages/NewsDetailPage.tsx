@@ -31,6 +31,17 @@ const SECTION_LABELS: Record<WeeklyBriefLanguage, Record<WeeklyBriefSectionKey, 
 };
 
 const SECTION_KEYS: WeeklyBriefSectionKey[] = ["weeklyNews", "selectedPapers", "literatureDeepDive"];
+
+// Not part of WeeklyBriefSectionKey/SECTION_KEYS: conceptOfTheWeek is
+// optional (added after brief-format articles were already published, see
+// docs/architecture/news-automation.md Phase 4), so it's rendered as its
+// own conditional block below rather than folded into the SECTION_KEYS map,
+// which assumes every key is always present.
+const CONCEPT_OF_THE_WEEK_LABEL: Record<WeeklyBriefLanguage, string> = {
+  "zh-TW": "本週概念",
+  en: "Concept of the Week",
+  fr: "Concept de la semaine",
+};
 const RICH_TEXT_CLASS =
   "mt-5 max-w-3xl text-body leading-relaxed text-text-secondary [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:border-l-2 [&_blockquote]:border-accent [&_blockquote]:pl-4 [&_h3]:mt-7 [&_h3]:text-h4 [&_h3]:text-text-primary [&_h4]:mt-6 [&_h4]:font-semibold [&_h4]:text-text-primary [&_li+li]:mt-2 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p+p]:mt-4 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6";
 
@@ -95,6 +106,15 @@ function Article({ item, brief }: { item: NewsItem; brief: WeeklyBriefDocument |
               />
             </section>
           ))}
+          {translation.conceptOfTheWeek && (
+            <section className="border-b border-border py-10 last:border-b-0">
+              <h2 className="text-h2 text-text-primary">{CONCEPT_OF_THE_WEEK_LABEL[language]}</h2>
+              <div
+                className={RICH_TEXT_CLASS}
+                dangerouslySetInnerHTML={{ __html: sanitizeRichText(translation.conceptOfTheWeek) }}
+              />
+            </section>
+          )}
         </article>
       ) : (
         item.content && (

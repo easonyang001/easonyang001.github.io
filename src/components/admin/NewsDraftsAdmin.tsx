@@ -8,6 +8,8 @@ import {
   type NewsDraftRecord,
   type NewsDraftStatus,
   type NewsDraftSummary,
+  type PaperIntelligence,
+  type QaReport,
 } from "../../lib/admin/newsDrafts.ts";
 import { parseWeeklyBrief } from "../../lib/news/weeklyBrief.ts";
 import WeeklyBriefEditor from "./WeeklyBriefEditor.tsx";
@@ -18,6 +20,73 @@ const STATUS_LABEL_CLASS: Record<NewsDraftStatus, string> = {
   published: "text-accent",
   rejected: "text-text-muted line-through",
 };
+
+function ListField({ label, items }: { label: string; items: string[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-2">
+      <span className="text-text-muted">{label}:</span>
+      <ul className="list-disc pl-5">
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Shows the Paper Intelligence + Evidence Matrix scripts/research/paper_analyzer.py
+// already computes for the week's deep-dive candidate -- lets the reviewer
+// see the facts literatureDeepDive/the Research Walkthrough were grounded
+// in, instead of trusting the generated prose blind.
+function EvidencePanel({ paperIntelligence }: { paperIntelligence: PaperIntelligence }) {
+  const { method, experiments } = paperIntelligence;
+  return (
+    <div className="space-y-3 text-small text-text-secondary">
+      <p>
+        <span className="text-text-muted">Research question:</span> {paperIntelligence.research_question}
+      </p>
+      <p>
+        <span className="text-text-muted">Motivation:</span> {paperIntelligence.motivation}
+      </p>
+      <p>
+        <span className="text-text-muted">Core contribution:</span> {paperIntelligence.core_contribution}
+      </p>
+      <div>
+        <span className="text-text-muted">Method:</span> {method.core_idea}
+        <ul className="list-disc pl-5">
+          <li>Quantum component: {method.quantum_component}</li>
+          <li>Classical component: {method.classical_component}</li>
+        </ul>
+      </div>
+      <div>
+        <span className="text-text-muted">Experiments:</span>
+        <ul className="list-disc pl-5">
+          <li>Datasets: {experiments.datasets.join(", ") || "Not reported"}</li>
+          <li>Baselines: {experiments.baselines.join(", ") || "Not reported"}</li>
+          <li>Metrics: {experiments.metrics.join(", ") || "Not reported"}</li>
+          <li>Hardware/simulator: {experiments.hardware_or_simulator}</li>
+        </ul>
+      </div>
+      <ListField label="Key results" items={paperIntelligence.key_results} />
+      <ListField label="Limitations" items={paperIntelligence.limitations} />
+      <ListField label="Claims not well supported by evidence" items={paperIntelligence.unsupported_or_weak_claims} />
+      {paperIntelligence.evidence.length > 0 && (
+        <div>
+          <span className="text-text-muted">Evidence:</span>
+          <ul className="mt-1 space-y-1">
+            {paperIntelligence.evidence.map((item, index) => (
+              <li key={index}>
+                {item.claim} <span className="text-text-muted">→</span> {item.evidence}{" "}
+                <span className="font-mono text-mono-label uppercase text-text-muted">({item.strength})</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function NewsDraftsAdmin({ token }: { token: string }) {
   const [drafts, setDrafts] = useState<NewsDraftSummary[] | null>(null);
@@ -196,6 +265,57 @@ export default function NewsDraftsAdmin({ token }: { token: string }) {
               ))}
             </ul>
           </div>
+
+          <div className="border-t border-border pt-5">
+            <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">Evidence</p>
+            {detail.paper_intelligence ? (
+              <EvidencePanel paperIntelligence={detail.paper_intelligence} />
+            ) : (
+              <p className="text-small text-text-secondary">
+                No full-text analysis this week (abstract-only).
+              </p>
+            )}
+          </div>
+
+          {detail.qa_report && Object.keys(detail.qa_report).length > 0 && (
+            <div className="border-t border-border pt-5">
+              <p className="mb-3 font-mono text-mono-label uppercase text-text-muted">QA Report</p>
+              <div className="space-y-4">
+                {(Object.entries(detail.qa_report) as [string, QaReport][]).map(([language, report]) => (
+                  <div key={language} className="text-small text-text-secondary">
+                    <p>
+                      <span className="font-mono text-mono-label uppercase text-text-muted">{language}</span>{" "}
+                      <span className={report.status === "pass" ? "text-text-muted" : "text-accent"}>
+                        {report.status}
+                      </span>{" "}
+                      <span className="text-text-muted">({report.score.toFixed(2)})</span>
+                    </p>
+                    <p className="mt-1">{report.summary}</p>
+                    {(
+                      [
+                        ["Unsupported claims", report.unsupported_claims],
+                        ["Numerical mismatches", report.numerical_mismatches],
+                        ["Missing caveats", report.missing_caveats],
+                        ["Overclaiming", report.overclaiming],
+                        ["Other issues", report.other_issues],
+                      ] as [string, string[]][]
+                    )
+                      .filter(([, items]) => items.length > 0)
+                      .map(([label, items]) => (
+                        <div key={label} className="mt-1">
+                          <span className="text-text-muted">{label}:</span>
+                          <ul className="list-disc pl-5">
+                            {items.map((item, index) => (
+                              <li key={index}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {actionError && <p className="text-small text-text-secondary">Error: {actionError}</p>}
           {prUrl && (

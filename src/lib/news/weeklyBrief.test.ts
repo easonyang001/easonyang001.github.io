@@ -28,4 +28,23 @@ describe("parseWeeklyBrief", () => {
     brief.translations.fr.sections.selectedPapers = "";
     expect(parseWeeklyBrief(JSON.stringify(brief))).toBeNull();
   });
+
+  it("parses a brief with no conceptOfTheWeek (backward compat with already-published articles)", () => {
+    const brief = makeBrief();
+    expect(parseWeeklyBrief(JSON.stringify(brief))?.translations.en.conceptOfTheWeek).toBeUndefined();
+  });
+
+  it("parses a brief with a valid conceptOfTheWeek", () => {
+    const brief = makeBrief();
+    brief.translations.en.conceptOfTheWeek = "## In One Sentence\nA concept.";
+    expect(parseWeeklyBrief(JSON.stringify(brief))?.translations.en.conceptOfTheWeek).toBe(
+      "## In One Sentence\nA concept."
+    );
+  });
+
+  it("rejects a present-but-empty conceptOfTheWeek", () => {
+    const brief = makeBrief();
+    brief.translations.en.conceptOfTheWeek = "";
+    expect(parseWeeklyBrief(JSON.stringify(brief))).toBeNull();
+  });
 });

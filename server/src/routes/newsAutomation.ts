@@ -71,7 +71,27 @@ newsAutomationRouter.get("/drafts/:id", async (req, res) => {
     res.status(404).json({ error: "Not found" });
     return;
   }
-  res.json(data);
+
+  let paperIntelligence = null;
+  if (data.deep_dive_arxiv_id) {
+    const { data: intelligence, error: intelligenceError } = await supabase
+      .from("paper_intelligence")
+      .select("*")
+      .eq("arxiv_id", data.deep_dive_arxiv_id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (intelligenceError) {
+      // Evidence panel is a review aid, not a publish gate -- log and
+      // still return the draft rather than failing the whole request.
+      console.error("Paper intelligence read failed:", intelligenceError);
+    } else {
+      paperIntelligence = intelligence;
+    }
+  }
+
+  res.json({ ...data, paper_intelligence: paperIntelligence });
 });
 
 newsAutomationRouter.patch("/drafts/:id", async (req, res) => {

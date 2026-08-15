@@ -10,6 +10,11 @@ export interface WeeklyBriefTranslation {
   title: string;
   summary: string;
   sections: Record<WeeklyBriefSectionKey, string>;
+  // Optional, not part of WeeklyBriefSectionKey: added after brief-format
+  // articles were already published, so it must stay optional or those
+  // already-stored records fail to parse. See
+  // docs/architecture/news-automation.md Phase 4.
+  conceptOfTheWeek?: string;
 }
 
 export interface WeeklyBriefDocument {
@@ -48,6 +53,9 @@ export function parseWeeklyBrief(raw: string | null | undefined): WeeklyBriefDoc
     if (!isRecord(translation.sections)) return null;
     for (const section of WEEKLY_BRIEF_SECTION_KEYS) {
       if (!isNonEmptyString(translation.sections[section])) return null;
+    }
+    if (translation.conceptOfTheWeek !== undefined && !isNonEmptyString(translation.conceptOfTheWeek)) {
+      return null;
     }
   }
 
