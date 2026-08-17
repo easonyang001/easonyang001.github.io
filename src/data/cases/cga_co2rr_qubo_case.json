@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "slug": "cga-co2rr-qubo-hard-n100",
+    "title": "CGA GPU Annealer on a Hard CO2RR Catalyst-Portfolio QUBO",
+    "date": "2026-08-17",
+    "status": "published",
+    "visibility": "internal",
+    "oneLiner": "GPU-accelerated simulated annealing benchmark on a hard CO2RR catalyst portfolio QUBO instance.",
+    "domain": "catalysis / combinatorial optimization",
+    "tags": ["co2rr", "qubo", "annealing", "gpu", "catalyst", "portfolio-selection"]
+  },
+  "problem": {
+    "summary": "Select a diverse, high-value batch of CO2 electroreduction (CO2RR -> CO) catalyst candidates from a predicted pool under a fixed validation budget. The selection trades predicted catalytic utility against pairwise chemical redundancy and enforces an exactly-K cardinality constraint.",
+    "objective": "Minimize the QUBO objective combining singleton utility, pairwise redundancy penalty, and a cardinality penalty that enforces exactly K selected sites.",
+    "scale": {
+      "numVariables": 100,
+      "description": "100 candidate catalyst sites; select K=25 with beta=5 pairwise coupling (hard synthetic regime)."
+    },
+    "currentApproach": "Greedy marginal selection iteratively picks the candidate with highest utility net of already-selected redundancy.",
+    "constraints": [
+      "Exactly-K cardinality: select precisely 25 candidates.",
+      "No additional explicit constraints; redundancy is encoded as a pairwise QUBO penalty."
+    ],
+    "formulation": "Binary QUBO with variables y_j in {0,1}; objective E(y) = -sum_j V_j y_j + beta sum_{i<j} S_{ij} y_i y_j + lambda_K (sum_j y_j - K)^2.",
+    "objectiveLatex": "E(y) = -\\sum_{j} V_j y_j + \\beta \\sum_{i<j} S_{ij}^{\\text{chem}} y_i y_j + \\lambda_K \\left(\\sum_j y_j - K\\right)^2"
+  },
+  "improvement": {
+    "primary": {
+      "name": "QUBO objective value",
+      "unit": "dimensionless energy",
+      "baseline": 5.3467,
+      "achieved": 4.7700,
+      "higherIsBetter": false,
+      "baselineSource": "Greedy marginal solver on hard_N100K25B5 cell"
+    },
+    "secondary": [
+      {
+        "name": "Gap to certified optimum",
+        "unit": "percent",
+        "baseline": 953.91,
+        "achieved": 840.17,
+        "higherIsBetter": false,
+        "baselineSource": "Greedy gap to Gurobi MIQP optimum (0.5074) on hard_N100K25B5"
+      }
+    ]
+  },
+  "approach": {
+    "chosen": {
+      "name": "CGA GPU annealer",
+      "kind": "quantum_inspired",
+      "rationale": "A third-party GPU-accelerated simulated annealing service used as an independent annealing reference to compare against classical greedy, SA, and D-Wave Hybrid on the identical QUBO instance.",
+      "parameters": {
+        "timeout_sec": 60,
+        "server_uri": "http://60.250.149.247:8080",
+        "protocol": "Socket.IO",
+        "lambda_K": 5,
+        "beta": 5,
+        "K": 25
+      },
+      "hardware": "Cloud GPU (NVIDIA, via CGA service)"
+    },
+    "alternatives": [
+      {
+        "name": "Greedy marginal selection",
+        "kind": "classical",
+        "whyNot": "Faster and feasible, but yields a higher objective (5.3467) than CGA (4.7700) in this hard regime."
+      },
+      {
+        "name": "D-Wave Hybrid",
+        "kind": "hybrid",
+        "whyNot": "Achieves the certified optimum vicinity (0.5074) but requires D-Wave Leap access; CGA was evaluated as an additional independent annealing reference."
+      },
+      {
+        "name": "Gurobi MIQP",
+        "kind": "classical",
+        "whyNot": "Certified optimum (0.5074) used as the bound/reference; not a heuristic solver being compared."
+      }
+    ]
+  },
+  "reliability": {
+    "numRuns": 1,
+    "values": [4.770031153763284],
+    "median": 4.770031153763284,
+    "min": 4.770031153763284,
+    "max": 4.770031153763284,
+    "successThreshold": null,
+    "successRate": null
+  },
+  "optimality": {
+    "boundValue": 0.5073599142524472,
+    "boundSource": "Gurobi MIQP certified optimum on hard_N100K25B5",
+    "achievedValue": 4.770031153763284,
+    "gapPercent": 840.1671318065263,
+    "interpretation": "CGA returns a feasible solution but leaves a large gap to the certified optimum in this strongly coupled, high-selection-fraction regime."
+  },
+  "performance": {
+    "solveTimeSeconds": 35.11418032646179,
+    "baselineTime": "Greedy < 0.01 s",
+    "workUnits": null,
+    "note": "Wall time includes Socket.IO connection, server queueing, GPU anneal, and sample decode. Server-reported anneal time was 34.20 s."
+  },
+  "value": {
+    "items": [],
+    "currency": null,
+    "qualitative": [
+      "Demonstrates that GPU annealing is feasible on the CO2RR chemical QUBO via a standard Socket.IO interface.",
+      "Provides an independent annealing reference point alongside D-Wave Hybrid and Fujitsu DA."
+    ],
+    "caveat": "The hard regime is a synthetic stress test (K/N=0.25, beta=5), not the realistic closed-loop validation budget (K/N ~ 0.025)."
+  },
+  "figures": [
+    {
+      "type": "image",
+      "heading": "Solver gap to best-known",
+      "caption": "Bar chart of solver gap to best-known energy on identical locked QUBO instances (K=10, beta=1), including CGA GPU annealer.",
+      "src": "/solutions/cga-co2rr-qubo-hard-n100/fig9_solver_benchmark.png",
+      "alt": "Bar chart showing solver gaps across N=50,100,200,272 for greedy, SA, SQA, Fujitsu DA, HiGHS, D-Wave Hybrid, D-Wave QPU, Gurobi, and CGA GPU.",
+      "sourceData": "reports/phase8_solvers_full_canonical.csv"
+    }
+  ],
+  "downloads": [
+    {
+      "label": "CGA benchmark results CSV",
+      "file": "reports/phase8_cga_bench.csv"
+    },
+    {
+      "label": "Canonical solver benchmark CSV",
+      "file": "reports/phase8_solvers_full_canonical.csv"
+    },
+    {
+      "label": "CGA solver client",
+      "file": "src/models/cga_solver.py"
+    },
+    {
+      "label": "CGA benchmark script",
+      "file": "experiments/26_cga_bench.py"
+    }
+  ],
+  "reproduce": {
+    "repository": null,
+    "commit": "unknown",
+    "command": "cd /research/projects/catalyst-hpc-qml && python experiments/26_cga_bench.py",
+    "dataSource": "public",
+    "dataNote": "Candidate pool derived from Catalysis-Hub exact-facet CO*/H* pairs (402 candidates). The hard_N100K25B5 cell is a synthetic subsample with K=25, beta=5, lambda_K=5.",
+    "environment": {
+      "conda_env": "/research/conda-envs/catalyst-qml",
+      "python_packages": ["socketio", "pyqubo", "pandas", "numpy"]
+    }
+  },
+  "notes": {
+    "whatWorked": "The Socket.IO submission and decode pipeline successfully returned feasible selections on all tested locked and hard cells.",
+    "whatDidnt": "CGA did not close the gap to Gurobi or D-Wave Hybrid in the hard regime; its objective was comparable to or worse than greedy except on hard_N100K25B5 where it modestly beat greedy.",
+    "gotchas": [
+      "The CGA server renames pyQUBO variables y[j] to c[j]; the client remaps both conventions back to candidate indices.",
+      "Server queueing and network overhead add several seconds beyond the anneal budget.",
+      "A pyQUBO model is required for automatic constraint violation counting; otherwise a manual spacing/cardinality check is used."
+    ],
+    "nextTime": "Run multiple seeds/repeats per cell, sweep anneal budgets (30/60/120 s), and compare CGA against Fujitsu DA and D-Wave Hybrid under identical time limits.",
+    "timeSpentHours": null
+  }
+}
