@@ -28,9 +28,12 @@ export default function HomeSection({
           {viewAllHref && (
             <Link
               to={viewAllHref}
-              className="mt-6 inline-block text-small font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
+              className="home-cta-link mt-6 text-small font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
             >
-              {viewAllLabel} &rarr;
+              <span className="home-cta-link__label">{viewAllLabel}</span>
+              <span aria-hidden="true" className="home-cta-link__icon">
+                &rarr;
+              </span>
             </Link>
           )}
         </div>
