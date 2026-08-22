@@ -15,7 +15,7 @@ const TIMELINE = [
 
 export default function AboutNetwork() {
   return (
-    <section className="section-container border-t border-border">
+    <section id="network" className="section-container border-t border-border scroll-mt-24">
       <p className="section-kicker">Research Network</p>
       <h2 className="mt-4 text-h2 text-text-primary">Who's involved</h2>
       <p className="mt-4 max-w-prose text-body-lg text-text-secondary">

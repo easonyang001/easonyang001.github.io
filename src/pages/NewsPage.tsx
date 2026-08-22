@@ -10,7 +10,8 @@ export default function NewsPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q === "" ? news : news.filter((item) => item.title.toLowerCase().includes(q));
+    const matched = q === "" ? news : news.filter((item) => item.title.toLowerCase().includes(q));
+    return [...matched].sort((a, b) => b.date.localeCompare(a.date));
   }, [query]);
 
   return (

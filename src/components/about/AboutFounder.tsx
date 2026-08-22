@@ -77,7 +77,7 @@ export default function AboutFounder() {
   if (founders.length === 0) return null;
 
   return (
-    <section className="section-container border-t border-border">
+    <section id="founding-team" className="section-container border-t border-border scroll-mt-24">
       <p className="section-kicker">Founding Team</p>
       <h2 className="mt-4 text-h2 text-text-primary">One institute, built across two cultures</h2>
       <p className="mt-4 max-w-prose text-body-lg text-text-secondary">

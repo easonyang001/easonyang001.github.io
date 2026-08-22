@@ -3,7 +3,7 @@ import AboutCircuitBackground from "./AboutCircuitBackground.tsx";
 
 export default function AboutHero() {
   return (
-    <section className="section-container relative overflow-hidden border-t border-border">
+    <section id="story" className="section-container relative overflow-hidden border-t border-border scroll-mt-24">
       <AboutCircuitBackground />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
 

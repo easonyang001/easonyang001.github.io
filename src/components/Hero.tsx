@@ -26,8 +26,9 @@ export default function Hero() {
 
   useLayoutEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const mobile = window.matchMedia("(max-width: 767px)").matches;
     const seen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
-    if (reduced || seen) {
+    if (reduced || seen || mobile) {
       sessionStorage.setItem(INTRO_SEEN_KEY, "1");
     } else {
       setShowIntro(true);
@@ -170,6 +171,31 @@ export default function Hero() {
           opacity: 1;
         }
 
+        .hero-mobile-scrim {
+          background: linear-gradient(to right, transparent 20%, #020617 65%);
+        }
+
+        @media (max-width: 767px) {
+          .hero-scientific::before {
+            background:
+              radial-gradient(circle at 72% 26%, rgba(37, 99, 235, 0.08), transparent 34%),
+              radial-gradient(circle at 48% 82%, rgba(34, 211, 238, 0.05), transparent 38%),
+              linear-gradient(180deg, rgba(1, 4, 11, 0.28) 0%, rgba(2, 8, 23, 0.28) 42%, rgba(4, 17, 39, 0.42) 100%);
+          }
+
+          .hero-bg-image {
+            object-position: center top;
+          }
+
+          .hero-bg-image--active {
+            filter: saturate(1.08) contrast(1.02) brightness(1.08);
+          }
+
+          .hero-mobile-scrim {
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.04) 0%, rgba(2, 6, 23, 0.08) 60%, rgba(2, 6, 23, 0.22) 100%);
+          }
+        }
+
       `}</style>
 
       {showIntro && (
@@ -217,8 +243,7 @@ export default function Hero() {
           }}
         />
         <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(to right, transparent 20%, #020617 65%)" }}
+          className="hero-mobile-scrim absolute inset-0"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
       </div>
@@ -235,39 +260,41 @@ export default function Hero() {
         className="relative z-10 w-full px-6 md:px-12"
       >
         <div className="mx-auto max-w-content md:flex md:justify-end">
-          <div className="w-full max-w-[720px] overflow-visible">
-            <motion.h1
-              initial={false}
-              animate={
-                contentVisible
-                  ? { opacity: 1, y: 0, filter: "blur(0px)" }
-                  : { opacity: 0, y: 26, filter: "blur(12px)" }
-              }
-              transition={{
-                duration: HERO_CONTENT_DURATION_MS / 1000,
-                ease: [0.25, 1, 0.5, 1],
-              }}
-              className="whitespace-normal overflow-visible text-[40px] font-medium leading-[0.95] tracking-[-0.035em] text-text-primary md:text-[clamp(56px,7vw,96px)]"
-            >
-              {site.name}
-            </motion.h1>
+          <div className="w-full max-w-[1040px] overflow-visible md:translate-x-28">
+            <div className="flex flex-col gap-4 md:gap-5">
+              <motion.h1
+                initial={false}
+                animate={
+                  contentVisible
+                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                    : { opacity: 0, y: 26, filter: "blur(12px)" }
+                }
+                transition={{
+                  duration: HERO_CONTENT_DURATION_MS / 1000,
+                  ease: [0.25, 1, 0.5, 1],
+                }}
+                className="whitespace-normal overflow-visible text-[clamp(3.25rem,9.2vw,8rem)] font-medium leading-[0.9] tracking-[-0.05em] text-text-primary md:whitespace-nowrap"
+              >
+                {site.name}
+              </motion.h1>
 
-            <motion.p
-              initial={false}
-              animate={
-                contentVisible
-                  ? { opacity: 1, y: 0, filter: "blur(0px)" }
-                  : { opacity: 0, y: 22, filter: "blur(12px)" }
-              }
-              transition={{
-                duration: 1.1,
-                delay: 0.18,
-                ease: [0.25, 1, 0.5, 1],
-              }}
-              className="mt-4 whitespace-normal text-[clamp(1.25rem,1.1rem_+_0.6vw,1.625rem)] font-normal text-text-primary"
-            >
-              {site.tagline}
-            </motion.p>
+              <motion.p
+                initial={false}
+                animate={
+                  contentVisible
+                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                    : { opacity: 0, y: 22, filter: "blur(12px)" }
+                }
+                transition={{
+                  duration: 1.1,
+                  delay: 0.18,
+                  ease: [0.25, 1, 0.5, 1],
+                }}
+                className="max-w-none whitespace-normal text-[clamp(1.38rem,1.05rem_+_0.5vw,2rem)] font-normal leading-[1.04] text-text-primary md:whitespace-nowrap"
+              >
+                {site.tagline}
+              </motion.p>
+            </div>
 
             <motion.p
               initial={false}
@@ -281,7 +308,7 @@ export default function Hero() {
                 delay: 0.38,
                 ease: [0.25, 1, 0.5, 1],
               }}
-              className="mt-8 text-[clamp(1rem,0.95rem_+_0.2vw,1.125rem)] leading-[1.6] text-text-secondary"
+              className="mt-8 max-w-[56ch] text-[clamp(1.22rem,1.05rem_+_0.4vw,1.42rem)] leading-[1.56] text-text-secondary"
             >
               {site.description}
             </motion.p>

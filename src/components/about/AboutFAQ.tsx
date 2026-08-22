@@ -34,7 +34,7 @@ export default function AboutFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="section-container border-t border-border">
+    <section id="faq" className="section-container border-t border-border scroll-mt-24">
       <p className="section-kicker">FAQ</p>
       <h2 className="mt-4 text-h2 text-text-primary">Common questions</h2>
 
