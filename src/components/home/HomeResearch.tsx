@@ -10,7 +10,7 @@ export default function HomeResearch() {
       title="Research Areas"
       description="Core disciplines that define our research program."
       viewAllHref="/research"
-      viewAllLabel={`All ${researchAreas.length} areas`}
+      viewAllLabel="View all research"
     >
       <div className="grid gap-6 sm:grid-cols-2">
         {featured.map((area) => {

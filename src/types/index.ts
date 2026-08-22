@@ -21,6 +21,8 @@ export interface ResearchArea {
   title: string;
   description: string;
   status: ResearchAreaStatus;
+  /** Nav/menu grouping label. null renders the area outside any named group. */
+  group: string | null;
   relatedLabTools?: string[];
 }
 

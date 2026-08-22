@@ -12,31 +12,70 @@ interface NavChild {
   external?: boolean;
 }
 
+interface NavGroup {
+  heading: string | null;
+  items: NavChild[];
+}
+
 interface NavLink {
   label: string;
   href: string;
-  children?: NavChild[];
+  groups?: NavGroup[];
 }
 
-const researchChildren: NavChild[] = researchAreas.map((area) => ({
-  label: area.title,
-  href: `/research/${area.slug}`,
-}));
+/** Buckets consecutive items sharing the same heading, preserving source order. */
+function toGroups(items: Array<NavChild & { heading: string | null }>): NavGroup[] {
+  const groups: NavGroup[] = [];
+  items.forEach(({ heading, ...child }) => {
+    const last = groups[groups.length - 1];
+    if (last && last.heading === heading) {
+      last.items.push(child);
+    } else {
+      groups.push({ heading, items: [child] });
+    }
+  });
+  return groups;
+}
 
-const labChildren: NavChild[] = [
-  ...labTools.map((tool) => ({ label: tool.name, href: `/lab/${tool.slug}` })),
-  { label: "Quantum Lab 3D", href: "/quantum-lab-3d.html", external: true },
-];
+const researchGroups = toGroups(
+  researchAreas.map((area) => ({
+    heading: area.group,
+    label: area.title,
+    href: `/research/${area.slug}`,
+  }))
+);
+
+const labGroups = toGroups([
+  ...labTools.map((tool) => ({ heading: null, label: tool.name, href: `/lab/${tool.slug}` })),
+  { heading: null, label: "Quantum Lab 3D", href: "/quantum-lab-3d.html", external: true },
+]);
 
 const links: NavLink[] = [
-  { label: "Research", href: "/research", children: researchChildren },
+  { label: "Research", href: "/research", groups: researchGroups },
   { label: "Solutions", href: "/solutions" },
-  { label: "Lab", href: "/lab", children: labChildren },
+  { label: "Lab", href: "/lab", groups: labGroups },
   { label: "Publications", href: "/publications" },
   { label: "About", href: "/about" },
   { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];
+
+function DropdownChild({ child, onClick }: { child: NavChild; onClick?: () => void }) {
+  const className =
+    "block rounded-md px-3 py-2 text-small text-text-secondary transition-colors duration-150 hover:bg-surface hover:text-text-primary";
+  if (child.external) {
+    return (
+      <a key={child.href} href={child.href} className={className} onClick={onClick}>
+        {child.label}
+      </a>
+    );
+  }
+  return (
+    <Link key={child.href} to={child.href} className={className} onClick={onClick}>
+      {child.label}
+    </Link>
+  );
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -93,7 +132,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-1 md:flex">
           {links.map((link) =>
-            link.children ? (
+            link.groups ? (
               <div
                 key={link.href}
                 className="relative"
@@ -125,25 +164,21 @@ export default function Navbar() {
                   >
                     <div className="rounded-lg border border-border bg-background/95 p-2 backdrop-blur-md">
                       <div className="max-h-[70vh] overflow-y-auto">
-                        {link.children.map((child) =>
-                          child.external ? (
-                            <a
-                              key={child.href}
-                              href={child.href}
-                              className="block rounded-md px-3 py-2 text-small text-text-secondary transition-colors duration-150 hover:bg-surface hover:text-text-primary"
-                            >
-                              {child.label}
-                            </a>
-                          ) : (
-                            <Link
-                              key={child.href}
-                              to={child.href}
-                              className="block rounded-md px-3 py-2 text-small text-text-secondary transition-colors duration-150 hover:bg-surface hover:text-text-primary"
-                            >
-                              {child.label}
-                            </Link>
-                          )
-                        )}
+                        {link.groups.map((group, index) => (
+                          <div key={group.heading ?? `ungrouped-${index}`}>
+                            {group.heading === null && index > 0 && (
+                              <div className="my-2 border-t border-border" />
+                            )}
+                            {group.heading && (
+                              <p className="px-3 pb-1 pt-3 font-mono text-mono-label uppercase text-text-muted first:pt-1">
+                                {group.heading}
+                              </p>
+                            )}
+                            {group.items.map((child) => (
+                              <DropdownChild key={child.href} child={child} />
+                            ))}
+                          </div>
+                        ))}
                       </div>
                       <Link
                         to={link.href}
@@ -199,7 +234,7 @@ export default function Navbar() {
           className="flex flex-col gap-1 border-t border-border bg-background/95 px-6 py-6 md:hidden"
         >
           {links.map((link) =>
-            link.children ? (
+            link.groups ? (
               <div key={link.href}>
                 <div className="flex items-center justify-between">
                   <Link
@@ -222,26 +257,25 @@ export default function Navbar() {
                 </div>
                 {mobileExpanded === link.label && (
                   <div className="mb-2 ml-3 flex flex-col gap-1 border-l border-border pl-3">
-                    {link.children.map((child) =>
-                      child.external ? (
-                        <a
-                          key={child.href}
-                          href={child.href}
-                          className="py-1.5 text-small text-text-secondary hover:text-text-primary"
-                        >
-                          {child.label}
-                        </a>
-                      ) : (
-                        <Link
-                          key={child.href}
-                          to={child.href}
-                          onClick={() => setOpen(false)}
-                          className="py-1.5 text-small text-text-secondary hover:text-text-primary"
-                        >
-                          {child.label}
-                        </Link>
-                      )
-                    )}
+                    {link.groups.map((group, index) => (
+                      <div key={group.heading ?? `ungrouped-${index}`}>
+                        {group.heading === null && index > 0 && (
+                          <div className="my-1.5 border-t border-border" />
+                        )}
+                        {group.heading && (
+                          <p className="pb-1 pt-2 font-mono text-mono-label uppercase text-text-muted first:pt-0">
+                            {group.heading}
+                          </p>
+                        )}
+                        {group.items.map((child) => (
+                          <DropdownChild
+                            key={child.href}
+                            child={child}
+                            onClick={() => !child.external && setOpen(false)}
+                          />
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
