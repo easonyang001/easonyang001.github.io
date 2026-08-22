@@ -652,7 +652,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
     實驗室主任 Dr. Chen 將親自帶你導覽<br><br>
     <span style="color:#2a3a50;font-size:9px;">稍後你將接手今晚的值班工程師任務</span>
   </div>
-  <button class="e-btn" onclick="startLobby()">▶ 進入實驗室大廳</button>
+      <button class="e-btn" onclick="window.location.href='/quantum-lab-3d.html?autostart=1'">▶ 進入實驗室大廳</button>
   <div class="e-hint" style="margin-top:6px;">建議使用 Chrome 桌面版以獲得最佳體驗</div>
 </div>
 
@@ -886,7 +886,7 @@ const DEVICE_PANELS = {
 // ═══════════════════════════════════════════════════════
 // CONSOLE
 // ═══════════════════════════════════════════════════════
-console:{
+   tabs:['ALARM LOG','ION TRAP','CH-02','OVERRIDE'],
   tag:'STATION 01', title:'MAIN CONSOLE',
   sub:'Facility Control · Alarm Management · Cryo Override',
   tabs:['警報中心','系統儀表','CH 控制台','實驗佇列'],
