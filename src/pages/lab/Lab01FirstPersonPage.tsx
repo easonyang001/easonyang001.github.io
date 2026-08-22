@@ -648,38 +648,6 @@ function CameraRig({
   return null;
 }
 
-function PlayerAvatar({
-  player,
-  yaw,
-  jumpHeight,
-}: {
-  player: Vec2;
-  yaw: number;
-  jumpHeight: number;
-}) {
-  const bodyY = 0.92 + jumpHeight;
-  return (
-    <group position={[player.x, jumpHeight, player.z]} rotation={[0, yaw, 0]}>
-      <mesh castShadow receiveShadow position={[0, bodyY, 0]}>
-        <capsuleGeometry args={[0.19, 0.62, 5, 12]} />
-        <meshStandardMaterial color="#dbeafe" roughness={0.42} metalness={0.06} />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0, 1.7 + jumpHeight, 0.03]}>
-        <sphereGeometry args={[0.17, 16, 16]} />
-        <meshStandardMaterial color="#f8fafc" roughness={0.32} metalness={0.04} />
-      </mesh>
-      <mesh castShadow receiveShadow position={[-0.09, 0.36 + jumpHeight, 0]}>
-        <boxGeometry args={[0.13, 0.6, 0.13]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.4} metalness={0.05} />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0.09, 0.36 + jumpHeight, 0]}>
-        <boxGeometry args={[0.13, 0.6, 0.13]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.4} metalness={0.05} />
-      </mesh>
-    </group>
-  );
-}
-
 function MiniMap({
   player,
   yaw,
@@ -700,10 +668,10 @@ function MiniMap({
         <p className="font-mono text-[10px] uppercase tracking-[0.36em] text-[#7657C8]/70">Mini map</p>
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#30383B]/46">{enteredLab ? "active" : "entry"}</p>
       </div>
-      <div className="relative mt-3 h-[120px] rounded-[16px] border border-[#B9BEC0]/40 bg-[linear-gradient(180deg,rgba(236,237,234,0.95)_0%,rgba(217,220,217,0.85)_100%)]">
-        <div className="absolute inset-[10px] rounded-[12px] border border-[#B9BEC0]/36" />
-        <div className="absolute left-[10px] top-1/2 h-px w-[calc(100%-20px)] bg-[#B9BEC0]/45" />
-        <div className="absolute top-[10px] left-1/2 h-[calc(100%-20px)] w-px bg-[#B9BEC0]/45" />
+      <div className="relative mt-3 h-[120px] rounded-[16px] border border-[#334155]/60 bg-[linear-gradient(180deg,rgba(15,23,42,0.95)_0%,rgba(2,6,23,0.9)_100%)]">
+        <div className="absolute inset-[10px] rounded-[12px] border border-[#334155]/50" />
+        <div className="absolute left-[10px] top-1/2 h-px w-[calc(100%-20px)] bg-[#334155]/50" />
+        <div className="absolute top-[10px] left-1/2 h-[calc(100%-20px)] w-px bg-[#334155]/50" />
         {STATIONS.map((station) => (
           <div
             key={station.id}
@@ -1173,61 +1141,63 @@ function LabRoom({
 
   return (
     <>
-      <color attach="background" args={[isCritical ? "#111018" : isWarning ? "#16110d" : "#E8E9E5"]} />
-      <fog attach="fog" args={[isCritical ? "#111018" : isWarning ? "#16110d" : "#E8E9E5", 12, 28]} />
-      <ambientLight intensity={isCritical ? 0.9 : isWarning ? 1.18 : 1.35} color={isCritical ? "#ffd7d7" : "#ffffff"} />
-      <hemisphereLight intensity={isCritical ? 0.8 : 1.15} color={isCritical ? "#ffe5e5" : "#ffffff"} groundColor={isCritical ? "#3e2323" : "#4B5153"} />
-      <directionalLight position={[5, 8, 6]} intensity={isCritical ? 1.1 : 1.35} color={isCritical ? "#ffb4b4" : "#ECEDEA"} castShadow />
-      <directionalLight position={[-6, 5, -4]} intensity={isCritical ? 0.9 : 0.68} color={isCritical ? "#ef4444" : "#7657C8"} />
+      <color attach="background" args={[isCritical ? "#150a0a" : isWarning ? "#171009" : "#050a14"]} />
+      <fog attach="fog" args={[isCritical ? "#150a0a" : isWarning ? "#171009" : "#050a14", 10, 26]} />
+      <ambientLight intensity={isCritical ? 0.38 : isWarning ? 0.4 : 0.36} color={isCritical ? "#ffb4b4" : "#94a3b8"} />
+      <hemisphereLight intensity={isCritical ? 0.34 : 0.4} color={isCritical ? "#ffb4b4" : "#7dd3fc"} groundColor="#0f172a" />
+      <directionalLight position={[5, 8, 6]} intensity={isCritical ? 0.65 : 0.55} color={isCritical ? "#ffb4b4" : "#dbeafe"} castShadow />
+      <directionalLight position={[-6, 5, -4]} intensity={isCritical ? 0.45 : 0.38} color={isCritical ? "#ef4444" : "#8B5CF6"} />
+      <pointLight position={[2.2, 1.7, 0.15]} intensity={isCritical ? 0.6 : 2.2} distance={7} color={isCritical ? "#ef4444" : "#38C6A3"} />
+      <pointLight position={[-3.8, 1.9, 3.0]} intensity={1.3} distance={6} color="#3A8DDE" />
+      <pointLight position={[4.4, 1.7, -1.7]} intensity={1.0} distance={5} color="#E5A43A" />
 
       <CameraRig player={player} yaw={yaw} pitch={pitch} jumpHeight={jumpHeight} focus={state.focus} cameraMode={cameraMode} />
-      <PlayerAvatar player={player} yaw={yaw} jumpHeight={jumpHeight} />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[ROOM.width, ROOM.depth]} />
-        <meshStandardMaterial color="#4B5153" roughness={0.95} metalness={0.02} />
+        <meshStandardMaterial color="#101b2c" roughness={0.85} metalness={0.15} />
       </mesh>
 
-      <gridHelper args={[24, 48, isCritical ? "#fca5a5" : "#ffffff", isCritical ? "#6b7280" : "#D9DCD9"]} position={[0, 0.02, 0]} />
+      <gridHelper args={[24, 48, isCritical ? "#b91c1c" : "#334155", isCritical ? "#5c1f1f" : "#1e293b"]} position={[0, 0.02, 0]} />
 
       <mesh position={[0, ROOM.height / 2, -ROOM.depth / 2]} receiveShadow>
         <boxGeometry args={[ROOM.width, ROOM.height, WALL_THICKNESS]} />
-        <meshStandardMaterial color="#E8E9E5" roughness={0.84} metalness={0.06} />
+        <meshStandardMaterial color="#131f30" roughness={0.78} metalness={0.18} />
       </mesh>
       <mesh position={[0, ROOM.height / 2, ROOM.depth / 2]} receiveShadow>
         <boxGeometry args={[ROOM.width, ROOM.height, WALL_THICKNESS]} />
-        <meshStandardMaterial color="#E8E9E5" roughness={0.84} metalness={0.06} />
+        <meshStandardMaterial color="#131f30" roughness={0.78} metalness={0.18} />
       </mesh>
       <mesh position={[-ROOM.width / 2, ROOM.height / 2, 0]} receiveShadow>
         <boxGeometry args={[WALL_THICKNESS, ROOM.height, ROOM.depth]} />
-        <meshStandardMaterial color="#E8E9E5" roughness={0.84} metalness={0.06} />
+        <meshStandardMaterial color="#131f30" roughness={0.78} metalness={0.18} />
       </mesh>
       <mesh position={[ROOM.width / 2, ROOM.height / 2, 0]} receiveShadow>
         <boxGeometry args={[WALL_THICKNESS, ROOM.height, ROOM.depth]} />
-        <meshStandardMaterial color="#E8E9E5" roughness={0.84} metalness={0.06} />
+        <meshStandardMaterial color="#131f30" roughness={0.78} metalness={0.18} />
       </mesh>
 
       <mesh position={[0, ROOM.height - 0.08, 0]} receiveShadow>
         <boxGeometry args={[ROOM.width - 0.5, 0.08, ROOM.depth - 0.5]} />
-        <meshStandardMaterial color="#D9DCD9" roughness={0.9} metalness={0.02} />
+        <meshStandardMaterial color="#060c16" roughness={0.9} metalness={0.1} />
       </mesh>
 
       {roofLights.map((position) => (
         <group key={position.join(",")} position={position}>
           <mesh castShadow receiveShadow>
             <boxGeometry args={[0.9, 0.08, 0.26]} />
-            <meshStandardMaterial color="#ECEDEA" emissive="#ECEDEA" emissiveIntensity={0.32} />
+            <meshStandardMaterial color="#e2e8f0" emissive="#bae6fd" emissiveIntensity={0.9} />
           </mesh>
         </group>
       ))}
 
       <mesh position={[0, 3.0, 0]} receiveShadow>
         <boxGeometry args={[12.8, 0.06, 0.14]} />
-        <meshStandardMaterial color="#ECEDEA" emissive="#DCE7E2" emissiveIntensity={0.18} />
+        <meshStandardMaterial color="#dbeafe" emissive="#38C6A3" emissiveIntensity={0.6} />
       </mesh>
       <mesh position={[0, 0.16, 0]} receiveShadow>
         <boxGeometry args={[ROOM.width - 1.2, 0.02, ROOM.depth - 1.1]} />
-        <meshStandardMaterial color="#4B5153" roughness={0.94} metalness={0.02} />
+        <meshStandardMaterial color="#0a121c" roughness={0.88} metalness={0.12} />
       </mesh>
 
       <MainConsole
