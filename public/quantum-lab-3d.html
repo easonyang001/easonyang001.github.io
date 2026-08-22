@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Quantum Ion Trap Lab — Mrama Institute</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;overflow:hidden;font-family:'Courier New',monospace;}
+canvas{display:block;position:fixed;inset:0;z-index:1;}
+#scanline{position:fixed;inset:0;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,200,140,0.012) 2px,rgba(0,200,140,0.012) 4px);}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10;}
+
+/* TOP BAR */
+#top-bar{position:absolute;top:0;left:0;right:0;
+  background:linear-gradient(180deg,rgba(0,4,12,0.97)0%,transparent 100%);
+  padding:10px 16px 22px;display:flex;justify-content:space-between;align-items:flex-start;}
+.back-link{pointer-events:all;display:inline-block;color:#3a6a9a;font-size:9px;letter-spacing:2px;
+  text-decoration:none;border:1px solid #1a2d45;padding:3px 8px;background:rgba(6,12,24,0.7);margin-bottom:6px;}
+.back-link:hover{color:#5aacff;border-color:#1e5090;}
+.lab-title{color:#e8f4ff;font-size:14px;letter-spacing:3px;font-weight:bold;}
+.lab-sub{color:#00cc88;font-size:9px;letter-spacing:2px;margin-top:2px;}
+.mode-tag{color:#5aacff;font-size:10px;letter-spacing:2px;border:1px solid #1e4a80;padding:3px 10px;background:rgba(8,16,36,0.88);}
+
+/* LEFT PANEL */
+#left-panel{position:absolute;top:56px;left:12px;background:rgba(5,10,20,0.94);
+  border:1px solid #1a2d45;width:182px;padding:10px;}
+.pt{font-size:8px;color:#3a6a9a;letter-spacing:2px;text-transform:uppercase;
+  border-bottom:1px solid #0f1e30;padding-bottom:5px;margin-bottom:7px;}
+.srow{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.slbl{font-size:10px;color:#4a6a8a;display:flex;align-items:center;gap:4px;}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.dg{background:#00cc88;box-shadow:0 0 5px #00cc88;}
+.db{background:#5aacff;box-shadow:0 0 5px #5aacff;}
+.do{background:#ffa040;box-shadow:0 0 5px #ffa040;}
+.dr{background:#cc3333;box-shadow:0 0 5px #cc3333;}
+.dgr{background:#2a3a4a;}
+.s-on{font-size:9px;color:#00cc88;}
+.s-al{font-size:9px;color:#5aacff;}
+.s-rd{font-size:9px;color:#ffa040;}
+.s-er{font-size:9px;color:#cc3333;}
+.s-id{font-size:9px;color:#2a4a5a;}
+.div{border:none;border-top:1px solid #0f1e30;margin:7px 0;}
+.met{display:flex;justify-content:space-between;margin-bottom:3px;}
+.ml{font-size:9px;color:#2a5070;}.mv{font-size:9px;color:#00cc88;}.mv2{font-size:9px;color:#8aaace;}
+.mv-er{font-size:9px;color:#cc3333;}
+
+/* MISSION BLOCK */
+#mission-block{margin-top:8px;border-top:1px solid #0f1e30;padding-top:8px;}
+.mission-lbl{font-size:8px;color:#ffa040;letter-spacing:2px;margin-bottom:4px;}
+#cur-step{font-size:9px;color:#c8d8e8;line-height:1.5;padding:4px 6px;
+  background:rgba(255,160,64,0.07);border-left:2px solid #ffa040;margin-bottom:4px;}
+#mission-dist{font-size:8px;color:#2a5070;margin-top:2px;}
+
+/* TUTORIAL OVERLAY */
+#tutorial{position:fixed;inset:0;background:rgba(0,3,12,0.97);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;z-index:200;pointer-events:all;}
+#tutorial-box{background:rgba(5,12,28,0.98);border:1px solid #1a3050;
+  width:600px;max-width:92vw;padding:32px 36px;}
+.tut-step-dots{display:flex;gap:6px;margin-bottom:20px;}
+.tsd{width:6px;height:6px;border-radius:50%;background:#1a2d45;}
+.tsd.active{background:#00cc88;box-shadow:0 0 5px #00cc88;}
+.tsd.done{background:#005530;}
+.tut-tag{font-size:8px;color:#ffa040;letter-spacing:3px;margin-bottom:8px;}
+.tut-title{font-size:17px;color:#e8f4ff;letter-spacing:2px;margin-bottom:12px;}
+.tut-body{font-size:11px;color:#8aaace;line-height:1.8;margin-bottom:16px;}
+.tut-visual{background:#040c1c;border:1px solid #0f1e30;padding:12px;
+  margin-bottom:16px;font-size:10px;color:#4a7aaa;line-height:1.8;}
+.key-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.kbig{background:#0a1828;border:1px solid #2a4060;padding:6px 12px;
+  font-size:10px;color:#8aaace;border-radius:3px;letter-spacing:1px;}
+.kbig span{display:block;font-size:8px;color:#2a5070;margin-top:3px;}
+.tut-next{background:transparent;border:1px solid #1e5090;color:#5aacff;
+  padding:8px 24px;font-size:10px;letter-spacing:2px;cursor:pointer;
+  font-family:'Courier New',monospace;pointer-events:all;}
+.tut-next:hover{background:rgba(30,74,128,0.2);border-color:#5aacff;}
+.tut-skip{font-size:9px;color:#1a3050;cursor:pointer;pointer-events:all;
+  margin-left:16px;letter-spacing:1px;}
+.tut-skip:hover{color:#3a5070;}
+
+/* DIALOGUE BOX */
+#dialogue-box{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);
+  width:560px;max-width:90vw;background:rgba(3,7,18,0.98);border:1px solid #1a2d45;
+  padding:14px 18px;pointer-events:none;display:none;}
+#dlg-speaker{font-size:8px;color:#00cc88;letter-spacing:2px;margin-bottom:5px;}
+#dlg-text{font-size:11px;color:#c8d8e8;line-height:1.8;min-height:18px;}
+#dlg-continue{font-size:8px;color:#2a5070;margin-top:6px;text-align:right;
+  animation:blink 1.2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+/* SCREEN ALERT */
+#screen-alert{position:absolute;top:90px;left:50%;transform:translateX(-50%);
+  width:500px;max-width:90vw;background:rgba(3,7,18,0.98);border:1px solid #1a2d45;
+  padding:12px 18px;pointer-events:none;display:none;}
+#alert-title{font-size:10px;letter-spacing:2px;margin-bottom:5px;font-weight:bold;}
+#alert-body{font-size:10px;color:#6a8aaa;line-height:1.6;}
+
+/* INTERACT HINT */
+#interact-hint{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);
+  background:rgba(3,7,18,0.98);border:1px solid #00cc88;padding:8px 20px;
+  display:none;text-align:center;pointer-events:none;min-width:200px;}
+@keyframes pb{0%,100%{border-color:#00cc88}50%{border-color:#003322}}
+#interact-hint{animation:pb 1.5s ease-in-out infinite;}
+#ih-name{font-size:11px;color:#e8f4ff;letter-spacing:2px;margin-bottom:3px;}
+#ih-action{font-size:10px;color:#00cc88;letter-spacing:1px;}
+#ih-dist{font-size:9px;color:#2a5a4a;margin-top:2px;}
+
+/* INFO PANEL */
+#info-panel{position:absolute;top:56px;right:12px;background:rgba(4,9,22,0.97);
+  border:1px solid #1a2d45;width:230px;padding:12px;display:none;pointer-events:all;}
+.ip-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.ip-title{font-size:11px;color:#e8f4ff;letter-spacing:2px;}
+.ip-x{font-size:11px;color:#2a4a6a;cursor:pointer;padding:0 2px;}
+.ip-x:hover{color:#5aacff;}
+.ip-tabs{display:flex;border-bottom:1px solid #0f1e30;margin-bottom:8px;}
+.ip-tab{font-size:9px;color:#2a4a6a;padding:4px 7px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;letter-spacing:1px;pointer-events:all !important;}
+.ip-tab.active{color:#5aacff;border-bottom-color:#5aacff;}
+.ipr{display:flex;justify-content:space-between;margin-bottom:4px;}
+.ipl{font-size:9px;color:#2a5070;}.ipv{font-size:9px;color:#00cc88;}
+.ipv2{font-size:9px;color:#8aaace;}.ipv-e{font-size:9px;color:#cc3333;}
+.ip-div{border:none;border-top:1px solid #0f1e30;margin:6px 0;}
+.ip-btn{display:block;width:100%;margin-top:6px;background:transparent;
+  border:1px solid #1e3a5a;color:#3a7aaa;font-size:9px;letter-spacing:1px;
+  padding:5px;cursor:pointer;font-family:'Courier New',monospace;pointer-events:all !important;}
+.ip-btn:hover{border-color:#5aacff;color:#5aacff;}
+.ip-btn.g{border-color:#005530;color:#00aa66;}
+.ip-btn.g:hover{border-color:#00cc88;color:#00cc88;}
+.sig-bar{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.sig-lbl{font-size:9px;color:#2a5070;width:72px;}
+.sig-trk{flex:1;height:3px;background:#0a1520;border-radius:1px;}
+.sig-fill{height:100%;border-radius:1px;}
+.sig-val{font-size:9px;color:#8aaace;width:36px;text-align:right;}
+.ip-warn{font-size:9px;color:#cc3333;line-height:1.6;margin-bottom:5px;
+  padding:4px 6px;background:rgba(200,50,50,0.07);border-left:2px solid #cc3333;}
+.ip-info{font-size:9px;color:#5aacff;line-height:1.6;margin-bottom:5px;
+  padding:4px 6px;background:rgba(90,172,255,0.07);border-left:2px solid #3a6aaa;}
+
+/* MINIMAP */
+#minimap{position:absolute;top:56px;right:12px;background:rgba(4,8,18,0.94);
+  border:1px solid #1a2d45;width:120px;}
+#mm-title{font-size:8px;color:#2a4a6a;letter-spacing:2px;padding:5px 8px;
+  border-bottom:1px solid #0f1e30;display:flex;justify-content:space-between;}
+#mm-title span{color:#00cc88;}
+
+/* HEALTH */
+#health-panel{position:absolute;bottom:44px;right:12px;background:rgba(4,8,18,0.92);
+  border:1px solid #1a2d45;padding:8px 12px;width:160px;}
+.hp-t{font-size:8px;color:#2a5070;letter-spacing:2px;margin-bottom:6px;}
+.hp-row{margin-bottom:4px;}
+.hp-lbl{display:flex;justify-content:space-between;font-size:9px;color:#2a5070;margin-bottom:2px;}
+.hp-bar{height:2px;background:#0a1520;border-radius:1px;}
+.hp-f{height:100%;border-radius:1px;background:#00cc88;transition:width 1s;}
+.hp-fb{background:#5aacff;}.hp-fo{background:#ffa040;}
+
+/* TOAST */
+#toast{position:absolute;top:56px;left:50%;transform:translateX(-50%);
+  background:rgba(0,40,20,0.98);border:1px solid #00cc88;
+  padding:8px 20px;font-size:10px;color:#00cc88;letter-spacing:2px;
+  display:none;white-space:nowrap;pointer-events:none;}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(-8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+#toast.show{display:block;animation:ti 0.3s ease;}
+
+/* FLASH */
+#flash{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;border:3px solid #00cc88;}
+@keyframes fa{0%{opacity:0.8;}100%{opacity:0;}}
+#flash.fire{animation:fa 0.6s ease-out forwards;}
+
+/* MISSION PANEL */
+#mission-panel{position:fixed;inset:0;background:rgba(1,4,12,0.98);
+  display:none;pointer-events:all;padding:60px 80px;overflow-y:auto;z-index:150;}
+.mp-x{position:fixed;top:20px;right:30px;font-size:11px;color:#2a4a6a;cursor:pointer;letter-spacing:2px;pointer-events:all;z-index:151;}
+.mp-x:hover{color:#5aacff;}
+.mp-title{font-size:16px;color:#e8f4ff;letter-spacing:4px;margin-bottom:3px;}
+.mp-sub{font-size:10px;color:#2a5070;letter-spacing:2px;margin-bottom:24px;}
+.mp-m{border:1px solid #1a2d45;padding:14px 18px;margin-bottom:12px;background:rgba(6,12,24,0.8);}
+.mp-m.done{border-color:#005530;background:rgba(0,20,10,0.6);}
+.mp-m.active{border-color:#ffa040;background:rgba(25,12,0,0.6);}
+.mp-mt{font-size:11px;color:#e8f4ff;letter-spacing:2px;margin-bottom:3px;}
+.mp-md{font-size:9px;color:#3a6080;margin-bottom:8px;line-height:1.5;}
+.mp-s{font-size:9px;padding:2px 0;color:#2a4a6a;display:flex;align-items:center;gap:5px;}
+.mp-s.done{color:#005530;}.mp-s.active{color:#ffa040;}
+.mp-sd{width:5px;height:5px;border-radius:50%;background:#1a2d45;flex-shrink:0;}
+.mp-s.done .mp-sd{background:#00cc88;}
+.mp-s.active .mp-sd{background:#ffa040;box-shadow:0 0 4px #ffa040;}
+.mp-badge{font-size:8px;padding:2px 7px;float:right;letter-spacing:1px;}
+.mp-badge.done{background:rgba(0,70,35,0.5);color:#00aa66;border:1px solid #005530;}
+.mp-badge.active{background:rgba(70,35,0,0.5);color:#ffa040;border:1px solid #664010;}
+.mp-badge.locked{background:rgba(15,15,22,0.5);color:#2a4a6a;border:1px solid #1a2d45;}
+
+/* BOTTOM BAR */
+#bottom-bar{position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(0deg,rgba(0,4,12,0.97)0%,transparent 100%);
+  padding:18px 16px 8px;display:flex;gap:16px;align-items:center;pointer-events:all;}
+.key{background:#0a1828;border:1px solid #1e3050;padding:2px 7px;
+  font-size:9px;color:#6a9ace;border-radius:2px;}
+.klbl{font-size:9px;color:#2a4a6a;}
+#mute-btn{font-size:9px;color:#00cc88;cursor:pointer;pointer-events:all;
+  letter-spacing:1px;border:1px solid #1a3a2a;padding:2px 8px;}
+
+/* ENTRY */
+#entry{position:fixed;inset:0;background:rgba(0,2,8,0.99);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;z-index:200;pointer-events:all;}
+.e-pre{font-size:9px;color:#1a4060;letter-spacing:4px;}
+.e-title{font-size:26px;color:#e8f4ff;letter-spacing:6px;font-weight:bold;}
+.e-sub{font-size:10px;color:#00cc88;letter-spacing:3px;}
+.e-line{width:200px;height:1px;background:linear-gradient(90deg,transparent,#1e4a6a,transparent);margin:4px 0;}
+.e-desc{font-size:10px;color:#2a5070;letter-spacing:1px;text-align:center;line-height:1.9;max-width:340px;}
+.e-btn{margin-top:12px;background:transparent;border:1px solid #1e4a80;color:#5aacff;
+  padding:10px 32px;font-size:11px;letter-spacing:3px;cursor:pointer;font-family:'Courier New',monospace;}
+.e-btn:hover{background:rgba(30,74,128,0.2);border-color:#5aacff;}
+.e-hint{font-size:9px;color:#0d2030;letter-spacing:1px;}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div id="scanline"></div>
+
+<!-- ENTRY -->
+<div id="entry">
+  <div class="e-pre">QUANTUM RESEARCH INSTITUTE</div>
+  <div class="e-title">ION TRAP LAB</div>
+  <div class="e-sub">INTERACTIVE RESEARCH FACILITY v2.1</div>
+  <div class="e-line"></div>
+  <div class="e-desc">這是一個真實的離子阱量子實驗室<br>每台機器都有控制面板<br>你將扮演今晚唯一的值班工程師</div>
+  <button class="e-btn" onclick="startGame()">▶ 進入實驗室</button>
+  <div class="e-hint">點擊後鎖定滑鼠 · ESC 釋放</div>
+</div>
+
+
+<!-- TUTORIAL — fixed layer, z-index 200 -->
+<div id="tutorial">
+  <div id="tutorial-box">
+    <div class="tut-step-dots" id="tut-dots"></div>
+    <div class="tut-tag" id="tut-tag">教學</div>
+    <div class="tut-title" id="tut-title"></div>
+    <div class="tut-body" id="tut-body"></div>
+    <div class="tut-visual" id="tut-visual" style="display:none"></div>
+    <div class="key-row" id="tut-keys" style="display:none"></div>
+    <div style="display:flex;align-items:center;margin-top:4px;">
+      <button class="tut-next" id="tut-next-btn" onclick="tutNext()">繼續 →</button>
+      <span class="tut-skip" onclick="tutSkip()">跳過教學</span>
+    </div>
+  </div>
+</div>
+
+<!-- MISSION PANEL — fixed layer -->
+
+<div id="mission-panel">
+  <span class="mp-x" onclick="toggleMission()">✕ CLOSE [TAB]</span>
+  <div class="mp-title">MISSION LOG</div>
+  <div class="mp-sub">QUANTUM RESEARCH OBJECTIVES</div>
+  <div id="mp-content"></div>
+</div>
+
+<!-- HUD -->
+<div id="hud">
+
+
+<div id="top-bar">
+  <div>
+    <a class="back-link" href="/">&larr; MRAMA INSTITUTE</a>
+    <div class="lab-title">QUANTUM ION TRAP LAB</div>
+    <div class="lab-sub">— INTERACTIVE RESEARCH FACILITY —</div>
+  </div>
+  <div class="mode-tag" id="mode-tag">EXPLORATION MODE</div>
+  <div style="font-size:9px;color:#1a3050;text-align:right;line-height:1.7;">
+    凌晨 03:07 · 值班工程師在線<br>
+    <span id="clock-display" style="color:#00cc88;">03:07:42</span>
+  </div>
+</div>
+
+<div id="left-panel">
+  <div class="pt">System Overview</div>
+  <div class="srow"><span class="slbl"><span class="dot dr"></span>控制台</span><span class="s-er">⚠ 警報</span></div>
+  <div class="srow"><span class="slbl"><span class="dot db"></span>光學/雷射</span><span class="s-al">正常</span></div>
+  <div class="srow"><span class="slbl"><span class="dot dr"></span>離子阱 QPU</span><span class="s-er">⚠ 過熱</span></div>
+  <div class="srow"><span class="slbl"><span class="dot do"></span>讀出系統</span><span class="s-rd">待機</span></div>
+  <div class="srow"><span class="slbl"><span class="dot dgr"></span>實驗排程</span><span class="s-id">已暫停</span></div>
+  <div class="div"></div>
+  <div class="pt">Ion Trap Status</div>
+  <div class="met"><span class="ml">QPU 溫度</span><span class="mv-er" id="temp-val">89.3 mK ↑</span></div>
+  <div class="met"><span class="ml">警戒溫度</span><span class="mv-er">100 mK</span></div>
+  <div class="met"><span class="ml">離子數量</span><span class="mv2">2 / 2（存活中）</span></div>
+  <div class="met"><span class="ml">冷卻狀態</span><span class="mv-er">CH-02 異常</span></div>
+  <div class="met"><span class="ml">雷射鎖定</span><span class="mv">STABLE</span></div>
+  <div id="mission-block">
+    <div class="mission-lbl">▶ ACTIVE MISSION</div>
+    <div id="cur-step">前往主控台查看警報日誌</div>
+    <div id="mission-dist"></div>
+  </div>
+</div>
+
+<div id="interact-hint">
+  <div id="ih-name">QPU ENCLOSURE</div>
+  <div id="ih-action">[E] 查看 / 互動</div>
+  <div id="ih-dist">距離 2.1 m</div>
+</div>
+
+<div id="info-panel">
+  <div class="ip-hdr">
+    <div class="ip-title" id="ip-title">QPU</div>
+    <span class="ip-x" onclick="closeInfo()">✕</span>
+  </div>
+  <div class="ip-tabs" id="ip-tabs"></div>
+  <div id="ip-content"></div>
+</div>
+
+<div id="minimap">
+  <div id="mm-title">MINI MAP <span>ACTIVE</span></div>
+  <canvas id="mm-canvas" width="120" height="100"></canvas>
+</div>
+
+<div id="health-panel">
+  <div class="hp-t">SYSTEM HEALTH</div>
+  <div class="hp-row">
+    <div class="hp-lbl"><span>QPU</span><span style="color:#cc3333">異常</span></div>
+    <div class="hp-bar"><div class="hp-f" style="width:32%;background:#cc3333;"></div></div>
+  </div>
+  <div class="hp-row">
+    <div class="hp-lbl"><span>雷射</span><span style="color:#00cc88">99%</span></div>
+    <div class="hp-bar"><div class="hp-f hp-fb" style="width:99%"></div></div>
+  </div>
+  <div class="hp-row">
+    <div class="hp-lbl"><span>讀出</span><span style="color:#ffa040">待機</span></div>
+    <div class="hp-bar"><div class="hp-f hp-fo" style="width:70%"></div></div>
+  </div>
+  <div class="hp-row">
+    <div class="hp-lbl"><span>冷卻</span><span style="color:#cc3333">失效</span></div>
+    <div class="hp-bar"><div class="hp-f" id="cryo-bar" style="width:10%;background:#cc3333;"></div></div>
+  </div>
+</div>
+
+<div id="dialogue-box">
+  <div id="dlg-speaker">SYSTEM</div>
+  <div id="dlg-text"></div>
+  <div id="dlg-continue">▸ 按 [空白鍵] 繼續</div>
+</div>
+
+<div id="screen-alert">
+  <div id="alert-title">ALERT</div>
+  <div id="alert-body"></div>
+</div>
+
+<div id="toast"></div>
+<div id="flash"></div>
+
+
+<div id="bottom-bar">
+  <span><span class="key">W A S D</span> <span class="klbl">移動</span></span>
+  <span><span class="key">滑鼠</span> <span class="klbl">視角</span></span>
+  <span><span class="key">E</span> <span class="klbl">互動</span></span>
+  <span><span class="key">SHIFT</span> <span class="klbl">加速</span></span>
+  <span><span class="key">TAB</span> <span class="klbl">任務</span></span>
+  <span><span class="key">空白鍵</span> <span class="klbl">繼續對話</span></span>
+  <span id="mute-btn" onclick="toggleMute()">♪ ON</span>
+</div>
+
+</div><!-- /hud -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ════════════════════════════════
+//  TUTORIAL SYSTEM
+// ════════════════════════════════
+const TUTORIAL_STEPS = [
+  {
+    tag:'歡迎來到量子實驗室',
+    title:'你是今晚的值班工程師',
+    body:'凌晨 3:07，系統警報響起。\n\n你面前是一座真實的離子阱量子電腦實驗室。這裡的每一台機器都正在運作，每一個讀數都有意義。\n\n你的任務：找出 QPU 溫度異常的原因，在離子脫陷之前解決問題。',
+    visual:'',keys:[]
+  },
+  {
+    tag:'移動方式',
+    title:'用 WASD 在實驗室裡移動',
+    body:'你用第一人稱視角在實驗室裡行走。\n\n滑鼠控制你看的方向，WASD 控制移動。按住 SHIFT 可以小跑。',
+    visual:'',
+    keys:[
+      {k:'W',lbl:'前進'},{k:'A',lbl:'左移'},{k:'S',lbl:'後退'},{k:'D',lbl:'右移'},
+      {k:'SHIFT',lbl:'加速'},{k:'滑鼠',lbl:'轉動視角'}
+    ]
+  },
+  {
+    tag:'互動方式',
+    title:'走近設備，按 [E] 查看',
+    body:'實驗室裡有五個可互動的設備站點：\n\n・主控台 — 查看警報日誌、執行指令\n・光學平台 — 雷射系統控制\n・離子阱 QPU — 量子電腦核心\n・Readout 系統 — 量子態讀出\n\n走到設備旁邊（約 2~3 公尺），畫面下方會出現互動提示，按 [E] 進入。',
+    visual:'💡 左側面板隨時顯示你的當前任務目標',
+    keys:[{k:'E',lbl:'互動/查看'},{k:'TAB',lbl:'任務總覽'},{k:'空白鍵',lbl:'跳過對話'}]
+  },
+  {
+    tag:'量子電腦基礎',
+    title:'你看到的是什麼？',
+    body:'房間中央那個高達 4 公尺的金色圓柱形裝置，就是離子阱量子電腦。\n\n它的工作原理：用雷射把帶電的鈣原子（離子）懸浮在電磁場中，再用另一道雷射對它們做量子運算。整個系統必須冷卻到接近絕對零度（0.015 克耳文 = -273.135°C）才能運作。\n\n現在它的溫度已經飆升到 89mK，這是非常危險的狀態。',
+    visual:'正常溫度：15.2 mK\n目前溫度：89.3 mK ↑（警戒值：100 mK）\n若超過 100mK → 離子脫陷 → 實驗數據歸零',
+    keys:[]
+  },
+  {
+    tag:'準備開始',
+    title:'前往主控台，查看警報日誌',
+    body:'教學完成。現在你知道了基本操作。\n\n你的第一個任務是走到左前方的主控台，按 [E] 查看警報日誌，找出溫度異常的原因。\n\n左側面板底部隨時顯示你的目標和與目標的距離。\n\n— 祝你好運，工程師。',
+    visual:'',keys:[]
+  }
+];
+let tutIdx = 0;
+function renderTut() {
+  const s = TUTORIAL_STEPS[tutIdx];
+  const dots = document.getElementById('tut-dots');
+  dots.innerHTML = TUTORIAL_STEPS.map((_,i)=>
+    `<div class="tsd ${i===tutIdx?'active':i<tutIdx?'done':''}"></div>`).join('');
+  document.getElementById('tut-tag').textContent = s.tag;
+  document.getElementById('tut-title').textContent = s.title;
+  document.getElementById('tut-body').style.whiteSpace = 'pre-line';
+  document.getElementById('tut-body').textContent = s.body;
+  const vis = document.getElementById('tut-visual');
+  vis.style.display = s.visual ? 'block' : 'none';
+  vis.style.whiteSpace = 'pre-line';
+  vis.textContent = s.visual;
+  const kr = document.getElementById('tut-keys');
+  kr.style.display = s.keys.length ? 'flex' : 'none';
+  kr.innerHTML = s.keys.map(k=>`<div class="kbig">${k.k}<span>${k.lbl}</span></div>`).join('');
+  const btn = document.getElementById('tut-next-btn');
+  btn.textContent = tutIdx >= TUTORIAL_STEPS.length-1 ? '開始遊戲 ▶' : '繼續 →';
+}
+function tutNext() {
+  tutIdx++;
+  if (tutIdx >= TUTORIAL_STEPS.length) {
+    document.getElementById('tutorial').style.display = 'none';
+    document.getElementById('tutorial').style.pointerEvents = 'none';
+    showOpening();
+  } else { renderTut(); }
+}
+function tutSkip() {
+  document.getElementById('tutorial').style.display = 'none';
+  document.getElementById('tutorial').style.pointerEvents = 'none';
+  showOpening();
+}
+
+// ════════════════════════════════
+//  DIALOGUE / NARRATIVE
+// ════════════════════════════════
+let dlgQueue = [], dlgPlaying = false, dlgOnDone = null;
+let typeTimer = null, currentDlgIdx = 0;
+
+function showDialogue(lines, onDone) {
+  dlgQueue = lines; dlgOnDone = onDone; currentDlgIdx = 0;
+  dlgPlaying = true;
+  document.getElementById('dialogue-box').style.display = 'block';
+  playDlgLine();
+}
+
+function playDlgLine() {
+  if (currentDlgIdx >= dlgQueue.length) {
+    endDialogue(); return;
+  }
+  const line = dlgQueue[currentDlgIdx];
+  const spk = document.getElementById('dlg-speaker');
+  const txt = document.getElementById('dlg-text');
+  const cont = document.getElementById('dlg-continue');
+  spk.textContent = line.who || 'SYSTEM';
+  spk.style.color = line.color || '#00cc88';
+  txt.textContent = '';
+  cont.style.display = 'none';
+  if (typeTimer) clearInterval(typeTimer);
+  let ci = 0;
+  const msg = line.msg;
+  // SLOW typewriter: 38ms per char
+  typeTimer = setInterval(() => {
+    txt.textContent += msg[ci++];
+    if (ci >= msg.length) {
+      clearInterval(typeTimer); typeTimer = null;
+      cont.style.display = 'block';
+    }
+  }, 38);
+}
+
+function advanceDialogue() {
+  if (!dlgPlaying) return;
+  // If still typing, finish instantly
+  if (typeTimer) {
+    clearInterval(typeTimer); typeTimer = null;
+    const line = dlgQueue[currentDlgIdx];
+    document.getElementById('dlg-text').textContent = line.msg;
+    document.getElementById('dlg-continue').style.display = 'block';
+    return;
+  }
+  currentDlgIdx++;
+  if (currentDlgIdx >= dlgQueue.length) { endDialogue(); return; }
+  playDlgLine();
+}
+
+function endDialogue() {
+  dlgPlaying = false;
+  document.getElementById('dialogue-box').style.display = 'none';
+  if (dlgOnDone) dlgOnDone();
+}
+
+function showAlert(type, title, body, dur=5000) {
+  const colors = {error:'#cc3333',warning:'#ffa040',success:'#00cc88',info:'#5aacff'};
+  const el = document.getElementById('screen-alert');
+  el.style.borderColor = colors[type]||'#5aacff';
+  document.getElementById('alert-title').style.color = colors[type]||'#5aacff';
+  document.getElementById('alert-title').textContent = title;
+  document.getElementById('alert-body').textContent = body;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.style.display='none', dur);
+}
+
+function showOpening() {
+  setTimeout(()=>{
+    showAlert('error','⚠ QPU TEMPERATURE CRITICAL',
+      '目前溫度：89.3 mK（正常值：15.2 mK）。若超過 100mK，離子將脫陷，所有實驗數據歸零。請立即處理。', 7000);
+    setTimeout(()=>{
+      showDialogue([
+        {who:'系統警報', msg:'⚠ QPU 溫度異常 — 89.3 mK，且持續上升。', color:'#cc3333'},
+        {who:'系統', msg:'凌晨 03:04:17 觸發警報，原因：冷卻迴路 CH-02 電流驟降至 0A。', color:'#ffa040'},
+        {who:'你', msg:'……溫度一直在漲。再不處理，離子就完了。先去主控台看警報日誌，找原因。', color:'#c8d8e8'},
+      ]);
+    }, 1500);
+  }, 600);
+}
+
+// ════════════════════════════════
+//  MISSION SYSTEM
+// ════════════════════════════════
+const MISSIONS = [
+  {
+    id:'m1', title:'緊急：QPU 溫度異常', badge:'ACTIVE',
+    desc:'凌晨 3:07，離子阱溫度從 15mK 飆升至 89mK。必須在超過 100mK 前找出原因並處理。',
+    steps:[
+      {id:'s1a', text:'前往主控台 — 查看警報日誌', target:'console',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'主控台……找日誌。03:04:17，CH-02 斷路——電流歸零。', color:'#c8d8e8'},
+          {who:'警報日誌', msg:'Still Heater CH-02 異常：控制器韌體當機，持續輸出加熱訊號。原本應保持 0A。', color:'#ffa040'},
+          {who:'你', msg:'韌體當機，一直在加熱……這就是原因。要手動 Override 關掉它。但先確認雷射系統沒受影響。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('error','⚠ 找到問題','Still Heater CH-02 韌體當機，持續加熱。必須手動 Override。先確認光學系統正常。',5000)
+      },
+      {id:'s1b', text:'前往光學平台 — 確認雷射未受影響', target:'laser',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'光學台……397nm 冷卻雷射，還在鎖定。866nm 補泵浦，正常。729nm qubit 雷射，鎖定中。', color:'#c8d8e8'},
+          {who:'雷射控制器', msg:'所有雷射鎖定正常。功率與波長穩定。AOM 運作中。', color:'#5aacff'},
+          {who:'你', msg:'光學系統沒事。問題只在冷卻端。現在去看 QPU 當前的溫度分布。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('info','✓ 光學系統正常','所有雷射鎖定中。問題確認在冷卻系統，非光學端。',4000)
+      },
+      {id:'s1c', text:'走近離子阱 — 查看冷卻層溫度', target:'qpu',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'看一下各層溫度……50K Stage 正常、4K Stage 正常——', color:'#c8d8e8'},
+          {who:'QPU 感測器', msg:'100mK Stage：異常偏高。Mixing Chamber：89.3 mK 且仍在上升。', color:'#cc3333'},
+          {who:'你', msg:'問題就在 100mK Stage，Still Heater 持續加熱讓它沒辦法降下來。要立刻去主控台執行手動 Override。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>{
+          showAlert('warning','⚠ 問題確認','Still Heater 控制器卡死，Mixing Chamber 正在升溫。需立即手動 Override。',5000);
+          document.getElementById('cryo-bar').style.width='8%';
+        }
+      },
+    ]
+  },
+  {
+    id:'m2', title:'手動重啟冷卻序列', badge:'',
+    desc:'已確認 Still Heater 異常。必須手動 Override 關閉加熱器，然後確認離子是否存活。',
+    steps:[
+      {id:'s2a', text:'回到主控台 — 執行 Still Heater Override', target:'console',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'找 Override 指令……CH-02 Still Heater，強制電流歸零。這個操作會繞過安全鎖定。', color:'#c8d8e8'},
+          {who:'主控台', msg:'警告：手動 Override 將停用 Still Heater 自動保護。確認執行？', color:'#ffa040'},
+          {who:'你', msg:'確認。現在沒時間了，執行。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>{
+          showAlert('success','✓ Still Heater 已關閉','CH-02 電流歸零。冷卻迴路壓差恢復。預計 8 分鐘後 Mixing Chamber 回到 15mK。',5500);
+          // Update temp display slowly
+          let t = 89;
+          const iv = setInterval(()=>{
+            t = Math.max(15, t - 1.2);
+            document.getElementById('temp-val').textContent = t.toFixed(1)+' mK'+(t>20?' ↓':'');
+            if(t<=15) { clearInterval(iv); document.getElementById('temp-val').style.color='#00cc88'; }
+          }, 800);
+          document.getElementById('cryo-bar').style.background='#00cc88';
+          setTimeout(()=>{ document.getElementById('cryo-bar').style.width='80%'; },2000);
+        }
+      },
+      {id:'s2b', text:'前往 Readout — 確認離子是否存活', target:'readout',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'最重要的問題——兩個鈣離子還在陷阱裡嗎？要查 PMT 的螢光訊號。', color:'#c8d8e8'},
+          {who:'Readout 系統', msg:'偵測 397nm 螢光訊號中……掃描……', color:'#5aacff'},
+          {who:'Readout 系統', msg:'偵測到兩個螢光峰值。兩個 ⁴⁰Ca⁺ 離子確認存活。但熱運動偏高（n̄ ≈ 120），需要重新 Doppler 冷卻。', color:'#00cc88'},
+          {who:'你', msg:'兩個都還在！……終於。熱運動高是正常的，只要溫度降下來就可以重新冷卻。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('success','✓ 兩個離子存活','⁴⁰Ca⁺ × 2 螢光訊號確認。離子仍在陷阱中。熱運動偏高，需重新 Doppler 冷卻後才能繼續實驗。',5000)
+      },
+    ]
+  },
+  {
+    id:'m3', title:'重新校準並執行 Bell State 纏結', badge:'',
+    desc:'危機解除，QPU 溫度回到 15mK。現在重新校準系統，完成今晚原本排程的實驗——製造兩離子 Bell State 最大纏結態。',
+    steps:[
+      {id:'s3a', text:'在光學平台 — 重新鎖定 729nm qubit 雷射', target:'laser',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'好，溫度回來了。重新鎖 729nm——這是最敏感的雷射，用來操作量子態。', color:'#c8d8e8'},
+          {who:'雷射控制器', msg:'729nm AOM 掃頻中……搜尋 ⁴⁰Ca⁺ S½ → D⁵₂ 躍遷……鎖定！', color:'#00cc88'},
+          {who:'雷射控制器', msg:'Rabi 頻率：12.4 kHz。π pulse 時間：40.3 μs。可以開始執行閘操作。', color:'#5aacff'},
+          {who:'你', msg:'很好。現在可以去 QPU 那邊執行 Bell State 序列了。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('success','✓ 729nm 雷射重新鎖定','Rabi 頻率 12.4kHz，π pulse 40.3μs。系統就緒，可執行量子閘操作。',5000)
+      },
+      {id:'s3b', text:'在離子阱 — 執行 Mølmer–Sørensen 纏結閘', target:'qpu',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'載入 Bell State 序列：先對 ion1 執行 Hadamard 閘，讓它進入疊加態……', color:'#c8d8e8'},
+          {who:'QPU 控制器', msg:'H(ion1) → 疊加態 (|0⟩+|1⟩)/√2 完成。執行 Mølmer–Sørensen 纏結閘中……', color:'#5aacff'},
+          {who:'QPU 控制器', msg:'量測結果：|00⟩ 49.3% / |11⟩ 49.4% / |01⟩ 0.7% / |10⟩ 0.6%', color:'#00cc88'},
+          {who:'你', msg:'……98.7% 保真度。|00⟩ 和 |11⟩ 各佔一半，|01⟩ 和 |10⟩ 幾乎是零。這是完美的 Bell State。', color:'#00cc88'},
+          {who:'你', msg:'凌晨 4:23。從緊急事故到成功纏結，花了一個多小時。今晚的數據……值得發論文。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>{
+          showAlert('success','🎉 Bell State |Φ+⟩ 達成！','纏結保真度：98.7%。|Φ+⟩ = (|00⟩ + |11⟩)/√2 確認。今晚實驗完成。',7000);
+          document.getElementById('mode-tag').textContent='EXPERIMENT COMPLETE';
+          document.getElementById('mode-tag').style.color='#00cc88';
+          document.getElementById('mode-tag').style.borderColor='#005530';
+        }
+      },
+    ]
+  }
+];
+
+const MS = { mIdx:0, sIdx:0, done:[] };
+
+function getCurStep(){ const m=MISSIONS[MS.mIdx]; return m?m.steps[MS.sIdx]:null; }
+
+function completeStep(){
+  const m=MISSIONS[MS.mIdx]; const s=m.steps[MS.sIdx];
+  showToast('✓ '+s.id.toUpperCase()+' — '+stepLabel(s));
+  screenFlash(); playComplete();
+  if(s.onComplete) s.onComplete();
+  MS.sIdx++;
+  if(MS.sIdx>=m.steps.length){
+    MS.done.push(m.id); MS.mIdx++; MS.sIdx=0;
+    if(MS.mIdx<MISSIONS.length){
+      setTimeout(()=>{
+        showToast('▶ 新任務：'+MISSIONS[MS.mIdx].title);
+        showDialogue([
+          {who:'任務更新', msg:MISSIONS[MS.mIdx].desc, color:'#ffa040'},
+        ]);
+      },1800);
+    }
+  }
+  updateMHUD(); renderMPanel();
+}
+
+function stepLabel(s){ return s.text.split('—')[1]?.trim()||s.text; }
+
+function updateMHUD(){
+  const s=getCurStep();
+  document.getElementById('cur-step').textContent = s?s.text:'所有任務已完成！';
+}
+
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  el.style.display='block';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>{el.classList.remove('show');el.style.display='none';},3000);
+}
+
+function screenFlash(){
+  const el=document.getElementById('flash');
+  el.classList.remove('fire'); void el.offsetWidth; el.classList.add('fire');
+}
+
+let mpOpen=false;
+function toggleMission(){
+  mpOpen=!mpOpen;
+  document.getElementById('mission-panel').style.display=mpOpen?'block':'none';
+  if(mpOpen) renderMPanel();
+}
+function renderMPanel(){
+  const c=document.getElementById('mp-content'); c.innerHTML='';
+  MISSIONS.forEach((m,mi)=>{
+    const done=MS.done.includes(m.id);
+    const active=mi===MS.mIdx;
+    const div=document.createElement('div');
+    div.className='mp-m'+(done?' done':active?' active':'');
+    const badge=done?'done':active?'active':'locked';
+    const badgeTxt=done?'COMPLETED':active?'ACTIVE':'LOCKED';
+    let stHtml='';
+    m.steps.forEach((s,si)=>{
+      const sd=done||(active&&si<MS.sIdx);
+      const sa=active&&si===MS.sIdx;
+      stHtml+=`<div class="mp-s ${sd?'done':sa?'active':''}">
+        <span class="mp-sd"></span>${s.text}</div>`;
+    });
+    div.innerHTML=`<div class="mp-mt"><span class="mp-badge ${badge}">${badgeTxt}</span>${m.title}</div>
+      <div class="mp-md">${m.desc}</div>${stHtml}`;
+    c.appendChild(div);
+  });
+}
+
+// ════════════════════════════════
+//  DEVICE PANELS
+// ════════════════════════════════
+const DP = {
+  console:{
+    name:'MAIN CONSOLE',
+    tabs:['警報日誌','系統狀態','實驗佇列'],
+    content:[
+      `<div class="ip-warn">⚠ Still Heater CH-02 異常<br>控制器韌體當機，持續輸出加熱訊號<br>時間：03:04:17</div>
+       <div class="ipr"><span class="ipl">觸發時間</span><span class="ipv-e">03:04:17</span></div>
+       <div class="ipr"><span class="ipl">CH-02 電流</span><span class="ipv-e">0A（斷路）</span></div>
+       <div class="ipr"><span class="ipl">實驗排程</span><span class="ipv2">已暫停</span></div>
+       <div class="ip-div"></div>
+       <div style="font-size:9px;color:#2a5070;line-height:1.7;">
+         03:04:17 CH-02 電流驟降至 0A<br>
+         03:04:18 Still Heater 失控<br>
+         03:04:22 QPU 溫度上升<br>
+         03:07:01 系統警報觸發
+       </div>
+       <button class="ip-btn g" onclick="handleAction('console')">▶ 查看並確認日誌</button>`,
+      `<div class="ipr"><span class="ipl">系統狀態</span><span class="ipv-e">⚠ 警報中</span></div>
+       <div class="ipr"><span class="ipl">時鐘同步</span><span class="ipv">LOCKED</span></div>
+       <div class="ipr"><span class="ipl">控制通道</span><span class="ipv2">CH-00~03</span></div>
+       <div class="ipr"><span class="ipl">CH-02</span><span class="ipv-e">異常</span></div>
+       <button class="ip-btn g" onclick="handleAction('console')">執行 Still Heater Override</button>`,
+      `<div class="ipr"><span class="ipl">排程數量</span><span class="ipv2">0</span></div>
+       <div class="ipr"><span class="ipl">下一個實驗</span><span class="ipv2">Bell State (暫停)</span></div>
+       <div class="ip-info">實驗排程已暫停，等待溫度恢復正常後自動重啟。</div>`
+    ]
+  },
+  laser:{
+    name:'OPTICAL / LASER',
+    tabs:['雷射狀態','光路路徑','功率讀數'],
+    content:[
+      `<div class="ip-info">所有雷射鎖定正常，未受冷卻系統影響。</div>
+       <div class="ipr"><span class="ipl">397nm 冷卻</span><span class="ipv">LOCKED</span></div>
+       <div class="ipr"><span class="ipl">866nm 補泵浦</span><span class="ipv">LOCKED</span></div>
+       <div class="ipr"><span class="ipl">729nm Qubit</span><span class="ipv">LOCKED</span></div>
+       <div class="ipr"><span class="ipl">AOM 狀態</span><span class="ipv">ACTIVE</span></div>
+       <div class="ip-div"></div>
+       <button class="ip-btn g" onclick="handleAction('laser')">確認雷射系統正常</button>`,
+      `<div class="ipr"><span class="ipl">PBS</span><span class="ipv">OK</span></div>
+       <div class="ipr"><span class="ipl">HWP</span><span class="ipv">OK</span></div>
+       <div class="ipr"><span class="ipl">QWP</span><span class="ipv">OK</span></div>
+       <div class="ipr"><span class="ipl">鏡片對準</span><span class="ipv">ALIGNED</span></div>
+       <div class="ipr"><span class="ipl">QPU 輸入</span><span class="ipv">ALIGNED</span></div>
+       <button class="ip-btn" onclick="handleAction('laser')">重新鎖定 729nm</button>`,
+      `<div class="sig-bar"><span class="sig-lbl">397nm 冷卻</span><div class="sig-trk"><div class="sig-fill" style="width:84%;background:#5aacff"></div></div><span class="sig-val">4.2 mW</span></div>
+       <div class="sig-bar"><span class="sig-lbl">866nm 補泵浦</span><div class="sig-trk"><div class="sig-fill" style="width:62%;background:#5aacff"></div></div><span class="sig-val">2.1 mW</span></div>
+       <div class="sig-bar"><span class="sig-lbl">729nm Qubit</span><div class="sig-trk"><div class="sig-fill" style="width:72%;background:#00cc88"></div></div><span class="sig-val">1.8 mW</span></div>
+       <button class="ip-btn g" onclick="handleAction('laser')">重新鎖定 729nm</button>`
+    ]
+  },
+  qpu:{
+    name:'QPU ENCLOSURE',
+    tabs:['冷卻狀態','離子鏈','閘操作'],
+    content:[
+      `<div class="ip-warn">Mixing Chamber 溫度異常偏高，Still Heater 失控。</div>
+       <div class="ipr"><span class="ipl">50K Stage</span><span class="ipv">正常 50.1K</span></div>
+       <div class="ipr"><span class="ipl">4K Stage</span><span class="ipv">正常 4.02K</span></div>
+       <div class="ipr"><span class="ipl">100mK Stage</span><span class="ipv-e">⚠ 偏高</span></div>
+       <div class="ipr"><span class="ipl">Mixing Chamber</span><span class="ipv-e" id="mc-temp">89.3 mK ↑</span></div>
+       <div class="ipr"><span class="ipl">Still Heater</span><span class="ipv-e">⚠ 失控</span></div>
+       <button class="ip-btn g" onclick="handleAction('qpu')">查看冷卻層狀態</button>`,
+      `<div class="ipr"><span class="ipl">Ion 1 狀態</span><span class="ipv">|0⟩</span></div>
+       <div class="ipr"><span class="ipl">Ion 2 狀態</span><span class="ipv">|0⟩</span></div>
+       <div class="ipr"><span class="ipl">離子間距</span><span class="ipv2">5.2 μm</span></div>
+       <div class="ipr"><span class="ipl">熱運動 n̄</span><span class="ipv-e">≈ 120（偏高）</span></div>
+       <div class="ip-info">熱運動偏高因為溫度異常。待冷卻後重新 Doppler 冷卻即可恢復。</div>
+       <button class="ip-btn g" onclick="handleAction('qpu')">確認離子存活</button>`,
+      `<div class="ipr"><span class="ipl">Rabi 頻率</span><span class="ipv">12.4 kHz</span></div>
+       <div class="ipr"><span class="ipl">π pulse 時間</span><span class="ipv2">40.3 μs</span></div>
+       <div class="ipr"><span class="ipl">閘保真度</span><span class="ipv">99.1%</span></div>
+       <div class="ip-div"></div>
+       <div style="font-size:10px;color:#5aacff;padding:4px 0;letter-spacing:1px;">
+         Bell State 序列：<br>
+         Ion1: H → (|0⟩+|1⟩)/√2<br>
+         MS Gate → |Φ+⟩
+       </div>
+       <button class="ip-btn g" onclick="handleAction('qpu')">執行 Bell State 序列</button>`
+    ]
+  },
+  readout:{
+    name:'READOUT SYSTEM',
+    tabs:['螢光讀出','直方圖','訊號'],
+    content:[
+      `<div class="ipr"><span class="ipl">PMT 狀態</span><span class="ipv">ACTIVE</span></div>
+       <div class="ipr"><span class="ipl">積分視窗</span><span class="ipv2">120 ns</span></div>
+       <div class="ipr"><span class="ipl">採樣率</span><span class="ipv2">1.25 GS/s</span></div>
+       <div class="ipr"><span class="ipl">保真度</span><span class="ipv">98.7%</span></div>
+       <div class="ip-info">偵測到兩個 ⁴⁰Ca⁺ 螢光訊號，離子存活確認。</div>
+       <button class="ip-btn g" onclick="handleAction('readout')">確認離子螢光訊號</button>`,
+      `<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
+         <div style="background:#001a0a;border:1px solid #0a3020;padding:5px;text-align:center;">
+           <div style="font-size:9px;color:#2a5a3a;">|00⟩</div>
+           <div style="background:#00cc88;height:3px;margin:3px 0;width:98%;"></div>
+           <div style="font-size:10px;color:#00cc88;">49.3%</div>
+         </div>
+         <div style="background:#001020;border:1px solid #0a2040;padding:5px;text-align:center;">
+           <div style="font-size:9px;color:#2a4060;">|01⟩</div>
+           <div style="background:#1a2d45;height:3px;margin:3px 0;width:2%;"></div>
+           <div style="font-size:10px;color:#3a5070;">0.7%</div>
+         </div>
+         <div style="background:#001020;border:1px solid #0a2040;padding:5px;text-align:center;">
+           <div style="font-size:9px;color:#2a4060;">|10⟩</div>
+           <div style="background:#1a2d45;height:3px;margin:3px 0;width:1%;"></div>
+           <div style="font-size:10px;color:#3a5070;">0.6%</div>
+         </div>
+         <div style="background:#001a0a;border:1px solid #0a3020;padding:5px;text-align:center;">
+           <div style="font-size:9px;color:#2a5a3a;">|11⟩</div>
+           <div style="background:#5aacff;height:3px;margin:3px 0;width:98%;"></div>
+           <div style="font-size:10px;color:#5aacff;">49.4%</div>
+         </div>
+       </div>
+       <div style="font-size:8px;color:#1a4030;text-align:center;">Bell state |Φ+⟩ 確認</div>`,
+      `<div style="height:36px;background:#000810;border:1px solid #0f1e30;margin-bottom:6px;overflow:hidden;">
+         <svg width="100%" height="36" viewBox="0 0 200 36" preserveAspectRatio="none">
+           <polyline points="0,18 10,9 20,27 30,13 40,23 50,6 60,30 70,16 80,24 90,10 100,26 110,12 120,20 130,8 140,28 150,18 160,10 170,26 180,16 190,22 200,18" fill="none" stroke="#00cc88" stroke-width="1" opacity="0.7"/>
+         </svg>
+       </div>
+       <div class="ipr"><span class="ipl">SNR</span><span class="ipv">24.3 dB</span></div>
+       <div class="ipr"><span class="ipl">峰值頻率</span><span class="ipv2">1.25 GHz</span></div>`
+    ]
+  }
+};
+
+let curDevice=null, curTab=0;
+function openInfo(id){
+  const d=DP[id]; if(!d) return;
+  curDevice=id; curTab=0;
+  document.getElementById('ip-title').textContent=d.name;
+  renderTabs(); renderContent();
+  document.getElementById('info-panel').style.display='block';
+  document.getElementById('minimap').style.display='none';
+  document.getElementById('health-panel').style.display='none';
+  const s=getCurStep();
+  if(s&&s.target===id&&s.onEnter&&!dlgPlaying) s.onEnter();
+}
+function renderTabs(){
+  const d=DP[curDevice];
+  document.getElementById('ip-tabs').innerHTML=
+    d.tabs.map((t,i)=>`<span class="ip-tab ${i===curTab?'active':''}" onclick="switchTab(${i})">${t}</span>`).join('');
+}
+function renderContent(){
+  document.getElementById('ip-content').innerHTML=DP[curDevice].content[curTab];
+}
+function switchTab(i){ curTab=i; renderTabs(); renderContent(); }
+function closeInfo(){
+  document.getElementById('info-panel').style.display='none';
+  document.getElementById('minimap').style.display='block';
+  document.getElementById('health-panel').style.display='block';
+  curDevice=null;
+}
+function handleAction(id){
+  playInteract();
+  const s=getCurStep();
+  if(s&&s.target===id) completeStep();
+  else showToast('系統已回應。請繼續當前任務。');
+}
+
+// ════════════════════════════════
+//  AUDIO
+// ════════════════════════════════
+let actx=null, masterG=null, audioOn=false;
+function initAudio(){
+  if(audioOn) return; audioOn=true;
+  actx=new(window.AudioContext||window.webkitAudioContext)();
+  masterG=actx.createGain();
+  masterG.gain.setValueAtTime(0,actx.currentTime);
+  masterG.gain.linearRampToValueAtTime(0.16,actx.currentTime+3);
+  masterG.connect(actx.destination);
+  // Drone layers
+  [36.7,36.85,73.5].forEach((f,i)=>{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.type=i<2?'sawtooth':'sine'; o.frequency.value=f;
+    g.gain.value=i<2?0.38:0.22;
+    const lp=actx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value=160+i*35; lp.Q.value=1.1;
+    o.connect(g); g.connect(lp); lp.connect(masterG); o.start();
+  });
+  // LFO breath
+  const lfo=actx.createOscillator(), lg=actx.createGain();
+  lfo.frequency.value=0.1; lg.gain.value=0.055;
+  lfo.connect(lg); lg.connect(masterG.gain); lfo.start();
+  // Noise
+  const buf=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.25;
+  const ns=actx.createBufferSource(); ns.buffer=buf; ns.loop=true;
+  const nbp=actx.createBiquadFilter(); nbp.type='bandpass'; nbp.frequency.value=900; nbp.Q.value=0.35;
+  const ng=actx.createGain(); ng.gain.value=0.01;
+  ns.connect(nbp); nbp.connect(ng); ng.connect(masterG); ns.start();
+  schedBlip(); schedPing();
+}
+function schedBlip(){ if(!actx) return; setTimeout(()=>{ playBlip(); schedBlip(); }, 4000+Math.random()*9000); }
+function schedPing(){ if(!actx) return; setTimeout(()=>{ playPing(); schedPing(); }, 8000+Math.random()*16000); }
+function playBlip(){
+  if(!actx) return; const n=actx.currentTime;
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.frequency.value=[220,330,440,550,660,880][Math.floor(Math.random()*6)];
+  o.type='sine'; g.gain.setValueAtTime(0,n);
+  g.gain.linearRampToValueAtTime(0.055,n+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001,n+0.28);
+  o.connect(g); g.connect(masterG); o.start(n); o.stop(n+0.32);
+}
+function playPing(){
+  if(!actx) return; const n=actx.currentTime;
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.frequency.setValueAtTime(1100,n); o.frequency.exponentialRampToValueAtTime(550,n+0.7);
+  o.type='sine'; g.gain.setValueAtTime(0,n);
+  g.gain.linearRampToValueAtTime(0.038,n+0.006);
+  g.gain.exponentialRampToValueAtTime(0.001,n+0.85);
+  o.connect(g); g.connect(masterG); o.start(n); o.stop(n+0.95);
+}
+function playInteract(){
+  if(!actx) return; const n=actx.currentTime;
+  [440,660].forEach((f,i)=>{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.frequency.value=f; o.type='square';
+    g.gain.setValueAtTime(0,n+i*0.07);
+    g.gain.linearRampToValueAtTime(0.06,n+i*0.07+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,n+i*0.07+0.13);
+    o.connect(g); g.connect(masterG); o.start(n+i*0.07); o.stop(n+i*0.07+0.18);
+  });
+}
+function playComplete(){
+  if(!actx) return; const n=actx.currentTime;
+  [523,659,880,1046].forEach((f,i)=>{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.frequency.value=f; o.type=i<3?'sine':'triangle';
+    g.gain.setValueAtTime(0,n+i*0.11);
+    g.gain.linearRampToValueAtTime(0.09,n+i*0.11+0.02);
+    g.gain.exponentialRampToValueAtTime(0.001,n+i*0.11+0.45);
+    o.connect(g); g.connect(masterG); o.start(n+i*0.11); o.stop(n+i*0.11+0.55);
+  });
+}
+function toggleMute(){
+  if(!actx) return;
+  const btn=document.getElementById('mute-btn');
+  if(masterG.gain.value>0.01){ masterG.gain.linearRampToValueAtTime(0,actx.currentTime+0.5); btn.textContent='♪ OFF'; btn.style.color='#2a4a6a'; }
+  else{ masterG.gain.linearRampToValueAtTime(0.16,actx.currentTime+0.5); btn.textContent='♪ ON'; btn.style.color='#00cc88'; }
+}
+
+// ════════════════════════════════
+//  THREE.JS 3D SCENE
+// ════════════════════════════════
+let scene,camera,renderer,clock;
+let keys={},locked=false;
+let pPos=new THREE.Vector3(0,1.7,9);
+let tYaw=0,tPitch=0,pYaw=0,pPitch=0;
+const SENS=0.0012, SMOOTH=0.13;
+let nearDev=null, rings=[],qpuCore=null,floatP=[];
+
+const DEVS=[
+  {id:'qpu',    label:'ION TRAP QPU',    pos:new THREE.Vector3(0,0,0),    r:2.8},
+  {id:'console',label:'MAIN CONSOLE',    pos:new THREE.Vector3(-6,0,-6),  r:2.5},
+  {id:'laser',  label:'OPTICAL / LASER', pos:new THREE.Vector3(-5,0,5),   r:2.5},
+  {id:'readout',label:'READOUT SYSTEM',  pos:new THREE.Vector3(6,0,-4),   r:2.5},
+];
+
+function startGame(){
+  document.getElementById('entry').style.display='none';
+  renderTut();
+  document.getElementById('tutorial').style.display='flex';
+}
+
+function init(){
+  clock=new THREE.Clock();
+  scene=new THREE.Scene(); scene.background=new THREE.Color(0x020810);
+  scene.fog=new THREE.Fog(0x020810,18,46);
+  camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,0.1,100);
+  camera.position.copy(pPos);
+  renderer=new THREE.WebGLRenderer({canvas:document.getElementById('canvas'),antialias:false});
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  renderer.shadowMap.enabled=false;
+  buildScene(); setupLights(); setupEvents(); animate();
+}
+
+function mkMesh(geo,mp,pos=[0,0,0]){
+  const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({roughness:0.5,metalness:0.3,...mp}));
+  m.position.set(...pos); return m;
+}
+
+function buildScene(){
+  // Floor
+  const fl=mkMesh(new THREE.PlaneGeometry(32,32),{color:0x0c1628,roughness:0.85,metalness:0.3});
+  fl.rotation.x=-Math.PI/2; scene.add(fl);
+  const gr=new THREE.GridHelper(32,32,0x0a1e35,0x0a1e35); gr.position.y=0.01; scene.add(gr);
+  // Ceiling
+  const ce=mkMesh(new THREE.PlaneGeometry(32,32),{color:0x040810,roughness:1});
+  ce.rotation.x=Math.PI/2; ce.position.y=6; scene.add(ce);
+  // Walls
+  const wm=new THREE.MeshStandardMaterial({color:0x0e1830,roughness:0.9,metalness:0.1});
+  [[0,3,-16,0],[0,3,16,Math.PI],[-16,3,0,Math.PI/2],[16,3,0,-Math.PI/2]].forEach(([x,y,z,ry])=>{
+    const w=new THREE.Mesh(new THREE.PlaneGeometry(32,6),wm);
+    w.position.set(x,y,z); w.rotation.y=ry; scene.add(w);
+  });
+  buildQPU();
+  buildConsole(-6,0,-6,Math.PI*0.15);
+  buildLaser(-5,0,5,-Math.PI*0.15);
+  buildReadout(6,0,-4,-Math.PI*0.4);
+  [[-13,0,-6],[-13,0,0],[-13,0,6],[13,0,-6],[13,0,0],[13,0,6]].forEach(([x,y,z])=>buildRack(x,y,z,x<0?Math.PI/2:-Math.PI/2));
+  // Warning ring
+  for(let i=0;i<24;i++){
+    const a=(i/24)*Math.PI*2;
+    const sg=mkMesh(new THREE.PlaneGeometry(0.32,0.45),{color:i%2===0?0x2a1a00:0x100800});
+    sg.rotation.x=-Math.PI/2; sg.rotation.z=a; sg.position.set(Math.cos(a)*3.2,0.015,Math.sin(a)*3.2);
+    scene.add(sg);
+  }
+  // Instanced particles
+  const PC=30,pGeo=new THREE.SphereGeometry(0.022,3,3);
+  const im=new THREE.InstancedMesh(pGeo,new THREE.MeshBasicMaterial({color:0x00cc88}),PC);
+  im.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(PC*3),3);
+  const dm=new THREE.Object3D();
+  const cls=[new THREE.Color(0x00cc88),new THREE.Color(0x5aacff),new THREE.Color(0x334488)];
+  for(let i=0;i<PC;i++){
+    const bx=(Math.random()-0.5)*22,by=Math.random()*3.5+0.5,bz=(Math.random()-0.5)*22;
+    dm.position.set(bx,by,bz); dm.updateMatrix(); im.setMatrixAt(i,dm.matrix);
+    im.setColorAt(i,cls[i%3]);
+    floatP.push({fo:Math.random()*Math.PI*2,fs:0.3+Math.random()*0.5,by,bx,bz});
+  }
+  im.instanceMatrix.needsUpdate=true; im.instanceColor.needsUpdate=true;
+  scene.add(im); window._im=im; window._dm=dm;
+}
+
+function buildQPU(){
+  const g=new THREE.Group();
+  g.add(mkMesh(new THREE.CylinderGeometry(1.3,1.5,0.18,20),{color:0x0d1520,metalness:0.85,roughness:0.25},[0,0.09,0]));
+  const shell=new THREE.Mesh(new THREE.CylinderGeometry(1.05,0.95,3.8,24,1,true),
+    new THREE.MeshStandardMaterial({color:0x1a3050,metalness:0.5,roughness:0.1,transparent:true,opacity:0.15,side:THREE.DoubleSide}));
+  shell.position.y=2.1; g.add(shell);
+  [0.9,1.4,1.9,2.4,2.85,3.3].forEach((h,i)=>{
+    const r=[0.88,0.74,0.62,0.52,0.43,0.36][i];
+    const rng=mkMesh(new THREE.CylinderGeometry(r,r+0.04,0.06,20),
+      {color:0xc8a020,metalness:0.95,roughness:0.12,emissive:0xc8a020,emissiveIntensity:0.08},[0,h,0]);
+    g.add(rng); rings.push(rng);
+    for(let j=0;j<4;j++){
+      const a=(j/4)*Math.PI*2;
+      g.add(mkMesh(new THREE.CylinderGeometry(0.012,0.012,h-0.2,4),{color:0x909080,metalness:0.9,roughness:0.2},
+        [Math.cos(a)*r*0.72,h/2+0.1,Math.sin(a)*r*0.72]));
+    }
+  });
+  g.add(mkMesh(new THREE.CylinderGeometry(0.3,0.3,3.7,16),{color:0x182840,metalness:0.92,roughness:0.18},[0,2.1,0]));
+  g.add(mkMesh(new THREE.CylinderGeometry(1.1,1.1,0.1,24),{color:0x283848,metalness:0.88,roughness:0.2},[0,4.0,0]));
+  g.add(mkMesh(new THREE.CylinderGeometry(1.1,1.1,0.1,24),{color:0x283848,metalness:0.88,roughness:0.2},[0,0.2,0]));
+  const toMat=new THREE.MeshStandardMaterial({color:0xd4aa22,metalness:0.98,roughness:0.08,emissive:0xaa8810,emissiveIntensity:0.3});
+  const ot=new THREE.Mesh(new THREE.TorusGeometry(0.28,0.04,12,32),toMat); ot.position.y=0.55; g.add(ot); rings.push(ot);
+  const it=new THREE.Mesh(new THREE.TorusGeometry(0.16,0.03,10,24),toMat.clone()); it.position.y=0.55; it.rotation.x=Math.PI/2; g.add(it); rings.push(it);
+  qpuCore=new THREE.Mesh(new THREE.SphereGeometry(0.1,16,16),new THREE.MeshBasicMaterial({color:0x00ffaa}));
+  qpuCore.position.y=0.55; g.add(qpuCore);
+  for(let i=0;i<10;i++){
+    const a=(i/10)*Math.PI*2;
+    const c=mkMesh(new THREE.CylinderGeometry(0.01,0.01,1.8,4),{color:i%2===0?0x005080:0x004430},
+      [Math.cos(a)*0.22,4.8,Math.sin(a)*0.22]);
+    c.rotation.z=Math.sin(a)*0.25; c.rotation.x=Math.cos(a)*0.25; g.add(c);
+  }
+  for(let i=0;i<3;i++){
+    const a=(i/3)*Math.PI*2+Math.PI/6;
+    g.add(mkMesh(new THREE.CylinderGeometry(0.04,0.04,0.5,6),{color:0x182840,metalness:0.8},
+      [Math.cos(a)*1.05,0.25,Math.sin(a)*1.05]));
+  }
+  scene.add(g);
+}
+
+function buildConsole(x,y,z,ry){
+  const g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=ry;
+  g.add(mkMesh(new THREE.BoxGeometry(2.2,0.06,1.0),{color:0x0c1828,metalness:0.6,roughness:0.4},[0,0.9,0]));
+  g.add(mkMesh(new THREE.BoxGeometry(0.8,0.06,0.8),{color:0x0c1828,metalness:0.6,roughness:0.4},[0.7,0.9,0.4]));
+  [[-0.7,1.42,-0.35],[0,1.52,-0.38],[0.7,1.42,-0.35]].forEach(([mx,my,mz],i)=>{
+    g.add(mkMesh(new THREE.BoxGeometry(0.7+i*0.1,0.45+i*0.1,0.04),{color:0x040c18,emissive:0x001830,emissiveIntensity:0.6,metalness:0.3},[mx,my,mz]));
+    const gl=new THREE.Mesh(new THREE.PlaneGeometry(0.62+i*0.08,0.38+i*0.08),
+      new THREE.MeshBasicMaterial({color:i===1?0x001a30:0x001028,transparent:true,opacity:0.8}));
+    gl.position.set(mx,my,mz+0.025); g.add(gl);
+  });
+  g.add(mkMesh(new THREE.BoxGeometry(0.8,0.02,0.3),{color:0x0a1420,metalness:0.5},[0,0.94,0.18]));
+  [[-0.9,-0.45],[0.9,-0.45],[-0.9,0.4],[0.9,0.4]].forEach(([lx,lz])=>
+    g.add(mkMesh(new THREE.BoxGeometry(0.05,0.9,0.05),{color:0x0c1828,metalness:0.7},[lx,0.45,lz])));
+  scene.add(g);
+}
+
+function buildLaser(x,y,z,ry){
+  const g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=ry;
+  g.add(mkMesh(new THREE.BoxGeometry(2.0,0.08,1.2),{color:0x0a1828,metalness:0.7,roughness:0.3},[0,0.8,0]));
+  [[-0.7,0.88,-0.3],[-0.3,0.88,-0.3],[0.1,0.88,-0.3],[0.5,0.88,-0.3]].forEach(p=>
+    g.add(mkMesh(new THREE.BoxGeometry(0.1,0.12,0.1),{color:0x1a2840,metalness:0.8},p)));
+  const pts=[new THREE.Vector3(-0.85,0.92,-0.3),new THREE.Vector3(0.65,0.92,-0.3),new THREE.Vector3(0.65,0.92,0.3)];
+  g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xff2200})));
+  [[-0.85,0.4,-0.5],[-0.85,0.4,0.5],[0.85,0.4,-0.5],[0.85,0.4,0.5]].forEach(p=>
+    g.add(mkMesh(new THREE.BoxGeometry(0.05,0.8,0.05),{color:0x0a1828,metalness:0.6},p)));
+  g.add(mkMesh(new THREE.BoxGeometry(0.22,0.14,0.18),{color:0x101c30,metalness:0.7},[-0.88,0.88,-0.3]));
+  scene.add(g);
+}
+
+function buildReadout(x,y,z,ry){
+  const g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=ry;
+  g.add(mkMesh(new THREE.BoxGeometry(0.8,2.4,0.6),{color:0x07101e,metalness:0.75,roughness:0.3},[0,1.2,0]));
+  for(let i=0;i<10;i++){
+    g.add(mkMesh(new THREE.BoxGeometry(0.72,0.16,0.04),{color:0x0d1826,metalness:0.5},[0,0.22+i*0.22,0.32]));
+    const led=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.05,0.01),new THREE.MeshBasicMaterial({color:i<3?0x00cc88:i<6?0x5aacff:0x112233}));
+    led.position.set(0.28,0.22+i*0.22,0.332); g.add(led);
+  }
+  g.add(mkMesh(new THREE.BoxGeometry(0.55,0.28,0.04),{color:0x001218,emissive:0x002020,emissiveIntensity:0.8},[0,2.56,0.32]));
+  scene.add(g);
+}
+
+function buildRack(x,y,z,ry){
+  const g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=ry;
+  g.add(mkMesh(new THREE.BoxGeometry(0.65,2.2,0.55),{color:0x060d18,metalness:0.7,roughness:0.3},[0,1.1,0]));
+  for(let i=0;i<9;i++){
+    g.add(mkMesh(new THREE.BoxGeometry(0.56,0.16,0.02),{color:0x0c1626,metalness:0.5},[0,0.22+i*0.22,0.29]));
+    const led=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.01),new THREE.MeshBasicMaterial({color:[0x00cc88,0x5aacff,0x003316][i%3]}));
+    led.position.set(0.22,0.22+i*0.22,0.302); g.add(led);
+  }
+  scene.add(g);
+}
+
+function setupLights(){
+  scene.add(new THREE.AmbientLight(0x8ab0d0,1.8));
+  [[-8,-8],[-8,0],[-8,8],[0,-8],[0,0],[0,8],[8,-8],[8,0],[8,8]].forEach(([x,z])=>{
+    const l=new THREE.PointLight(0xb0cce0,1.1,20); l.position.set(x,5.8,z); scene.add(l);
+  });
+  const qg=new THREE.PointLight(0x00cc88,4.0,10); qg.position.set(0,1.5,0); scene.add(qg);
+  const qb=new THREE.PointLight(0x0044ff,1.2,5); qb.position.set(0,3.5,0); scene.add(qb);
+  const cl=new THREE.PointLight(0x4488cc,1.2,6); cl.position.set(-6,2,-6); scene.add(cl);
+  const ll=new THREE.PointLight(0x660000,1.2,4); ll.position.set(-5,1.5,5); scene.add(ll);
+  [[-12,2.5,0],[12,2.5,0],[0,2.5,-12],[0,2.5,12]].forEach(([x,y,z])=>{
+    const l=new THREE.PointLight(0x203858,1.5,16); l.position.set(x,y,z); scene.add(l);
+  });
+}
+
+function setupEvents(){
+  document.addEventListener('pointerlockchange',()=>{ locked=document.pointerLockElement===renderer.domElement; });
+  document.addEventListener('mousemove',e=>{
+    if(!locked) return;
+    tYaw-=e.movementX*SENS; tPitch-=e.movementY*SENS;
+    tPitch=Math.max(-0.72,Math.min(0.72,tPitch));
+  });
+  document.addEventListener('keydown',e=>{
+    keys[e.code]=true;
+    if(e.code==='KeyE'&&nearDev&&!curDevice){
+      openInfo(nearDev.id); playInteract();
+      const s=getCurStep();
+      if(s&&s.target===nearDev.id) {} // onEnter handles itself
+    }
+    if(e.code==='Tab'){ e.preventDefault(); toggleMission(); }
+    if(e.code==='Space'){ e.preventDefault(); advanceDialogue(); }
+    if(e.code==='Escape') closeInfo();
+  });
+  document.addEventListener('keyup',e=>{ keys[e.code]=false; });
+  window.addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+  renderer.domElement.addEventListener('click',(e)=>{
+    // Only lock if clicking on the canvas itself, not UI overlays
+    if(!locked && e.target === renderer.domElement){
+      renderer.domElement.requestPointerLock();
+      initAudio();
+    }
+  });
+}
+
+// Clock display
+let gameSeconds = 3*3600+7*60+42;
+setInterval(()=>{
+  gameSeconds++;
+  const h=Math.floor(gameSeconds/3600)%24;
+  const m=Math.floor((gameSeconds%3600)/60);
+  const s=gameSeconds%60;
+  document.getElementById('clock-display').textContent=
+    String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}, 1000);
+
+function drawMinimap(t){
+  const mc=document.getElementById('mm-canvas');
+  const ctx=mc.getContext('2d'),W=120,H=100;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#020810'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#0a1e35'; ctx.lineWidth=0.5;
+  for(let i=0;i<=8;i++){
+    ctx.beginPath(); ctx.moveTo(i*(W/8),0); ctx.lineTo(i*(W/8),H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i*(H/8)); ctx.lineTo(W,i*(H/8)); ctx.stroke();
+  }
+  const s=getCurStep();
+  DEVS.forEach(d=>{
+    const isT=s&&s.target===d.id;
+    const mx=(d.pos.x+16)*(W/32), mz=(d.pos.z+16)*(H/32);
+    ctx.fillStyle=isT?(Math.sin(t*4)>0?'#ffa040':'#442200'):'#1e3a5a';
+    ctx.fillRect(mx-5,mz-4,10,8);
+  });
+  const px=(pPos.x+16)*(W/32),pz=(pPos.z+16)*(H/32);
+  ctx.save(); ctx.translate(px,pz); ctx.rotate(pYaw+Math.PI);
+  ctx.fillStyle='#00cc88';
+  ctx.beginPath(); ctx.moveTo(0,-5); ctx.lineTo(3.5,4); ctx.lineTo(-3.5,4); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(),0.05),t=clock.getElapsedTime();
+  if(locked&&!mpOpen){
+    const sp=(keys['ShiftLeft']||keys['ShiftRight'])?0.13:0.07;
+    const dir=new THREE.Vector3();
+    if(keys['KeyW']) dir.z-=1; if(keys['KeyS']) dir.z+=1;
+    if(keys['KeyA']) dir.x-=1; if(keys['KeyD']) dir.x+=1;
+    dir.normalize().multiplyScalar(sp).applyEuler(new THREE.Euler(0,pYaw,0));
+    pPos.x=Math.max(-13,Math.min(13,pPos.x+dir.x));
+    pPos.z=Math.max(-13,Math.min(13,pPos.z+dir.z));
+    pPos.y=1.7;
+  }
+  pYaw+=(tYaw-pYaw)*SMOOTH; pPitch+=(tPitch-pPitch)*SMOOTH;
+  camera.position.copy(pPos);
+  camera.rotation.order='YXZ'; camera.rotation.y=pYaw; camera.rotation.x=pPitch;
+
+  // Proximity
+  nearDev=null; let md=Infinity;
+  DEVS.forEach(d=>{
+    const dist=pPos.distanceTo(d.pos.clone().setY(pPos.y));
+    if(dist<d.r&&dist<md){ md=dist; nearDev=d; }
+  });
+  const hint=document.getElementById('interact-hint');
+  if(nearDev&&!curDevice){
+    hint.style.display='block';
+    document.getElementById('ih-name').textContent=nearDev.label;
+    document.getElementById('ih-dist').textContent='距離 '+md.toFixed(1)+' m';
+  } else { hint.style.display='none'; }
+
+  // Mission distance
+  const cs=getCurStep();
+  if(cs){
+    const td=DEVS.find(d=>d.id===cs.target);
+    if(td){ const dd=pPos.distanceTo(td.pos.clone().setY(pPos.y));
+      document.getElementById('mission-dist').textContent='▸ 目標距離 '+dd.toFixed(1)+' m'; }
+  }
+
+  // Animate QPU
+  rings.forEach((r,i)=>{
+    if(i<6) r.position.y+=Math.sin(t*0.6+i*0.5)*0.0003;
+    else if(i===6) r.rotation.y+=0.004;
+    else r.rotation.x+=0.006;
+  });
+  if(qpuCore){ const in_=0.42+Math.sin(t*2.2)*0.12; qpuCore.material.color.setHSL(0.42,1,in_); }
+
+  // Particles
+  if(window._im){ floatP.forEach((p,i)=>{
+    window._dm.position.set(p.bx,p.by+Math.sin(t*p.fs+p.fo)*0.4,p.bz);
+    window._dm.updateMatrix(); window._im.setMatrixAt(i,window._dm.matrix);
+  }); window._im.instanceMatrix.needsUpdate=true; }
+
+  drawMinimap(t);
+  renderer.render(scene,camera);
+}
+
+init();
+</script>
+</body>
+</html>
