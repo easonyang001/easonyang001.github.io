@@ -11,9 +11,13 @@ import { createServer } from "node:http";
 import { readFileSync, existsSync, mkdirSync, writeFileSync, statSync } from "node:fs";
 import { resolve, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import serverlessChromium from "@sparticuz/chromium";
 import { chromium } from "playwright";
 import { getAllRoutePaths } from "./all-routes.mjs";
+
+if (process.env.VERCEL) {
+  console.log("Skipping Playwright prerender on Vercel; using Vite output.");
+  process.exit(0);
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..");
