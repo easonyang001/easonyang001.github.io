@@ -40,7 +40,7 @@ export default function ResearchPage() {
         {groupedAreas.map(({ group, areas }) => (
           <section key={group ?? "ungrouped"} className="space-y-4">
             {group && (
-              <p className="font-mono text-mono-label uppercase tracking-[0.2em] text-text-muted">
+              <p className="font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-text-muted/80">
                 {group}
               </p>
             )}

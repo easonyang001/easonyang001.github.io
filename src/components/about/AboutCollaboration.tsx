@@ -11,7 +11,7 @@ const AUDIENCES = [
 
 export default function AboutCollaboration() {
   return (
-    <section className="section-container border-t border-border">
+    <section id="collaboration" className="section-container border-t border-border scroll-mt-24">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div>
           <p className="section-kicker">Collaboration</p>

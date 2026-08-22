@@ -97,6 +97,34 @@ h4 {
   @apply border-border-strong bg-surface-raised;
 }
 
+.nav-dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.88) rgba(255, 255, 255, 0.08);
+}
+
+.nav-dropdown-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.nav-dropdown-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-dropdown-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  border: 2px solid rgba(15, 23, 42, 0.96);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.nav-dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.nav-dropdown-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 .readout {
   @apply font-mono bg-readout-bg;
   font-variant-numeric: tabular-nums;

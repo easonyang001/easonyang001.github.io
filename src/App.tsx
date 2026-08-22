@@ -18,11 +18,14 @@ const ContactPage = lazy(() => import("./pages/ContactPage.tsx"));
 const EducationPage = lazy(() => import("./pages/education/EducationPage.tsx"));
 const EducationDetailPage = lazy(() => import("./pages/education/EducationDetailPage.tsx"));
 const OpenSourcePage = lazy(() => import("./pages/OpenSourcePage.tsx"));
+const FontLabPage = lazy(() => import("./pages/FontLabPage.tsx"));
 const LabPage = lazy(() => import("./pages/lab/LabPage.tsx"));
 const BlochSpherePage = lazy(() => import("./pages/lab/BlochSpherePage.tsx"));
 const CircuitPage = lazy(() => import("./pages/lab/CircuitPage.tsx"));
 const VQCPage = lazy(() => import("./pages/lab/VQCPage.tsx"));
 const VQEH2Page = lazy(() => import("./pages/lab/VQEH2Page.tsx"));
+const SystemRecoveryPage = lazy(() => import("./pages/lab/SystemRecoveryPage.tsx"));
+const Lab01FirstPersonPage = lazy(() => import("./pages/lab/Lab01FirstPersonPage.tsx"));
 const QuboPage = lazy(() => import("./pages/lab/QuboPage.tsx"));
 const AnnealingPage = lazy(() => import("./pages/lab/AnnealingPage.tsx"));
 const QuantumKernelPage = lazy(() => import("./pages/lab/QuantumKernelPage.tsx"));
@@ -55,11 +58,14 @@ export default function App() {
             <Route path="education" element={<EducationPage />} />
             <Route path="education/:slug" element={<EducationDetailPage />} />
             <Route path="opensource" element={<OpenSourcePage />} />
+            <Route path="fonts" element={<FontLabPage />} />
             <Route path="lab" element={<LabPage />} />
             <Route path="lab/bloch-sphere" element={<BlochSpherePage />} />
             <Route path="lab/circuit" element={<CircuitPage />} />
             <Route path="lab/vqc" element={<VQCPage />} />
             <Route path="lab/vqe-h2" element={<VQEH2Page />} />
+            <Route path="lab/system-recovery" element={<SystemRecoveryPage />} />
+            <Route path="lab/lab01-first-person" element={<Lab01FirstPersonPage />} />
             <Route path="lab/qubo" element={<QuboPage />} />
             <Route path="lab/annealing" element={<AnnealingPage />} />
             <Route path="lab/quantum-kernel" element={<QuantumKernelPage />} />

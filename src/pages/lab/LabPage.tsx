@@ -27,26 +27,26 @@ const LAB_MODES = [
   },
 ];
 
-const LEARNING_PATHS = [
+const LAB_DIRECTORY = [
   {
-    title: "Build quantum intuition",
-    description: "Move from one-qubit geometry to interference and entanglement.",
+    title: "Fundamentals",
+    description: "Bloch sphere geometry and circuit building blocks.",
     slugs: ["bloch-sphere", "circuit"],
   },
   {
-    title: "Learn variational algorithms",
-    description: "Connect parameterized circuits, optimization signals, and trainability.",
+    title: "Quantum AI",
+    description: "Classification, kernels, and trainability in parameterized models.",
     slugs: ["vqc", "vqe-h2", "barren-plateau"],
   },
   {
-    title: "Explore optimization",
-    description: "Translate binary decisions into energy, then search a rugged landscape.",
+    title: "Quantum Simulation",
+    description: "Energy minimization, combinatorial optimization, and annealing.",
     slugs: ["qubo", "annealing"],
   },
   {
-    title: "Explore QML geometry",
-    description: "Redraw similarity with feature maps, then train a decision boundary.",
-    slugs: ["quantum-kernel", "vqc"],
+    title: "Interactive Lab",
+    description: "Playable hardware recovery and a first-person lab experience.",
+    slugs: ["system-recovery", "lab01-first-person"],
   },
 ];
 
@@ -81,8 +81,8 @@ export default function LabPage() {
 
   return (
     <PageShell
-      title="Explore quantum ideas by changing the system yourself"
-      description="A hands-on workspace for quantum states, circuits, variational models, optimization, kernels, and trainability experiments."
+      title="Lab directory"
+      description="A hands-on workspace for quantum states, circuits, variational models, optimization, kernels, and immersive lab experiments."
       path="/lab"
     >
       <div className="grid gap-4 border-y border-border py-6 sm:grid-cols-4">
@@ -107,34 +107,47 @@ export default function LabPage() {
       <section className="mt-12 border-b border-border pb-12">
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
-            <p className="text-small font-medium text-text-muted">Learning paths</p>
-            <h2 className="mt-3 text-h2 text-text-primary">Choose a scientific question</h2>
+            <p className="text-small font-medium text-text-muted">Directory</p>
+            <h2 className="mt-3 text-h2 text-text-primary">Choose a lab path</h2>
           </div>
           <Route className="hidden text-accent md:block" size={26} />
         </div>
+
         <div className="grid gap-6 lg:grid-cols-2">
-          {LEARNING_PATHS.map((path) => {
-            const pathTools = path.slugs.map((slug) => labTools.find((tool) => tool.slug === slug)).filter(Boolean);
-            const pathCompleted = path.slugs.filter((slug) => completedSlugs.has(slug)).length;
+          {LAB_DIRECTORY.map((section) => {
+            const sectionTools = section.slugs
+              .map((slug) => labTools.find((tool) => tool.slug === slug))
+              .filter(Boolean);
+            const sectionCompleted = section.slugs.filter((slug) => completedSlugs.has(slug)).length;
+
             return (
-              <article key={path.title} className="border-l-2 border-border pl-5">
+              <article key={section.title} className="rounded-lg border border-border bg-surface/60 p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="text-h3 text-text-primary">{path.title}</h3>
-                    <p className="mt-2 text-small text-text-secondary">{path.description}</p>
+                    <h3 className="text-h3 text-text-primary">{section.title}</h3>
+                    <p className="mt-2 text-small text-text-secondary">{section.description}</p>
                   </div>
-                  <span className="shrink-0 font-mono text-mono-label uppercase text-text-muted">{pathCompleted}/{path.slugs.length}</span>
+                  <span className="shrink-0 font-mono text-mono-label uppercase text-text-muted">
+                    {sectionCompleted}/{section.slugs.length}
+                  </span>
                 </div>
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {pathTools.map((tool, index) => tool && (
-                    <div key={tool.slug} className="flex items-center gap-2">
-                      <Link to={`/lab/${tool.slug}`} className="inline-flex items-center gap-1.5 text-small font-medium text-text-primary hover:text-accent">
-                        {completedSlugs.has(tool.slug) && <Check size={14} className="text-accent" aria-label="Completed" />}
-                        {tool.name}
-                      </Link>
-                      {index < pathTools.length - 1 && <ArrowRight size={13} className="text-text-muted" aria-hidden="true" />}
-                    </div>
-                  ))}
+
+                <div className="mt-5 space-y-3">
+                  {sectionTools.map((tool, index) => {
+                    if (!tool) return null;
+                    return (
+                      <div key={tool.slug} className="flex items-center gap-3">
+                        <span className="text-text-muted">{index < sectionTools.length - 1 ? "├─" : "└─"}</span>
+                        <Link
+                          to={`/lab/${tool.slug}`}
+                          className="inline-flex items-center gap-1.5 text-small font-medium text-text-primary hover:text-accent"
+                        >
+                          {completedSlugs.has(tool.slug) && <Check size={14} className="text-accent" aria-label="Completed" />}
+                          {tool.name}
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
               </article>
             );

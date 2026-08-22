@@ -18,7 +18,7 @@ const CORE_VALUES = [
 
 export default function AboutPrinciples() {
   return (
-    <section className="section-container border-t border-border">
+    <section id="principles" className="section-container border-t border-border scroll-mt-24">
       <p className="section-kicker">Research Areas</p>
       <h2 className="mt-4 text-h2 text-text-primary">What we work on</h2>
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -52,7 +52,7 @@ export default function AboutPrinciples() {
           <ul className="mt-6 space-y-3">
             {CORE_VALUES.map((value) => (
               <li key={value} className="flex gap-3 text-body text-text-secondary">
-                <span className="text-accent">—</span>
+                <span className="text-accent">•</span>
                 {value}
               </li>
             ))}

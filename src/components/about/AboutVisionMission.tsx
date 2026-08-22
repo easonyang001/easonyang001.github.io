@@ -10,7 +10,7 @@ const PHILOSOPHY_ITEMS = ["Rigorous", "Reproducible", "Practical", "Collaborativ
 
 export default function AboutVisionMission() {
   return (
-    <section className="section-container border-t border-border">
+    <section id="vision-mission" className="section-container border-t border-border scroll-mt-24">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div>
           <p className="section-kicker">Vision</p>
@@ -25,7 +25,7 @@ export default function AboutVisionMission() {
           <ul className="mt-4 space-y-3">
             {MISSION_ITEMS.map((item) => (
               <li key={item} className="flex gap-3 text-body text-text-secondary">
-                <span className="text-accent">—</span>
+                <span className="text-accent">•</span>
                 {item}
               </li>
             ))}
