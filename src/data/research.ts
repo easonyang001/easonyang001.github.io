@@ -1,12 +1,14 @@
 import {
   Atom,
+  Orbit,
   BrainCircuit,
   Waves,
-  Snowflake,
   Cpu,
+  Radio,
+  Shield,
+  FlaskConical,
   Sparkles,
   Network,
-  FlaskConical,
 } from "lucide-react";
 import type { ResearchArea } from "../types/index.ts";
 
@@ -18,7 +20,18 @@ export const researchAreas: ResearchArea[] = [
     description:
       "Foundational study of information encoded in quantum states, entanglement, and quantum communication protocols.",
     status: "exploratory",
+    group: "Quantum Foundations",
     relatedLabTools: ["bloch-sphere", "circuit"],
+  },
+  {
+    slug: "quantum-theory",
+    icon: Orbit,
+    title: "Quantum Theory",
+    description:
+      "The mathematical and physical postulates underlying quantum mechanics -- state spaces, measurement, and unitary evolution -- that every quantum algorithm builds on.",
+    status: "exploratory",
+    group: "Quantum Foundations",
+    relatedLabTools: ["bloch-sphere"],
   },
   {
     slug: "quantum-machine-learning",
@@ -27,25 +40,18 @@ export const researchAreas: ResearchArea[] = [
     description:
       "Designing quantum-enhanced learning algorithms that exploit superposition and entanglement for pattern discovery.",
     status: "exploratory",
+    group: "Quantum Computing",
     relatedLabTools: ["vqc", "quantum-kernel"],
   },
   {
-    slug: "quantum-optimization",
+    slug: "quantum-optimization-annealing",
     icon: Waves,
-    title: "Quantum Optimization",
+    title: "Quantum Optimization & Annealing",
     description:
-      "Formulating and solving combinatorial optimization problems using variational and quantum-native methods.",
+      "Formulating combinatorial optimization problems as energy landscapes and solving them with variational, quantum-native, and adiabatic annealing methods.",
     status: "active",
-    relatedLabTools: ["qubo"],
-  },
-  {
-    slug: "quantum-annealing",
-    icon: Snowflake,
-    title: "Quantum Annealing",
-    description:
-      "Leveraging adiabatic quantum hardware to explore rugged energy landscapes for near-term optimization advantage.",
-    status: "active",
-    relatedLabTools: ["annealing"],
+    group: "Quantum Computing",
+    relatedLabTools: ["qubo", "annealing"],
   },
   {
     slug: "hybrid-quantum-classical-computing",
@@ -54,6 +60,35 @@ export const researchAreas: ResearchArea[] = [
     description:
       "Building architectures that combine classical compute with quantum processors to solve real-world problems.",
     status: "active",
+    group: "Quantum Computing",
+    relatedLabTools: ["vqe-h2"],
+  },
+  {
+    slug: "quantum-communication-networks",
+    icon: Radio,
+    title: "Quantum Communication & Networks",
+    description:
+      "Protocols for transmitting and distributing quantum information across distance, including quantum key distribution and the building blocks of a future quantum internet.",
+    status: "exploratory",
+    group: "Quantum Systems",
+  },
+  {
+    slug: "quantum-security",
+    icon: Shield,
+    title: "Quantum Security",
+    description:
+      "Cryptographic protocols and threat models for a post-quantum world, spanning quantum-resistant algorithms and the guarantees quantum hardware can provide.",
+    status: "exploratory",
+    group: "Quantum Systems",
+  },
+  {
+    slug: "quantum-simulation-chemistry",
+    icon: FlaskConical,
+    title: "Quantum Simulation & Chemistry",
+    description:
+      "Educational exploration of quantum simulation for molecular systems, starting from minimal-basis, two-qubit examples.",
+    status: "educational",
+    group: "Quantum Science",
     relatedLabTools: ["vqe-h2"],
   },
   {
@@ -63,6 +98,7 @@ export const researchAreas: ResearchArea[] = [
     description:
       "Advancing machine learning theory and systems, from optimization to reasoning, that complement quantum research.",
     status: "exploratory",
+    group: null,
   },
   {
     slug: "operations-research",
@@ -71,14 +107,6 @@ export const researchAreas: ResearchArea[] = [
     description:
       "Applying mathematical optimization and decision science to complex, large-scale operational systems.",
     status: "active",
-  },
-  {
-    slug: "quantum-simulation-chemistry",
-    icon: FlaskConical,
-    title: "Quantum Simulation and Chemistry",
-    description:
-      "Educational exploration of quantum simulation for molecular systems, starting from minimal-basis, two-qubit examples.",
-    status: "educational",
-    relatedLabTools: ["vqe-h2"],
+    group: null,
   },
 ];
