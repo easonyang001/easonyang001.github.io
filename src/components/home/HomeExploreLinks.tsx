@@ -24,6 +24,12 @@ const links = [
     href: "/news",
     accent: "rgba(251, 146, 60, 0.34)",
   },
+  {
+    title: "Quantum Lab 3D",
+    href: "/quantum-lab-3d.html",
+    accent: "rgba(45, 212, 191, 0.36)",
+    external: true,
+  },
 ];
 
 export default function HomeExploreLinks() {
@@ -54,18 +60,11 @@ export default function HomeExploreLinks() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              {links.map((item, index) => (
-                <ScrollReveal
-                  key={item.href}
-                  variant={index % 2 === 0 ? "fade-left" : "fade-right"}
-                  duration={1}
-                  delay={index * 0.3}
-                >
-                  <Link
-                    to={item.href}
-                    style={{ "--card-accent": item.accent } as CSSProperties}
-                    className="home-explore-card home-cta-link group block h-full w-full rounded-lg border border-white/18 bg-slate-950/72 px-7 py-8 md:px-8 md:py-9 backdrop-blur-3xl transition duration-300 min-h-[170px]"
-                  >
+              {links.map((item, index) => {
+                const cardClassName =
+                  "home-explore-card home-cta-link group block h-full w-full rounded-lg border border-white/18 bg-slate-950/72 px-7 py-8 md:px-8 md:py-9 backdrop-blur-3xl transition duration-300 min-h-[170px]";
+                const cardContent = (
+                  <>
                     <span className="home-explore-card__wash" aria-hidden="true" />
                     <span className="home-explore-card__glow" aria-hidden="true" />
                     <div className="flex h-full min-h-[78px] items-center justify-between gap-6">
@@ -80,9 +79,36 @@ export default function HomeExploreLinks() {
                         />
                       </span>
                     </div>
-                  </Link>
-                </ScrollReveal>
-              ))}
+                  </>
+                );
+
+                return (
+                  <ScrollReveal
+                    key={item.href}
+                    variant={index % 2 === 0 ? "fade-left" : "fade-right"}
+                    duration={1}
+                    delay={index * 0.3}
+                  >
+                    {item.external ? (
+                      <a
+                        href={item.href}
+                        style={{ "--card-accent": item.accent } as CSSProperties}
+                        className={cardClassName}
+                      >
+                        {cardContent}
+                      </a>
+                    ) : (
+                      <Link
+                        to={item.href}
+                        style={{ "--card-accent": item.accent } as CSSProperties}
+                        className={cardClassName}
+                      >
+                        {cardContent}
+                      </Link>
+                    )}
+                  </ScrollReveal>
+                );
+              })}
             </div>
           </div>
         </div>

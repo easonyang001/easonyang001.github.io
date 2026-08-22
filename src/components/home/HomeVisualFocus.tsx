@@ -23,7 +23,7 @@ const hardwareLinks = [
 
 export default function HomeVisualFocus() {
   return (
-    <section className="bg-background text-text-primary">
+    <section id="explore-research" className="bg-background text-text-primary scroll-mt-24">
       <div className="mx-auto w-full max-w-content px-6 py-24 md:px-12 md:py-32">
         <div className="grid gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:items-end">
           <ScrollReveal variant="fade-up" duration={1} delay={0}>
