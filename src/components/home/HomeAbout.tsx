@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { site } from "../../data/site.ts";
-import CharReveal from "./CharReveal.tsx";
 import ScrollReveal from "./ScrollReveal.tsx";
 import teamImage from "../about/team.png";
 
@@ -13,14 +12,9 @@ export default function HomeAbout() {
             <ScrollReveal variant="fade-up" duration={1} delay={0}>
               <p className="font-mono text-mono-label uppercase text-slate-500">About the Institute</p>
             </ScrollReveal>
-            <CharReveal
-              text="Quantum research, made visible."
-              startDelayMs={120}
-              staggerMs={24}
-              wordGapMs={140}
-              charDurationMs={280}
-              className="mt-5 max-w-[780px] text-[clamp(2.6rem,5.6vw,6.5rem)] font-medium leading-none text-slate-950"
-            />
+            <h2 className="mt-5 max-w-[780px] font-sans text-[clamp(2.6rem,5.6vw,6.5rem)] font-medium leading-none text-slate-950">
+              Quantum Research, Made Visible.
+            </h2>
           </div>
 
           <div className="lg:pb-3">
