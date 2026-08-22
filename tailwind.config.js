@@ -37,8 +37,8 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
+        display: ["Cormorant Garamond", "Inter", "system-ui", "sans-serif"],
+        mono: ["IBM Plex Mono", "JetBrains Mono", "ui-monospace", "monospace"],
       },
       fontSize: {
         display: ["44px", { lineHeight: "0.95", letterSpacing: "-0.035em", fontWeight: "500" }],
