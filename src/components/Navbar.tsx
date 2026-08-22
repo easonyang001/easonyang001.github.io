@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, Github, Menu, X } from "lucide-react";
 import { site } from "../data/site.ts";
 import { researchAreas } from "../data/research.ts";
-import { labTools } from "../data/labTools.ts";
 
 interface NavChild {
   label: string;
@@ -45,35 +44,135 @@ const researchGroups = toGroups(
   }))
 );
 
-const labGroups = toGroups([
-  ...labTools.map((tool) => ({ heading: null, label: tool.name, href: `/lab/${tool.slug}` })),
-  { heading: null, label: "Quantum Lab 3D", href: "/quantum-lab-3d.html", external: true },
-]);
+const labLinks: NavGroup[] = [
+  {
+    heading: "Fundamentals",
+    items: [
+      { label: "Bloch Sphere", href: "/lab/bloch-sphere" },
+      { label: "Circuit Playground", href: "/lab/circuit" },
+    ],
+  },
+  {
+    heading: "Quantum AI",
+    items: [
+      { label: "Variational Quantum Classifier", href: "/lab/vqc" },
+      { label: "Quantum Kernel Explorer", href: "/lab/quantum-kernel" },
+      { label: "Barren Plateau Demo", href: "/lab/barren-plateau" },
+    ],
+  },
+  {
+    heading: "Quantum Simulation",
+    items: [
+      { label: "H2 Ground State · VQE", href: "/lab/vqe-h2" },
+      { label: "QUBO Solver", href: "/lab/qubo" },
+      { label: "Annealing Simulator", href: "/lab/annealing" },
+    ],
+  },
+  {
+    heading: "Interactive Lab",
+    items: [
+      { label: "System Recovery", href: "/lab/system-recovery" },
+      { label: "LAB 01 · First-Person Lab", href: "/quantum-lab.html", external: true },
+    ],
+  },
+];
+
+const publicationLinks: NavGroup[] = [
+  {
+    heading: "Directory",
+    items: [
+      { label: "Publication", href: "/publications#publication" },
+      { label: "Preprint", href: "/publications#preprint" },
+    ],
+  },
+];
+
+const aboutLinks: NavGroup[] = [
+  {
+    heading: "Overview",
+    items: [
+      { label: "Story", href: "/about#story" },
+      { label: "Vision & Mission", href: "/about#vision-mission" },
+      { label: "FAQ", href: "/about#faq" },
+    ],
+  },
+  {
+    heading: "Community",
+    items: [
+      { label: "Research Areas", href: "/about#principles" },
+      { label: "Research Network", href: "/about#network" },
+      { label: "Open Science", href: "/about#open-science" },
+      { label: "Founding Team", href: "/about#founding-team" },
+      { label: "Collaboration", href: "/about#collaboration" },
+    ],
+  },
+];
 
 const links: NavLink[] = [
   { label: "Research", href: "/research", groups: researchGroups },
   { label: "Solutions", href: "/solutions" },
-  { label: "Lab", href: "/lab", groups: labGroups },
-  { label: "Publications", href: "/publications" },
-  { label: "About", href: "/about" },
+  { label: "Lab", href: "/lab", groups: labLinks },
+  { label: "Publications", href: "/publications", groups: publicationLinks },
+  { label: "About", href: "/about", groups: aboutLinks },
   { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];
 
 function DropdownChild({ child, onClick }: { child: NavChild; onClick?: () => void }) {
   const className =
-    "block rounded-md px-3 py-2 text-small text-text-secondary transition-colors duration-150 hover:bg-surface hover:text-text-primary";
+    "group relative flex items-center overflow-hidden rounded-[18px] px-4 py-3 text-[15px] leading-6 text-slate-300 transition-all duration-200 hover:-translate-y-px hover:bg-white/[0.11] hover:text-white hover:shadow-[0_14px_36px_rgba(15,23,42,0.42)] hover:ring-1 hover:ring-white/[0.14]";
   if (child.external) {
     return (
       <a key={child.href} href={child.href} className={className} onClick={onClick}>
-        {child.label}
+        <span className="relative z-10 font-sans transition-transform duration-200 group-hover:translate-x-1 group-hover:scale-[1.01]">
+          {child.label}
+        </span>
+        <span className="pointer-events-none absolute inset-x-3 bottom-1 h-px scale-x-0 bg-gradient-to-r from-transparent via-white/95 to-transparent transition-transform duration-200 group-hover:scale-x-100" />
+        <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.2),transparent_42%)] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
       </a>
     );
   }
   return (
     <Link key={child.href} to={child.href} className={className} onClick={onClick}>
-      {child.label}
+      <span className="relative z-10 font-sans transition-transform duration-200 group-hover:translate-x-1 group-hover:scale-[1.01]">
+        {child.label}
+      </span>
+      <span className="pointer-events-none absolute inset-x-3 bottom-1 h-px scale-x-0 bg-gradient-to-r from-transparent via-white/95 to-transparent transition-transform duration-200 group-hover:scale-x-100" />
+      <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.2),transparent_42%)] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
     </Link>
+  );
+}
+
+function MenuSection({
+  group,
+  index,
+  onChildClick,
+}: {
+  group: NavGroup;
+  index: number;
+  onChildClick?: (child: NavChild) => void;
+}) {
+  return (
+    <div
+      className={`rounded-[22px] border border-white/[0.08] bg-white/[0.03] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] ${
+        index > 0 ? "mt-3" : ""
+      }`}
+    >
+      {group.heading && (
+        <p className="px-1 pb-3 font-display text-[17px] font-semibold tracking-[-0.02em] text-white">
+          {group.heading}
+        </p>
+      )}
+      <div className="space-y-1">
+        {group.items.map((child) => (
+          <DropdownChild
+            key={child.href}
+            child={child}
+            onClick={onChildClick ? () => onChildClick(child) : undefined}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -142,49 +241,58 @@ export default function Navbar() {
                 <Link
                   to={link.href}
                   aria-expanded={openDropdown === link.label}
-                  className={`flex items-center gap-1 px-4 py-2 text-small font-medium transition-colors duration-150 ${
+                  className={`group flex items-center gap-1 px-4 py-2 text-small font-medium transition-colors duration-150 ${
                     isActive(link.href)
                       ? "text-accent"
                       : "text-text-secondary hover:text-text-primary"
                   }`}
                 >
-                  {link.label}
+                  <span className="relative">
+                    {link.label}
+                    <span
+                      className={`absolute left-0 -bottom-1 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-transparent via-white/90 to-transparent transition-transform duration-200 group-hover:scale-x-100 ${
+                        isActive(link.href) ? "scale-x-100" : ""
+                      }`}
+                    />
+                  </span>
                   <ChevronDown
                     size={13}
                     strokeWidth={2}
-                    className={`transition-transform duration-150 ${openDropdown === link.label ? "rotate-180" : ""}`}
+                    className={`transition-all duration-150 ${openDropdown === link.label ? "rotate-180 text-white" : "text-current"}`}
                   />
                 </Link>
 
                 {openDropdown === link.label && (
                   <div
-                    className="absolute left-1/2 top-full w-[300px] -translate-x-1/2 pt-3"
+                    className="absolute left-1/2 top-full w-[372px] -translate-x-1/2 pt-3"
                     onMouseEnter={() => openNow(link.label)}
                     onMouseLeave={closeSoon}
                   >
-                    <div className="rounded-lg border border-border bg-background/95 p-2 backdrop-blur-md">
-                      <div className="max-h-[70vh] overflow-y-auto">
+                    <div className="relative overflow-hidden rounded-[30px] border border-white/[0.12] bg-[linear-gradient(180deg,rgba(9,14,29,0.98),rgba(4,8,18,0.96))] p-4 shadow-[0_40px_140px_rgba(2,6,23,0.76)] ring-1 ring-white/[0.04] backdrop-blur-[34px]">
+                      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_12%,rgba(255,255,255,0.14),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(255,255,255,0.06),transparent_20%),linear-gradient(180deg,rgba(255,255,255,0.07),transparent_18%,rgba(255,255,255,0.02))]" />
+                      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-4 bottom-2 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-75" />
+                      <div className="nav-dropdown-scrollbar relative max-h-[70vh] overflow-y-auto pr-1">
                         {link.groups.map((group, index) => (
-                          <div key={group.heading ?? `ungrouped-${index}`}>
-                            {group.heading === null && index > 0 && (
-                              <div className="my-2 border-t border-border" />
-                            )}
-                            {group.heading && (
-                              <p className="px-3 pb-1 pt-3 font-mono text-mono-label uppercase text-text-muted first:pt-1">
-                                {group.heading}
-                              </p>
-                            )}
-                            {group.items.map((child) => (
-                              <DropdownChild key={child.href} child={child} />
-                            ))}
+                          <div key={group.heading ?? `ungrouped-${index}`} className="px-1 py-0.5">
+                            <MenuSection group={group} index={index} />
                           </div>
                         ))}
                       </div>
                       <Link
                         to={link.href}
-                        className="mt-1 block rounded-md border-t border-border px-3 pt-3 pb-1 font-mono text-mono-label uppercase text-accent transition-colors duration-150 hover:text-accent-hover"
+                        className="group mt-2 block rounded-b-[22px] border-t border-white/10 px-3 pt-4 pb-1 font-display text-[12px] font-semibold tracking-[0.14em] text-accent transition-all duration-150 hover:text-accent-hover"
                       >
-                        View all {link.label.toLowerCase()} &rarr;
+                        <span className="relative inline-flex items-center gap-2">
+                          <span className="transition-transform duration-150 group-hover:translate-x-0.5">
+                            View all {link.label.toLowerCase()}
+                          </span>
+                          <span className="transition-transform duration-150 group-hover:translate-x-1">
+                            &rarr;
+                          </span>
+                          <span className="pointer-events-none absolute left-0 -bottom-1 h-px w-full origin-left scale-x-0 bg-current/80 transition-transform duration-200 group-hover:scale-x-100" />
+                        </span>
                       </Link>
                     </div>
                   </div>
@@ -256,24 +364,10 @@ export default function Navbar() {
                   </button>
                 </div>
                 {mobileExpanded === link.label && (
-                  <div className="mb-2 ml-3 flex flex-col gap-1 border-l border-border pl-3">
+                  <div className="nav-dropdown-scrollbar mb-2 ml-3 flex max-h-[55vh] flex-col gap-1 overflow-y-auto border-l border-accent/35 pl-3">
                     {link.groups.map((group, index) => (
                       <div key={group.heading ?? `ungrouped-${index}`}>
-                        {group.heading === null && index > 0 && (
-                          <div className="my-1.5 border-t border-border" />
-                        )}
-                        {group.heading && (
-                          <p className="pb-1 pt-2 font-mono text-mono-label uppercase text-text-muted first:pt-0">
-                            {group.heading}
-                          </p>
-                        )}
-                        {group.items.map((child) => (
-                          <DropdownChild
-                            key={child.href}
-                            child={child}
-                            onClick={() => !child.external && setOpen(false)}
-                          />
-                        ))}
+                        <MenuSection group={group} index={index} onChildClick={() => setOpen(false)} />
                       </div>
                     ))}
                   </div>

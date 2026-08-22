@@ -33,8 +33,8 @@ export default function HomeVisualFocus() {
 
         <div className="mt-12 grid gap-8">
           <ScrollReveal variant="blur" duration={1} delay={0.15}>
-            <Link
-              to="/research"
+            <a
+              href="/quantum-lab.html"
               className="group grid overflow-hidden rounded-lg border border-border bg-surface transition-colors duration-150 hover:border-border-strong hover:bg-surface-raised lg:grid-cols-[minmax(360px,1fr)_minmax(0,0.86fr)]"
             >
               <img
@@ -47,7 +47,7 @@ export default function HomeVisualFocus() {
                   A clear signal for the future.
                 </h3>
                 <span className="home-cta-link mt-8 w-fit text-small font-medium text-accent transition-colors duration-150 group-hover:text-accent-hover">
-                  <span className="home-cta-link__label">Explore research</span>
+                  <span className="home-cta-link__label">Open the lab</span>
                   <ArrowRight
                     size={15}
                     strokeWidth={1.7}
@@ -55,7 +55,7 @@ export default function HomeVisualFocus() {
                   />
                 </span>
               </div>
-            </Link>
+            </a>
           </ScrollReveal>
 
           <div className="grid gap-5 lg:grid-cols-3">
