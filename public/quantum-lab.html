@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Quantum Ion Trap Lab — v4</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#000;overflow:hidden;font-family:'IBM Plex Mono','Courier New',monospace;}
+body{background:#000;overflow:hidden;font-family:'Courier New',monospace;}
 canvas{display:block;position:fixed;inset:0;z-index:1;}
 #scanline{position:fixed;inset:0;pointer-events:none;z-index:2;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,200,140,0.009) 2px,rgba(0,200,140,0.009) 4px);}
@@ -142,9 +141,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
 #entry{position:fixed;inset:0;background:rgba(0,2,8,0.99);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:10px;z-index:300;pointer-events:all;}
-.e-pre{font-family:'Noto Sans TC',sans-serif;font-size:0;color:#a8bdd1;
-  letter-spacing:3px;font-weight:600;}
-.e-pre::after{content:'QUANTUM RESEARCH INSTITUTE - TAIWAN';font-size:11px;}
+.e-pre{font-size:9px;color:#1a4060;letter-spacing:4px;}
 .e-title{font-size:26px;color:#e8f4ff;letter-spacing:6px;font-weight:bold;}
 .e-sub{font-size:10px;color:#00cc88;letter-spacing:3px;}
 .e-line{width:200px;height:1px;background:linear-gradient(90deg,transparent,#1e4a6a,transparent);margin:4px 0;}
@@ -169,7 +166,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
   font-size:20px;flex-shrink:0;}
 #npc-name{font-size:8px;color:#5aacff;letter-spacing:3px;}
 #npc-role{font-size:8px;color:#1a3a60;letter-spacing:1px;margin-top:2px;}
-#npc-msg{font-size:12px;color:#c8d8e8;line-height:1.85;max-width:760px;font-family:'Noto Sans TC',sans-serif;}
+#npc-msg{font-size:12px;color:#c8d8e8;line-height:1.85;max-width:760px;}
 #npc-actions{margin-top:12px;display:flex;gap:12px;align-items:center;}
 #npc-next{background:transparent;border:1px solid #1e5090;color:#5aacff;
   padding:6px 22px;font-size:10px;letter-spacing:2px;cursor:pointer;
@@ -214,7 +211,6 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
   grid-template-rows:56px 1fr;
   height:100vh;
   position:relative;z-index:2;
-  font-family:'Noto Sans TC',sans-serif;
 }
 /* top header bar */
 #dm-topbar{
@@ -240,7 +236,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
   flex:1;padding:0 20px;
   display:flex;align-items:center;gap:16px;
 }
-#dm-device-name{font-size:15px;color:#e8f4ff;letter-spacing:2px;font-weight:700;font-family:'Noto Sans TC',sans-serif;}
+#dm-device-name{font-size:15px;color:#e8f4ff;letter-spacing:4px;font-weight:bold;}
 #dm-device-sub{font-size:8px;color:#2a5070;letter-spacing:1px;margin-top:1px;}
 .dm-status-pill{
   font-size:8px;padding:2px 10px;border-radius:0;
@@ -293,7 +289,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
   border-left-color:#5aacff;
 }
 .dm-tab-num{font-size:7px;color:#1a3a5a;letter-spacing:2px;margin-bottom:3px;}
-.dm-tab-name{font-size:10px;color:#4a7090;letter-spacing:0.5px;font-family:'Noto Sans TC',sans-serif;}
+.dm-tab-name{font-size:10px;color:#4a7090;letter-spacing:1px;}
 .dm-tab-item.active .dm-tab-name{color:#5aacff;}
 .dm-tab-item.active .dm-tab-num{color:#1a5080;}
 .dm-tab-dot{
@@ -622,7 +618,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
   display:flex;align-items:center;gap:12px;
 }
 #dm-guide-icon{font-size:18px;flex-shrink:0;}
-#dm-guide-text{font-size:11px;color:#c8d8e8;line-height:1.7;font-family:'Noto Sans TC',sans-serif;}
+#dm-guide-text{font-size:11px;color:#c8d8e8;line-height:1.6;}
 #dm-guide-text strong{color:#ffa040;}
 #dm-guide.info{
   background:linear-gradient(90deg,rgba(90,172,255,0.1),rgba(90,172,255,0.03));
@@ -644,7 +640,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
 <div id="entry">
   <div class="e-pre">QUANTUM RESEARCH INSTITUTE — TAIWAN</div>
   <div class="e-title">ION TRAP LAB</div>
-  <div class="e-sub">INTERACTIVE RESEARCH FACILITY V4.0</div>
+  <div class="e-sub">INTERACTIVE RESEARCH FACILITY v4.0</div>
   <div class="e-line"></div>
   <div class="e-desc">
     歡迎來到量子離子阱實驗室<br>
@@ -652,7 +648,7 @@ canvas{display:block;position:fixed;inset:0;z-index:1;}
     實驗室主任 Dr. Chen 將親自帶你導覽<br><br>
     <span style="color:#2a3a50;font-size:9px;">稍後你將接手今晚的值班工程師任務</span>
   </div>
-      <button class="e-btn" onclick="window.location.href='/quantum-lab-3d.html?autostart=1'">▶ 進入實驗室大廳</button>
+  <button class="e-btn" onclick="startLobby()">▶ 進入實驗室大廳</button>
   <div class="e-hint" style="margin-top:6px;">建議使用 Chrome 桌面版以獲得最佳體驗</div>
 </div>
 
@@ -886,7 +882,7 @@ const DEVICE_PANELS = {
 // ═══════════════════════════════════════════════════════
 // CONSOLE
 // ═══════════════════════════════════════════════════════
-   tabs:['ALARM LOG','ION TRAP','CH-02','OVERRIDE'],
+console:{
   tag:'STATION 01', title:'MAIN CONSOLE',
   sub:'Facility Control · Alarm Management · Cryo Override',
   tabs:['警報中心','系統儀表','CH 控制台','實驗佇列'],
@@ -1329,58 +1325,1611 @@ window.execOverrideV5=function(){
 <div class="gauge-row cols-3">
   <div class="gauge-card">
     <div class="live-pip ok"></div>
-    <div class="gauge-label">TODAY'S RUNS</div>\n    <div class="gauge-val white">4</div>\n    <div class="gauge-unit">排程</div>\n  </div>\n  <div class="gauge-card ${c?'warn':''}">\n    <div class="live-pip ${c?'warn':'ok'}"></div>\n    <div class="gauge-label">NEXT EXPERIMENT</div>\n    <div class="gauge-val ${c?'warn':'blue'}">Bell State</div>\n    <div class="gauge-unit">${c?'PAUSED':'03:00 待機'}</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">TARGET FIDELITY</div>\n    <div class="gauge-val ok">> 98</div>\n    <div class="gauge-unit">% entanglement</div>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">EXPERIMENT QUEUE</span><div class="ip-section-line"></div></div>\n<div style="background:#040d1e;border:1px solid #0d2240;">\n  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;\n    font-size:7px;color:#1a4060;letter-spacing:2px;padding:6px 12px;border-bottom:1px solid #0d2240;">\n    <span>TIME</span><span>EXPERIMENT</span><span>STATUS</span><span>DURATION</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;\n    align-items:center;padding:10px 12px;border-bottom:1px solid #060f20;opacity:0.6;">\n    <span style="font-size:9px;color:#1a4060;">02:30</span>\n    <div>\n      <div style="font-size:10px;color:#4a7090;">系統預冷確認 + 離子裝載</div>\n      <div style="font-size:8px;color:#1a4060;margin-top:2px;">⁴⁰Ca⁺ × 2, Doppler cooled to n̄ ~ 10</div>\n    </div>\n    <span style="font-size:8px;color:#00cc88;padding:2px 6px;border:1px solid #005530;">✓ DONE</span>\n    <span style="font-size:9px;color:#1a4060;">~28 min</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;\n    align-items:center;padding:10px 12px;border-bottom:1px solid #060f20;\n    background:${c?'rgba(80,40,0,0.15)':'rgba(0,30,60,0.1)'};">\n    <span style="font-size:9px;color:#1a4060;">03:00</span>\n    <div>\n      <div style="font-size:10px;color:#e8f4ff;">Bell State |Φ+⟩ 纏結實驗</div>\n      <div style="font-size:8px;color:#1a4060;margin-top:2px;">Mølmer-Sørensen gate · 1000 shots · 目標 F > 98%</div>\n      <div style="height:2px;background:#060f20;margin-top:6px;border-radius:1px;">\n        <div style="height:100%;width:${c?'0':'0'}%;background:#5aacff;border-radius:1px;"></div>\n      </div>\n    </div>\n    <span style="font-size:8px;color:${c?'#ffaa00':'#5aacff'};padding:2px 6px;border:1px solid ${c?'#4a2a00':'#0d3060'};">${c?'PAUSED':'SCHED'}</span>\n    <span style="font-size:9px;color:#1a4060;">~23 min</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;\n    align-items:center;padding:10px 12px;border-bottom:1px solid #060f20;">\n    <span style="font-size:9px;color:#1a4060;">05:00</span>\n    <div>\n      <div style="font-size:10px;color:#4a7090;">量子相位估計 (QPE)</div>\n      <div style="font-size:8px;color:#1a4060;margin-top:2px;">Kitaev QPE · ancilla readout · 精度 π/64</div>\n    </div>\n    <span style="font-size:8px;color:#2a5070;padding:2px 6px;border:1px solid #0d2240;">SCHED</span>\n    <span style="font-size:9px;color:#1a4060;">~45 min</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;\n    align-items:center;padding:10px 12px;">\n    <span style="font-size:9px;color:#1a4060;">06:30</span>\n    <div>\n      <div style="font-size:10px;color:#4a7090;">數據匯出 + 日誌封存</div>\n    </div>\n    <span style="font-size:8px;color:#2a5070;padding:2px 6px;border:1px solid #0d2240;">SCHED</span>\n    <span style="font-size:9px;color:#1a4060;">~10 min</span>\n  </div>\n</div>`;\n  }\n  ]\n}, // end console\n\n// ═══════════════════════════════════════════════════════\n// LASER\n// ═══════════════════════════════════════════════════════\nlaser:{\n  tag:'STATION 02', title:'LASER SYSTEM',\n  sub:'PDH Frequency Lock · AOM Control · 397/866/729 nm',\n  tabs:['雷射控制台','PDH 鎖定','功率監測','重新鎖定'],\n  render:[\n\n  // ── 0: 控制台 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return `\n<div class="gauge-row cols-4">\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">397 nm</div>\n    <div class="gauge-val blue">LOCKED</div>\n    <div class="gauge-unit">Doppler cooling</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">866 nm</div>\n    <div class="gauge-val blue">LOCKED</div>\n    <div class="gauge-unit">Repumper</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">729 nm</div>\n    <div class="gauge-val ok">LOCKED</div>\n    <div class="gauge-unit">Qubit gate</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">FIBER COUPLING</div>\n    <div class="gauge-val white">87.0</div>\n    <div class="gauge-unit">% efficiency</div>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">LASER CHANNELS</span><div class="ip-section-line"></div></div>\n<div style="background:#040d1e;border:1px solid #0d2240;padding:0;">\n  <div style="display:grid;grid-template-columns:56px 110px 1fr 50px 140px;\n    font-size:7px;color:#1a4060;letter-spacing:2px;padding:6px 12px;border-bottom:1px solid #0d2240;">\n    <span>λ (nm)</span><span>ROLE</span><span>LOCK STATUS</span><span>PWR</span><span>FREQUENCY</span>\n  </div>\n  <div class="laser-channel" style="padding:0 12px;">\n    <span class="laser-nm" style="color:#8888ff;">397</span>\n    <span class="laser-role">Doppler<br>Cooling</span>\n    <div>\n      <div style="font-size:9px;color:#00cc88;margin-bottom:3px;">● PDH LOCKED</div>\n      <div class="bar-track"><div class="bar-fill" style="width:98%;background:#5aacff;"></div></div>\n    </div>\n    <span style="font-size:9px;color:#00cc88;">4.2 mW</span>\n    <span class="laser-freq">755,222.765 GHz<br>err: ±0.3 Hz</span>\n  </div>\n  <div class="laser-channel" style="padding:0 12px;border-top:1px solid #060f20;">\n    <span class="laser-nm" style="color:#cc6666;">866</span>\n    <span class="laser-role">Repumper<br>D3/2→P1/2</span>\n    <div>\n      <div style="font-size:9px;color:#00cc88;margin-bottom:3px;">● PDH LOCKED</div>\n      <div class="bar-track"><div class="bar-fill" style="width:96%;background:#8aaace;"></div></div>\n    </div>\n    <span style="font-size:9px;color:#00cc88;">2.1 mW</span>\n    <span class="laser-freq">346,000.235 GHz<br>err: ±0.8 Hz</span>\n  </div>\n  <div class="laser-channel" style="padding:0 12px;border-top:1px solid #060f20;">\n    <span class="laser-nm" style="color:#cc4400;">729</span>\n    <span class="laser-role">Qubit gate<br>S1/2→D5/2</span>\n    <div>\n      <div style="font-size:9px;color:#00cc88;margin-bottom:3px;" id="l729-lock">● PDH LOCKED</div>\n      <div class="bar-track"><div class="bar-fill" id="l729-bar" style="width:100%;background:#00cc88;"></div></div>\n    </div>\n    <span style="font-size:9px;color:#00cc88;">1.8 mW</span>\n    <span class="laser-freq">411,042.130 GHz<br>err: ±0.1 Hz</span>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">SHUTTER & AOM CONTROL</span><div class="ip-section-line"></div></div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">\n  <div style="background:#040d1e;border:1px solid #0d2240;padding:12px;">\n    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:8px;">SHUTTERS</div>\n    <div class="toggle-group">\n      <span class="toggle-label">397 nm Shutter</span>\n      <div class="toggle-sw" id="sh-397" onclick="this.classList.toggle('on')"></div>\n    </div>\n    <div class="toggle-group">\n      <span class="toggle-label">729 nm Shutter</span>\n      <div class="toggle-sw" id="sh-729" onclick="this.classList.toggle('on')"></div>\n    </div>\n    <div class="toggle-group">\n      <span class="toggle-label">866 nm Shutter</span>\n      <div class="toggle-sw" id="sh-866" onclick="this.classList.toggle('on')"></div>\n    </div>\n  </div>\n  <div style="background:#040d1e;border:1px solid #0d2240;padding:12px;">\n    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:8px;">AOM SWITCHES</div>\n    <div class="toggle-group">\n      <span class="toggle-label">AOM-1 (397 冷卻)</span>\n      <div class="toggle-sw on" id="aom1" onclick="this.classList.toggle('on')"></div>\n    </div>\n    <div class="toggle-group">\n      <span class="toggle-label">AOM-2 (729 qubit)</span>\n      <div class="toggle-sw on" id="aom2" onclick="this.classList.toggle('on')"></div>\n    </div>\n    <div class="toggle-group">\n      <span class="toggle-label">AOM-3 (866 pump)</span>\n      <div class="toggle-sw on" id="aom3" onclick="this.classList.toggle('on')"></div>\n    </div>\n  </div>\n</div>\n<div class="act-row">\n  <button class="act-btn primary" onclick="handleAction('laser','check')">✓ 確認雷射系統狀態</button>\n</div>`;\n  },\n\n  // ── 1: PDH 鎖定 ──\n  ()=>`\n<div class="gauge-row cols-3">\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">397 nm ERROR</div>\n    <div class="gauge-val ok" id="pdh-397-val">±0.31</div>\n    <div class="gauge-unit">Hz linewidth</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">729 nm ERROR</div>\n    <div class="gauge-val ok" id="pdh-729-val">±0.09</div>\n    <div class="gauge-unit">Hz linewidth</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">ULE CAVITY DRIFT</div>\n    <div class="gauge-val white">&lt; 0.05</div>\n    <div class="gauge-unit">Hz/s</div>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">PDH ERROR SIGNAL — 729 nm QUBIT LASER</span><div class="ip-section-line"></div></div>\n<div class="chart-wrap" style="height:80px;">\n  <span class="chart-label">PDH ERROR</span>\n  <span class="chart-val" id="pdh-live">± 0.09 Hz</span>\n  <canvas id="pdh-canvas" width="800" height="80" style="width:100%;height:80px;display:block;"></canvas>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">ULE CAVITY PARAMETERS</span><div class="ip-section-line"></div></div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">\n  <div>\n    <div class="data-row"><span class="data-key">腔體材料</span><span class="data-val">ULE 玻璃（超低膨脹）</span></div>\n    <div class="data-row"><span class="data-key">精細度 (Finesse)</span><span class="data-val hi">F = 250,000</span></div>\n    <div class="data-row"><span class="data-key">FSR (自由光譜區)</span><span class="data-val">1.5 GHz</span></div>\n    <div class="data-row"><span class="data-key">腔線寬 FWHM</span><span class="data-val">6.0 kHz</span></div>\n  </div>\n  <div>\n    <div class="data-row"><span class="data-key">零膨脹溫度</span><span class="data-val">17.5 °C ± 2 mK</span></div>\n    <div class="data-row"><span class="data-key">腔長漂移</span><span class="data-val ok">&lt; 0.05 Hz/s</span></div>\n    <div class="data-row"><span class="data-key">AOM 驅動頻率</span><span class="data-val">200.000 MHz</span></div>\n    <div class="data-row"><span class="data-key">鎖定伺服頻寬</span><span class="data-val">500 kHz</span></div>\n  </div>\n</div>\n\n<\/script>\n<script>\n(function(){\n  const cvs=document.getElementById('pdh-canvas');\n  if(!cvs) return;\n  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;\n  let t=0;\n  function draw(){\n    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);\n    ctx.strokeStyle='#0d2240'; ctx.lineWidth=0.5;\n    ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();\n    for(let x=0;x<W;x+=80){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }\n    ctx.strokeStyle='#00e5a0'; ctx.lineWidth=1.2;\n    ctx.beginPath();\n    for(let x=0;x<=W;x+=2){\n      const y=H/2 + Math.sin(t+x*0.018)*7 + Math.sin(t*1.7+x*0.042)*2.5 + (Math.random()-0.5)*1.2;\n      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);\n    }\n    ctx.stroke();\n    t+=0.04;\n    const err=document.getElementById('pdh-live');\n    const e729=document.getElementById('pdh-729-val');\n    if(err) err.textContent='± '+(0.07+Math.random()*0.05).toFixed(2)+' Hz';\n    if(e729) e729.textContent='±'+(0.07+Math.random()*0.05).toFixed(2);\n    requestAnimationFrame(draw);\n  }\n  draw();\n})();\n<\/script>\n`,\n\n  // ── 2: 功率監測 ──\n  ()=>`\n<div class="ip-section"><span class="ip-section-label">LASER POWER</span><div class="ip-section-line"></div></div>\n<div style="background:#040d1e;border:1px solid #0d2240;padding:16px;margin-bottom:12px;">\n  <div class="bar-row">\n    <span class="bar-label" style="color:#8888ff;">397 nm 冷卻</span>\n    <div class="bar-track"><div class="bar-fill" id="pwr397" style="width:84%;background:#5aacff;"></div></div>\n    <span class="bar-val" id="pwr397-val" style="color:#5aacff;">4.18 mW</span>\n  </div>\n  <div class="bar-row">\n    <span class="bar-label" style="color:#cc6666;">866 nm Repump</span>\n    <div class="bar-track"><div class="bar-fill" id="pwr866" style="width:62%;background:#8aaace;"></div></div>\n    <span class="bar-val" id="pwr866-val" style="color:#8aaace;">2.09 mW</span>\n  </div>\n  <div class="bar-row">\n    <span class="bar-label" style="color:#cc6644;">729 nm Qubit</span>\n    <div class="bar-track"><div class="bar-fill" id="pwr729" style="width:72%;background:#00cc88;"></div></div>\n    <span class="bar-val" id="pwr729-val" style="color:#00cc88;">1.82 mW</span>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">OPTICAL ELEMENTS</span><div class="ip-section-line"></div></div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">\n  <div>\n    <div class="data-row"><span class="data-key">PBS-1 偏振分束器 (397)</span><span class="data-val ok">對準 OK</span></div>\n    <div class="data-row"><span class="data-key">PBS-2 偏振分束器 (729)</span><span class="data-val ok">對準 OK</span></div>\n    <div class="data-row"><span class="data-key">HWP-1 半波片 θ=22.5°</span><span class="data-val ok">OK</span></div>\n    <div class="data-row"><span class="data-key">QWP-1 四分之一波片</span><span class="data-val ok">σ+ 極化 OK</span></div>\n  </div>\n  <div>\n    <div class="data-row"><span class="data-key">AOM-1 繞射效率</span><span class="data-val">88.2%</span></div>\n    <div class="data-row"><span class="data-key">AOM-2 繞射效率</span><span class="data-val">91.4%</span></div>\n    <div class="data-row"><span class="data-key">SM 光纖耦合</span><span class="data-val ok">87.0%</span></div>\n    <div class="data-row"><span class="data-key">光隔離器 ISO-1</span><span class="data-val">38 dB</span></div>\n  </div>\n</div>\n<\/script>\n<script>\n(function(){\n  function tick(){\n    const p={397:[4.18,'pwr397','pwr397-val'],866:[2.09,'pwr866','pwr866-val'],729:[1.82,'pwr729','pwr729-val']};\n    Object.values(p).forEach(([base,bid,vid])=>{\n      const v=(base+(Math.random()-0.5)*0.06);\n      const bar=document.getElementById(bid);\n      const val=document.getElementById(vid);\n      if(bar) bar.style.width=(v/base*75).toFixed(0)+'%';\n      if(val) val.textContent=v.toFixed(2)+' mW';\n    });\n    setTimeout(tick,1100);\n  }\n  tick();\n})();\n<\/script>\n`,\n\n  // ── 3: 重新鎖定 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return c?`\n<div class="alert-box warn" data-label="ACTION REQUIRED">\n  <div class="alert-body">溫度異常後，729 nm qubit 雷射需重新掃頻確認鎖定點。<br>Ca+ 的 S½→D5/2 躍遷頻率受溫度擾動影響，每次異常後必須重新搜尋。</div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">RE-LOCK PROCEDURE</span><div class="ip-section-line"></div></div>\n<div class="step-list">\n  <div class="step-item">\n    <div class="step-num" id="rs1n">1</div>\n    <div class="step-body">\n      <div class="step-title">關閉 AOM-2 快門，進入安全掃頻模式</div>\n      <div class="step-desc">避免掃頻過程中意外照射離子，破壞量子態。</div>\n      <div class="act-row"><button class="act-btn neutral" id="rs1b" onclick="rlStep(1)">執行</button></div>\n    </div>\n  </div>\n  <div class="step-item">\n    <div class="step-num" id="rs2n">2</div>\n    <div class="step-body">\n      <div class="step-title">設定掃頻範圍 ±2 GHz @ 411 THz</div>\n      <div class="step-desc">以 Ca+ 理論頻率為中心，搜尋因溫度漂移的鎖定點。</div>\n      <div class="act-row"><button class="act-btn neutral" id="rs2b" onclick="rlStep(2)" disabled>執行</button></div>\n    </div>\n  </div>\n  <div class="step-item">\n    <div class="step-num" id="rs3n">3</div>\n    <div class="step-body">\n      <div class="step-title">啟動掃頻 — PMT 同步偵測螢光峰</div>\n      <div class="sweep-wrap" style="height:60px;" id="sweep-wrap">\n        <canvas id="sweep-c" width="600" height="60" style="width:100%;height:60px;display:block;"></canvas>\n      </div>\n      <div style="font-size:8px;color:#1a4060;margin-bottom:4px;" id="sweep-status">等待步驟 3 執行</div>\n      <div class="act-row"><button class="act-btn neutral" id="rs3b" onclick="rlStep(3)" disabled>啟動掃頻</button></div>\n    </div>\n  </div>\n  <div class="step-item">\n    <div class="step-num" id="rs4n">4</div>\n    <div class="step-body">\n      <div class="step-title">確認鎖定並恢復 AOM-2</div>\n      <div class="step-desc" id="rs4d">等待掃頻完成...</div>\n      <div class="act-row"><button class="act-btn primary" id="rs4b" onclick="rlStep(4)" disabled>確認鎖定</button></div>\n    </div>\n  </div>\n</div>\n\n<\/script>\n<script>\nwindow.rlStep=function(n){\n  const nb=document.getElementById('rs'+n+'b');\n  const nn=document.getElementById('rs'+n+'n');\n  if(nb) nb.disabled=true;\n  const unlock=function(m){const b=document.getElementById('rs'+m+'b');const nm=document.getElementById('rs'+m+'n');if(b)b.disabled=false;if(nm)nm.className='step-num active';};\n  if(n===1){if(nn){nn.className='step-num done';nn.textContent='✓';}unlock(2);}\n  else if(n===2){if(nn){nn.className='step-num done';nn.textContent='✓';}unlock(3);}\n  else if(n===3){\n    if(nn) nn.className='step-num active';\n    const cvs=document.getElementById('sweep-c');\n    const st=document.getElementById('sweep-status');\n    if(st) st.textContent='掃頻中...';\n    if(!cvs) return;\n    const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;\n    ctx.fillStyle='#000b14';ctx.fillRect(0,0,W,H);\n    const peak=180+Math.floor(Math.random()*200);\n    let x=0;const pts=[];\n    const iv=setInterval(()=>{\n      const noise=Math.random()*4;\n      let y=H-noise-2;\n      if(Math.abs(x-peak)<28) y=H-(H-4)*Math.exp(-Math.pow((x-peak)/7,2))-noise;\n      pts.push([x,y]);\n      ctx.fillStyle='#000b14';ctx.fillRect(0,0,W,H);\n      ctx.strokeStyle='#0d2240';ctx.lineWidth=0.5;\n      ctx.beginPath();ctx.moveTo(0,H-1);ctx.lineTo(W,H-1);ctx.stroke();\n      // scan cursor\n      ctx.strokeStyle='rgba(255,160,64,0.5)';ctx.lineWidth=1;\n      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();\n      // plot\n      ctx.strokeStyle='#00e5a0';ctx.lineWidth=1.5;ctx.beginPath();\n      pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));\n      ctx.stroke();\n      x+=2;\n      if(x>W){\n        clearInterval(iv);\n        if(nn){nn.className='step-num done';nn.textContent='✓';}\n        if(st) st.textContent='✓ 偵測到 Ca+ 螢光峰 @ 411,042.130 GHz';\n        const d4=document.getElementById('rs4d');\n        if(d4) d4.textContent='鎖定點確認：411,042.130 GHz。Rabi 12.4 kHz，π-pulse 40.3 μs。';\n        unlock(4);\n      }\n    },14);\n  }\n  else if(n===4){\n    if(nn){nn.className='step-num done';nn.textContent='✓';}\n    handleAction('laser','relock');\n  }\n};\n<\/script>`\n    :`<div class="alert-box ok" data-label="STATUS"><div class="alert-body">系統正常，729 nm 雷射鎖定中（誤差 ±0.09 Hz）。無需重新掃頻。</div></div>`;\n  }\n  ]\n}, // end laser\n\n// ═══════════════════════════════════════════════════════\n// QPU\n// ═══════════════════════════════════════════════════════\nqpu:{\n  tag:'STATION 03', title:'ION TRAP QPU',\n  sub:'Dilution Refrigerator · ⁴⁰Ca⁺ × 2 · Paul Trap Control',\n  tabs:['溫度控制','離子監控','量子閘','阱參數'],\n  render:[\n\n  // ── 0: 溫度控制 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return `\n<div style="display:grid;grid-template-columns:1fr 280px;gap:16px;">\n<div>\n<div style="text-align:center;padding:20px 0;background:#040d1e;border:1px solid ${c?'#661a1a':'#0d2240'};margin-bottom:14px;position:relative;overflow:hidden;">\n  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,${c?'rgba(200,50,50,0.08)':'rgba(0,200,130,0.05)'} 0%,transparent 70%);pointer-events:none;"></div>\n  <div style="font-size:7px;color:#1a4060;letter-spacing:4px;margin-bottom:8px;">MIXING CHAMBER TEMPERATURE</div>\n  <div style="font-size:56px;font-weight:bold;color:${c?'#ff4444':'#00e5a0'};line-height:1;font-family:'Courier New',monospace;" id="mc-big">${c?'89.3':'15.2'}</div>\n  <div style="font-size:13px;color:#2a5070;margin-top:4px;">mK</div>\n  <div style="font-size:10px;color:${c?'#ff4444':'#00cc88'};margin-top:6px;" id="mc-trend">${c?'↑ +0.4 mK/s — CRITICAL':'↓ Stable ±0.02 mK'}</div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">COOLING STAGES</span><div class="ip-section-line"></div></div>\n<div class="cryo-stack">\n  <div class="cryo-item ok">\n    <span class="cryo-name">① 室溫外殼 (RT)</span>\n    <span class="cryo-temp ok">300 K</span>\n    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:100%;background:#ffa040;"></div></div>\n    <span class="cryo-note" style="color:#ffa040;">正常</span>\n  </div>\n  <div class="cryo-item ok">\n    <span class="cryo-name">② 50K Stage (LN₂ 預冷)</span>\n    <span class="cryo-temp ok">50.1 K</span>\n    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:16%;background:#5aacff;"></div></div>\n    <span class="cryo-note" style="color:#00cc88;">正常</span>\n  </div>\n  <div class="cryo-item ok">\n    <span class="cryo-name">③ 4K Stage (LHe 液氦)</span>\n    <span class="cryo-temp ok">4.02 K</span>\n    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:1.3%;background:#5aacff;"></div></div>\n    <span class="cryo-note" style="color:#00cc88;">正常</span>\n  </div>\n  <div class="cryo-item ${c?'warn':'ok'}">\n    <span class="cryo-name">④ Still (700 mK 層)</span>\n    <span class="cryo-temp ${c?'warn':'ok'}">${c?'720':'700'} mK</span>\n    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:0.23%;background:${c?'#ffaa00':'#00cc88'};"></div></div>\n    <span class="cryo-note" style="color:${c?'#ffaa00':'#00cc88'};">${c?'偏高':'正常'}</span>\n  </div>\n  <div class="cryo-item ${c?'warn':'ok'}">\n    <span class="cryo-name">⑤ 100 mK Stage</span>\n    <span class="cryo-temp ${c?'warn':'ok'}">${c?'108':'100'} mK</span>\n    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:0.033%;background:${c?'#ffaa00':'#00cc88'};"></div></div>\n    <span class="cryo-note" style="color:${c?'#ffaa00':'#00cc88'};">${c?'偏高':'正常'}</span>\n  </div>\n  <div class="cryo-item ${c?'err':'ok'}">\n    <span class="cryo-name">⑥ Mixing Chamber ★</span>\n    <span class="cryo-temp ${c?'err':'ok'}" id="mc-row-temp">${c?'89.3':'15.2'} mK</span>\n    <div class="cryo-bar-bg"><div class="cryo-bar-fill" id="mc-bar" style="width:${c?'89':'15'}%;background:${c?'#ff4444':'#00e5a0'};"></div></div>\n    <span class="cryo-note" style="color:${c?'#ff4444':'#00cc88'};">${c?'⚠ 危':'正常'}</span>\n  </div>\n</div>\n${c?`<div class="act-row"><button class="act-btn primary" onclick="handleAction('qpu','temp')">▶ 記錄溫度狀態並確認</button></div>`:''}\n</div>\n\n<!-- right: mini fridge diagram -->\n<div>\n<div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">\n  <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:10px;">STILL HEATER CIRCUIT</div>\n  <svg width="100%" viewBox="0 0 200 280" font-family="monospace">\n    <!-- pipes -->\n    <line x1="60" y1="20" x2="60" y2="260" stroke="#0d2240" stroke-width="6" stroke-linecap="round"/>\n    <line x1="140" y1="20" x2="140" y2="260" stroke="#0d2240" stroke-width="6" stroke-linecap="round"/>\n    <!-- stages as horizontal bars -->\n    <rect x="30" y="18" width="140" height="22" rx="2" fill="#060f1c" stroke="#1a3050"/>\n    <text x="100" y="33" text-anchor="middle" font-size="8" fill="#3a6080">300 K — RT</text>\n    <rect x="36" y="48" width="128" height="20" rx="2" fill="#050c18" stroke="#1a3050"/>\n    <text x="100" y="62" text-anchor="middle" font-size="8" fill="#2a5070">50 K Stage</text>\n    <rect x="42" y="76" width="116" height="20" rx="2" fill="#040a14" stroke="#1a3050"/>\n    <text x="100" y="90" text-anchor="middle" font-size="8" fill="#2a5070">4 K Stage</text>\n    <!-- still heater highlight -->\n    <rect x="48" y="104" width="104" height="22" rx="2" fill="${c?'rgba(80,40,0,0.4)':'#030810'}" stroke="${c?'#664010':'#0d2240'}" stroke-width="${c?'1.5':'1'}"/>\n    <text x="100" y="119" text-anchor="middle" font-size="8" fill="${c?'#ffaa00':'#1a4060'}">Still  700 mK</text>\n    ${c?`<text x="180" y="119" text-anchor="middle" font-size="10" fill="#ffaa00">⚠</text>`:''}\n    <!-- CH-02 heater element -->\n    <rect x="56" y="132" width="88" height="16" rx="2" fill="${c?'rgba(120,20,20,0.5)':'#020810'}" stroke="${c?'#cc3333':'#0d2240'}"/>\n    <text x="100" y="143" text-anchor="middle" font-size="7" fill="${c?'#ff5555':'#1a4060'}">CH-02 Still Heater ${c?'[STUCK]':''}</text>\n    <!-- current arrow -->\n    ${c?`<line x1="100" y1="132" x2="100" y2="112" stroke="#ff4444" stroke-width="1.5" marker-end="url(#arr)"/>\n    <text x="108" y="126" font-size="7" fill="#ff4444">8.5A</text>`:''}\n    <rect x="50" y="156" width="100" height="22" rx="2" fill="${c?'rgba(80,20,20,0.3)':'#020810'}" stroke="${c?'#661a1a':'#0d2240'}"/>\n    <text x="100" y="171" text-anchor="middle" font-size="8" fill="${c?'#ff4444':'#1a4060'}">100 mK Stage</text>\n    <rect x="54" y="186" width="92" height="24" rx="2" fill="${c?'rgba(100,10,10,0.4)':'#020810'}" stroke="${c?'#cc3333':'#1a4060'}" stroke-width="1.5"/>\n    <text x="100" y="200" text-anchor="middle" font-size="8" fill="${c?'#ff4444':'#00cc88'}">Mixing Chamber</text>\n    <text x="100" y="210" text-anchor="middle" font-size="10" fill="${c?'#ff4444':'#00e5a0'}" font-weight="bold">${c?'89.3 mK':'15.2 mK'}</text>\n    <!-- ion trap -->\n    <ellipse cx="100" cy="244" rx="22" ry="10" fill="none" stroke="${c?'#cc3333':'#005530'}" stroke-width="1"/>\n    <circle cx="93" cy="244" r="3" fill="${c?'rgba(255,80,80,0.6)':'rgba(90,172,255,0.8)'}"/>\n    <circle cx="107" cy="244" r="3" fill="${c?'rgba(255,80,80,0.6)':'rgba(90,172,255,0.8)'}"/>\n    <text x="100" y="260" text-anchor="middle" font-size="7" fill="#1a4060">ION TRAP</text>\n    <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">\n      <path d="M0,0 L6,3 L0,6 z" fill="#ff4444"/>\n    </marker></defs>\n  </svg>\n</div>\n</div>\n</div>`;\n  },\n\n  // ── 1: 離子監控 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return `\n<div class="gauge-row cols-4">\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">ION #1</div>\n    <div class="gauge-val blue">|0⟩</div>\n    <div class="gauge-unit">⁴⁰Ca⁺ alive</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">ION #2</div>\n    <div class="gauge-val blue">|0⟩</div>\n    <div class="gauge-unit">⁴⁰Ca⁺ alive</div>\n  </div>\n  <div class="gauge-card ${c?'warn':''}">\n    <div class="live-pip ${c?'warn':'ok'}"></div>\n    <div class="gauge-label">n̄ (COM mode)</div>\n    <div class="gauge-val ${c?'warn':'ok'}">${c?'~120':'0.05'}</div>\n    <div class="gauge-unit">${c?'過熱 — 待冷卻':'phonons (GS)'}</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">ION SPACING</div>\n    <div class="gauge-val white">5.2</div>\n    <div class="gauge-unit">μm</div>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">ION CHAIN — CCD IMAGE (SIMULATION)</span><div class="ip-section-line"></div></div>\n<div class="ion-view">\n  <canvas id="ion-ccd" width="540" height="90" style="display:block;margin:0 auto;width:100%;max-width:540px;height:90px;"></canvas>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">TRAP & ION PARAMETERS</span><div class="ip-section-line"></div></div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">\n  <div>\n    <div class="data-row"><span class="data-key">阱軸向頻率 ωz/2π</span><span class="data-val">1.20 MHz</span></div>\n    <div class="data-row"><span class="data-key">阱徑向頻率 ωr/2π</span><span class="data-val">2.82 MHz</span></div>\n    <div class="data-row"><span class="data-key">Lamb-Dicke η (axial)</span><span class="data-val">0.094</span></div>\n    <div class="data-row"><span class="data-key">D5/2 態壽命</span><span class="data-val">1.168 s</span></div>\n  </div>\n  <div>\n    <div class="data-row"><span class="data-key">Ion #1 螢光</span><span class="data-val ${c?'warn':'ok'}" id="ion1-fl">${c?'偏低 (~4 c/ms)':'23.4 c/ms ✓'}</span></div>\n    <div class="data-row"><span class="data-key">Ion #2 螢光</span><span class="data-val ${c?'warn':'ok'}" id="ion2-fl">${c?'偏低 (~4 c/ms)':'22.9 c/ms ✓'}</span></div>\n    <div class="data-row"><span class="data-key">背景計數</span><span class="data-val">0.31 c/ms</span></div>\n    <div class="data-row"><span class="data-key">判決閾值</span><span class="data-val">5 counts/120ns</span></div>\n  </div>\n</div>\n${c?`<div class="act-row"><button class="act-btn primary" onclick="handleAction('qpu','ions')">▶ 確認離子存活 — 記錄螢光</button></div>`:''}\n\n<\/script>\n<script>\n(function(){\n  const cvs=document.getElementById('ion-ccd');\n  if(!cvs) return;\n  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;\n  const crisis=(typeof gamePhase!=='undefined'&&gamePhase==='crisis');\n  let t=0;\n  function draw(){\n    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);\n    // noise floor\n    for(let i=0;i<60;i++){\n      ctx.fillStyle='rgba(90,172,255,'+(Math.random()*0.04)+')';\n      ctx.fillRect(Math.random()*W,Math.random()*H,1,1);\n    }\n    [[W*0.38,H/2],[W*0.62,H/2]].forEach(([cx,cy],i)=>{\n      const bright=crisis?(0.25+Math.random()*0.2):(0.82+Math.sin(t*2.5+i)*0.1);\n      const r=crisis?7:11;\n      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r*2.5);\n      g.addColorStop(0,'rgba(130,200,255,'+bright+')');\n      g.addColorStop(0.35,'rgba(80,140,220,'+(bright*0.5)+')');\n      g.addColorStop(1,'rgba(0,10,30,0)');\n      ctx.fillStyle=g;\n      ctx.fillRect(cx-r*2.5-2,cy-r*2.5-2,r*5+4,r*5+4);\n    });\n    t+=0.04;\n    requestAnimationFrame(draw);\n  }\n  draw();\n})();\n<\/script>`;\n  },\n\n  // ── 2: 量子閘 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return c?`<div class="alert-box crit" data-label="SUSPENDED"><div class="alert-body">溫度異常中，量子閘序列暫停。待冷卻系統恢復至 &lt; 20 mK 後方可執行。</div></div>`:`\n<div class="ip-section"><span class="ip-section-label">BELL STATE SEQUENCE — |Φ+⟩ = (|00⟩+|11⟩)/√2</span><div class="ip-section-line"></div></div>\n<div style="background:#040d1e;border:1px solid #0d2240;padding:0;margin-bottom:12px;">\n  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;\n    font-size:7px;color:#1a4060;letter-spacing:2px;padding:5px 12px;border-bottom:1px solid #0d2240;">\n    <span>STEP</span><span>OPERATION</span><span>DURATION</span><span>STATUS</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;border-bottom:1px solid #060f20;">\n    <span style="font-size:9px;color:#1a4060;">INIT</span>\n    <span style="font-size:10px;color:#5aacff;">Doppler 冷卻 + Sideband 冷卻</span>\n    <span style="font-size:9px;color:#1a4060;">55 ms</span>\n    <span style="font-size:9px;color:#2a5070;" id="gs1">待機</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;border-bottom:1px solid #060f20;">\n    <span style="font-size:9px;color:#1a4060;">H</span>\n    <span style="font-size:10px;color:#cc8844;">Hadamard — π/2 pulse (729 nm, Ion #1)</span>\n    <span style="font-size:9px;color:#1a4060;">20 μs</span>\n    <span style="font-size:9px;color:#2a5070;" id="gs2">待機</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;border-bottom:1px solid #060f20;">\n    <span style="font-size:9px;color:#1a4060;">MS</span>\n    <span style="font-size:10px;color:#cc8844;">Mølmer–Sørensen gate (bichromatic)</span>\n    <span style="font-size:9px;color:#1a4060;">184 μs</span>\n    <span style="font-size:9px;color:#2a5070;" id="gs3">待機</span>\n  </div>\n  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;">\n    <span style="font-size:9px;color:#1a4060;">READ</span>\n    <span style="font-size:10px;color:#8aaace;">State detection × 1000 shots (PMT)</span>\n    <span style="font-size:9px;color:#1a4060;">120 ms</span>\n    <span style="font-size:9px;color:#2a5070;" id="gs4">待機</span>\n  </div>\n</div>\n\n<div class="gauge-row cols-2" id="gate-results" style="display:none;">\n  <div>\n    <div class="ip-section"><span class="ip-section-label">MEASUREMENT RESULTS</span><div class="ip-section-line"></div></div>\n    <div class="hist-container">\n      <div class="hist-bars">\n        <div class="hist-col"><div class="hist-bar" id="hb00" style="height:0%;background:#00cc88;transition:height 1s;"></div><div class="hist-state">|00⟩</div><div class="hist-pct" id="hp00" style="color:#00cc88;">-</div></div>\n        <div class="hist-col"><div class="hist-bar" id="hb01" style="height:0%;background:#1a4060;transition:height 1s;"></div><div class="hist-state">|01⟩</div><div class="hist-pct" id="hp01" style="color:#1a4060;">-</div></div>\n        <div class="hist-col"><div class="hist-bar" id="hb10" style="height:0%;background:#1a4060;transition:height 1s;"></div><div class="hist-state">|10⟩</div><div class="hist-pct" id="hp10" style="color:#1a4060;">-</div></div>\n        <div class="hist-col"><div class="hist-bar" id="hb11" style="height:0%;background:#5aacff;transition:height 1s;"></div><div class="hist-state">|11⟩</div><div class="hist-pct" id="hp11" style="color:#5aacff;">-</div></div>\n      </div>\n    </div>\n  </div>\n  <div>\n    <div class="ip-section"><span class="ip-section-label">ENTANGLEMENT METRICS</span><div class="ip-section-line"></div></div>\n    <div style="background:#040d1e;border:1px solid #0d2240;padding:12px;">\n      <div class="data-row"><span class="data-key">纏結保真度 F</span><span class="data-val ok" id="fid-val">-</span></div>\n      <div class="data-row"><span class="data-key">Bell 參數 S</span><span class="data-val ok" id="bell-s">-</span></div>\n      <div class="data-row"><span class="data-key">古典上限</span><span class="data-val">S ≤ 2.000</span></div>\n      <div class="data-row"><span class="data-key">量子優勢</span><span class="data-val ok" id="qadv">-</span></div>\n      <div class="data-row"><span class="data-key">量測次數</span><span class="data-val">1000 shots</span></div>\n    </div>\n    <div class="alert-box ok" data-label="RESULT" id="bell-ok-box" style="display:none;">\n      <div class="alert-body">Bell State |Φ+⟩ 確認！Bell 不等式違反 — 量子纏結成功。</div>\n    </div>\n  </div>\n</div>\n\n<div class="act-row">\n  <button class="act-btn primary" id="run-bell-btn" onclick="runBellV5()">▶ 執行 Bell State 序列</button>\n</div>\n\n<\/script>\n<script>\nwindow.runBellV5=function(){\n  const btn=document.getElementById('run-bell-btn');\n  if(btn) btn.disabled=true;\n  const steps=[{id:'gs1',t:700},{id:'gs2',t:1500},{id:'gs3',t:2400},{id:'gs4',t:3500}];\n  steps.forEach(s=>{\n    const el=document.getElementById(s.id);\n    if(el){el.textContent='執行中';el.style.color='#ffa040';}\n    setTimeout(()=>{\n      if(el){el.textContent='✓ 完成';el.style.color='#00cc88';}\n    },s.t+400);\n  });\n  setTimeout(()=>{\n    const res=document.getElementById('gate-results');\n    if(res) res.style.display='grid';\n    const p00=(48+Math.random()*3).toFixed(1);\n    const p11=(48+Math.random()*3).toFixed(1);\n    const p01=((100-parseFloat(p00)-parseFloat(p11))*0.55).toFixed(1);\n    const p10=(100-parseFloat(p00)-parseFloat(p11)-parseFloat(p01)).toFixed(1);\n    setTimeout(()=>{\n      [['00',p00,'#00cc88'],['01',p01,'#1a4060'],['10',p10,'#1a4060'],['11',p11,'#5aacff']].forEach(([s,v,col])=>{\n        const b=document.getElementById('hb'+s),p=document.getElementById('hp'+s);\n        if(b){b.style.height=parseFloat(v)+'%';b.style.background=col;}\n        if(p){p.textContent=v+'%';p.style.color=col;}\n      });\n      const fid=((parseFloat(p00)+parseFloat(p11))/100*100).toFixed(1);\n      const S=(2.6+Math.random()*0.3).toFixed(3);\n      const fv=document.getElementById('fid-val'),bs=document.getElementById('bell-s'),qa=document.getElementById('qadv'),ob=document.getElementById('bell-ok-box');\n      if(fv){fv.textContent=fid+'%';}\n      if(bs){bs.textContent=S;}\n      if(qa){qa.textContent='S − 2 = +'+(parseFloat(S)-2).toFixed(3);}\n      if(ob) ob.style.display='block';\n      setTimeout(()=>handleAction('qpu','bell'),600);\n    },200);\n  },4000);\n};\n<\/script>`;\n  },\n\n  // ── 3: 阱參數 ──\n  ()=>`\n<div class="gauge-row cols-4">\n  <div class="gauge-card"><div class="gauge-label">RF FREQUENCY</div><div class="gauge-val ok">26.10</div><div class="gauge-unit">MHz LOCKED</div></div>\n  <div class="gauge-card"><div class="gauge-label">RF VOLTAGE V₀</div><div class="gauge-val white">640</div><div class="gauge-unit">V pk-pk</div></div>\n  <div class="gauge-card"><div class="gauge-label">STABILITY q</div><div class="gauge-val ok">0.206</div><div class="gauge-unit">Mathieu param</div></div>\n  <div class="gauge-card"><div class="gauge-label">DC ENDCAP</div><div class="gauge-val white">+8.4</div><div class="gauge-unit">V</div></div>\n</div>\n<div class="ip-section"><span class="ip-section-label">PAUL TRAP GEOMETRY</span><div class="ip-section-line"></div></div>\n<div class="trap-svg-wrap">\n  <svg width="380" height="120" viewBox="0 0 380 120" font-family="monospace">\n    <!-- endcaps -->\n    <rect x="8" y="44" width="60" height="32" rx="3" fill="#c8a020" stroke="#d4b030" stroke-width="1.5"/>\n    <text x="38" y="63" text-anchor="middle" font-size="8" fill="#040d1e" font-weight="bold">+DC</text>\n    <rect x="312" y="44" width="60" height="32" rx="3" fill="#c8a020" stroke="#d4b030" stroke-width="1.5"/>\n    <text x="342" y="63" text-anchor="middle" font-size="8" fill="#040d1e" font-weight="bold">+DC</text>\n    <!-- blade electrodes top -->\n    <rect x="76" y="8" width="228" height="34" rx="2" fill="#1a3050" stroke="#3a6090" stroke-width="1"/>\n    <text x="190" y="29" text-anchor="middle" font-size="8" fill="#5aacff">RF +V₀ (Blade 1)</text>\n    <!-- blade electrodes bottom -->\n    <rect x="76" y="78" width="228" height="34" rx="2" fill="#1a3050" stroke="#3a6090" stroke-width="1"/>\n    <text x="190" y="99" text-anchor="middle" font-size="8" fill="#5aacff">RF −V₀ (Blade 2)</text>\n    <!-- trap axis -->\n    <line x1="68" y1="60" x2="312" y2="60" stroke="#0d2240" stroke-width="0.5" stroke-dasharray="4,4"/>\n    <!-- ions -->\n    <circle cx="174" cy="60" r="7" fill="rgba(90,172,255,0.85)" stroke="#5aacff" stroke-width="1"/>\n    <text x="174" y="63" text-anchor="middle" font-size="6" fill="white">Ca</text>\n    <circle cx="206" cy="60" r="7" fill="rgba(90,172,255,0.85)" stroke="#5aacff" stroke-width="1"/>\n    <text x="206" y="63" text-anchor="middle" font-size="6" fill="white">Ca</text>\n    <!-- spacing label -->\n    <line x1="174" y1="73" x2="206" y2="73" stroke="#1a4060" stroke-width="0.8"/>\n    <text x="190" y="83" text-anchor="middle" font-size="7" fill="#1a4060">5.2 μm</text>\n    <!-- laser beams -->\n    <line x1="76" y1="60" x2="165" y2="60" stroke="rgba(130,100,255,0.5)" stroke-width="1.5" stroke-dasharray="3,2"/>\n    <text x="110" y="56" text-anchor="middle" font-size="7" fill="rgba(130,130,255,0.7)">397nm ↓</text>\n    <line x1="215" y1="60" x2="312" y2="60" stroke="rgba(200,80,0,0.5)" stroke-width="1.5" stroke-dasharray="3,2"/>\n    <text x="265" y="56" text-anchor="middle" font-size="7" fill="rgba(200,100,0,0.7)">729nm →</text>\n  </svg>\n</div>\n<div class="ip-section"><span class="ip-section-label">SECULAR FREQUENCIES</span><div class="ip-section-line"></div></div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">\n  <div>\n    <div class="data-row"><span class="data-key">軸向 COM ωz/2π</span><span class="data-val">1.200 MHz</span></div>\n    <div class="data-row"><span class="data-key">軸向 STR ωz,2/2π</span><span class="data-val">2.078 MHz</span></div>\n    <div class="data-row"><span class="data-key">徑向 x ωx/2π</span><span class="data-val">2.820 MHz</span></div>\n    <div class="data-row"><span class="data-key">徑向 y ωy/2π</span><span class="data-val">2.835 MHz</span></div>\n  </div>\n  <div>\n    <div class="data-row"><span class="data-key">Rabi 頻率 Ω/2π</span><span class="data-val ok">12.4 kHz</span></div>\n    <div class="data-row"><span class="data-key">π pulse 時間</span><span class="data-val ok">40.3 μs</span></div>\n    <div class="data-row"><span class="data-key">單 qubit 閘保真度</span><span class="data-val ok">99.8%</span></div>\n    <div class="data-row"><span class="data-key">MS 纏結閘保真度</span><span class="data-val ok">98.7%</span></div>\n  </div>\n</div>`\n  ]\n}, // end qpu\n\n// ═══════════════════════════════════════════════════════\n// READOUT\n// ═══════════════════════════════════════════════════════\nreadout:{\n  tag:'STATION 04', title:'READOUT SYSTEM',\n  sub:'Single-Photon PMT · Fluorescence Analysis · State Discrimination',\n  tabs:['PMT 控制台','螢光掃描','統計分析','示波器'],\n  render:[\n\n  // ── 0: PMT 控制台 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return `\n<div style="display:grid;grid-template-columns:1fr 260px;gap:16px;">\n<div>\n<div class="gauge-row cols-3">\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">PMT HIGH VOLTAGE</div>\n    <div class="gauge-val blue" id="hv-big">-850</div>\n    <div class="gauge-unit">V — ACTIVE</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ok"></div>\n    <div class="gauge-label">DARK COUNT RATE</div>\n    <div class="gauge-val ok" id="dark-big">3.2</div>\n    <div class="gauge-unit">counts / sec</div>\n  </div>\n  <div class="gauge-card">\n    <div class="live-pip ${c?'warn':'ok'}"></div>\n    <div class="gauge-label">LIVE COUNT</div>\n    <div class="gauge-val ${c?'warn':'ok'}" id="live-big">${c?'~8':'~46'}</div>\n    <div class="gauge-unit">counts / ms (2 ions)</div>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">PMT CONTROLS</span><div class="ip-section-line"></div></div>\n<div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">\n  <div class="knob-row">\n    <span class="knob-key">High Voltage (HV)</span>\n    <div class="knob-ctrl">\n      <button class="knob-btn" onclick="adjPMT('hv',-10)">−</button>\n      <span class="knob-disp" id="hv-disp">-850 V</span>\n      <button class="knob-btn" onclick="adjPMT('hv',10)">+</button>\n    </div>\n  </div>\n  <div class="knob-row">\n    <span class="knob-key">積分視窗</span>\n    <div class="knob-ctrl">\n      <button class="knob-btn" onclick="adjPMT('win',-10)">−</button>\n      <span class="knob-disp" id="win-disp">120 ns</span>\n      <button class="knob-btn" onclick="adjPMT('win',10)">+</button>\n    </div>\n  </div>\n  <div class="knob-row">\n    <span class="knob-key">判決閾值</span>\n    <div class="knob-ctrl">\n      <button class="knob-btn" onclick="adjPMT('thr',-1)">−</button>\n      <span class="knob-disp" id="thr-disp">5 cts</span>\n      <button class="knob-btn" onclick="adjPMT('thr',1)">+</button>\n    </div>\n  </div>\n</div>\n\n<div class="ip-section"><span class="ip-section-label">PER-ION FLUORESCENCE</span><div class="ip-section-line"></div></div>\n<div class="bar-row">\n  <span class="bar-label">Ion #1 螢光</span>\n  <div class="bar-track"><div class="bar-fill" id="fl1-bar" style="width:${c?'20':'90'}%;background:${c?'#ffaa00':'#00cc88'};"></div></div>\n  <span class="bar-val" id="fl1-val" style="color:${c?'#ffaa00':'#00cc88'};">${c?'4.2':'23.4'} c/ms</span>\n</div>\n<div class="bar-row">\n  <span class="bar-label">Ion #2 螢光</span>\n  <div class="bar-track"><div class="bar-fill" id="fl2-bar" style="width:${c?'19':'88'}%;background:${c?'#ffaa00':'#00cc88'};"></div></div>\n  <span class="bar-val" id="fl2-val" style="color:${c?'#ffaa00':'#00cc88'};">${c?'4.0':'22.9'} c/ms</span>\n</div>\n<div class="bar-row">\n  <span class="bar-label">背景雜訊</span>\n  <div class="bar-track"><div class="bar-fill" style="width:1.5%;background:#1a4060;"></div></div>\n  <span class="bar-val" style="color:#1a4060;">0.31 c/ms</span>\n</div>\n\n${c?`<div class="act-row"><button class="act-btn primary" onclick="switchDMTab(1)">▶ 前往螢光掃描確認離子</button></div>`:''}\n</div>\n\n<!-- right: detection principle -->\n<div>\n  <div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">\n    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:10px;">STATE DISCRIMINATION</div>\n    <svg width="100%" viewBox="0 0 200 200" font-family="monospace">\n      <!-- bright state -->\n      <rect x="10" y="10" width="80" height="80" rx="2" fill="#040d1e" stroke="#005530"/>\n      <text x="50" y="28" text-anchor="middle" font-size="8" fill="#1a4060">|0⟩ BRIGHT</text>\n      <circle cx="50" cy="58" r="14" fill="rgba(90,172,255,0.8)" stroke="#5aacff"/>\n      <text x="50" y="62" text-anchor="middle" font-size="7" fill="white">Ca⁺</text>\n      <!-- photon arrows -->\n      <line x1="50" y1="44" x2="50" y2="20" stroke="#5aacff" stroke-width="1" marker-end="url(#ph)"/>\n      <line x1="63" y1="50" x2="82" y2="36" stroke="#5aacff" stroke-width="1"/>\n      <line x1="37" y1="50" x2="18" y2="36" stroke="#5aacff" stroke-width="1"/>\n      <text x="50" y="90" text-anchor="middle" font-size="7" fill="#00cc88">~23 c/ms ✓</text>\n      <!-- dark state -->\n      <rect x="110" y="10" width="80" height="80" rx="2" fill="#040d1e" stroke="#661a1a"/>\n      <text x="150" y="28" text-anchor="middle" font-size="8" fill="#1a4060">|1⟩ DARK</text>\n      <circle cx="150" cy="58" r="14" fill="rgba(40,20,40,0.8)" stroke="#3a1a4a"/>\n      <text x="150" y="62" text-anchor="middle" font-size="7" fill="#4a3a5a">Ca⁺</text>\n      <text x="150" y="90" text-anchor="middle" font-size="7" fill="#cc3333">&lt;0.5 c/ms</text>\n      <!-- threshold -->\n      <rect x="10" y="105" width="180" height="50" rx="2" fill="#030a14" stroke="#0d2240"/>\n      <text x="100" y="120" text-anchor="middle" font-size="7" fill="#1a4060">THRESHOLD = 5 counts</text>\n      <line x1="20" y1="132" x2="180" y2="132" stroke="#1a4060" stroke-width="0.5"/>\n      <rect x="20" y="120" width="40" height="24" rx="1" fill="rgba(0,200,130,0.3)" stroke="#005530"/>\n      <text x="40" y="136" text-anchor="middle" font-size="7" fill="#00cc88">≥5 → |0⟩</text>\n      <rect x="140" y="120" width="40" height="24" rx="1" fill="rgba(150,30,30,0.3)" stroke="#661a1a"/>\n      <text x="160" y="136" text-anchor="middle" font-size="7" fill="#cc3333">&lt;5 → |1⟩</text>\n      <!-- readout time -->\n      <text x="100" y="160" text-anchor="middle" font-size="7" fill="#1a4060">讀出視窗: 120 ns</text>\n      <text x="100" y="172" text-anchor="middle" font-size="7" fill="#1a4060">誤差率: 0.28%</text>\n      <defs><marker id="ph" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">\n        <circle cx="2.5" cy="2.5" r="2" fill="#5aacff"/>\n      </marker></defs>\n    </svg>\n  </div>\n</div>\n</div>\n\n<\/script>\n<script>\nwindow._pmt={hv:-850,win:120,thr:5};\nwindow.adjPMT=function(k,d){\n  if(k==='hv'){window._pmt.hv=Math.max(-1000,Math.min(-700,window._pmt.hv+d));const el=document.getElementById('hv-disp');const big=document.getElementById('hv-big');if(el)el.textContent=window._pmt.hv+' V';if(big)big.textContent=window._pmt.hv;}\n  if(k==='win'){window._pmt.win=Math.max(50,Math.min(500,window._pmt.win+d));const el=document.getElementById('win-disp');if(el)el.textContent=window._pmt.win+' ns';}\n  if(k==='thr'){window._pmt.thr=Math.max(1,Math.min(20,window._pmt.thr+d));const el=document.getElementById('thr-disp');if(el)el.textContent=window._pmt.thr+' cts';}\n};\n(function liveTick(){\n  const crisis=(typeof gamePhase!=='undefined'&&gamePhase==='crisis');\n  const base=crisis?4:23;\n  const v1=(base+(Math.random()-0.5)*1.2).toFixed(1);\n  const v2=(base+(Math.random()-0.5)*1.2).toFixed(1);\n  const tot=(parseFloat(v1)+parseFloat(v2)).toFixed(0);\n  const lb=document.getElementById('live-big');const f1=document.getElementById('fl1-val');const f2=document.getElementById('fl2-val');\n  const b1=document.getElementById('fl1-bar');const b2=document.getElementById('fl2-bar');\n  if(lb) lb.textContent='~'+tot;\n  if(f1){f1.textContent=v1+' c/ms';}\n  if(f2){f2.textContent=v2+' c/ms';}\n  if(b1) b1.style.width=(parseFloat(v1)/30*100).toFixed(0)+'%';\n  if(b2) b2.style.width=(parseFloat(v2)/30*100).toFixed(0)+'%';\n  const dark=(3+Math.random()*0.5).toFixed(1);\n  const db=document.getElementById('dark-big');\n  if(db) db.textContent=dark;\n  setTimeout(liveTick,700);\n})();\n<\/script>`;\n  },\n\n  // ── 1: 螢光掃描 ──\n  ()=>{\n    const c=(gamePhase==='crisis');\n    return `\n<div class="ip-section"><span class="ip-section-label">397 nm FLUORESCENCE SCAN</span><div class="ip-section-line"></div></div>\n<div class="sweep-wrap" style="height:100px;">\n  <canvas id="fluo-c" width="700" height="100" style="width:100%;height:100px;display:block;"></canvas>\n</div>\n<div style="font-size:9px;color:#1a4060;text-align:center;margin:4px 0;" id="fluo-status">按下方按鈕開始掃描</div>\n\n<div style="display:none;" id="fluo-results">\n  <div class="gauge-row cols-3" style="margin-top:12px;">\n    <div class="gauge-card">\n      <div class="live-pip ok"></div>\n      <div class="gauge-label">ION #1</div>\n      <div class="gauge-val ok" id="fluo-v1">-</div>\n      <div class="gauge-unit">counts/ms</div>\n    </div>\n    <div class="gauge-card">\n      <div class="live-pip ok"></div>\n      <div class="gauge-label">ION #2</div>\n      <div class="gauge-val ok" id="fluo-v2">-</div>\n      <div class="gauge-unit">counts/ms</div>\n    </div>\n    <div class="gauge-card">\n      <div class="live-pip ok"></div>\n      <div class="gauge-label">SURVIVAL</div>\n      <div class="gauge-val ok">2 / 2</div>\n      <div class="gauge-unit">confirmed</div>\n    </div>\n  </div>\n  <div class="alert-box ok" data-label="SCAN RESULT">\n    <div class="alert-body">\n      兩個 ⁴⁰Ca⁺ 離子螢光峰確認。離子仍在陷阱中。<br>\n      ${c?'熱運動偏高（n̄≈120），溫度恢復後需重新 Doppler 冷卻再繼續實驗。':'系統狀態正常。'}\n    </div>\n  </div>\n</div>\n\n<div class="act-row">\n  <button class="act-btn primary" id="scan-btn" onclick="runFluoV5()">▶ 執行螢光掃描</button>\n</div>\n\n<\/script>\n<script>\nwindow.runFluoV5=function(){\n  const btn=document.getElementById('scan-btn');\n  if(btn) btn.disabled=true;\n  const cvs=document.getElementById('fluo-c');\n  const st=document.getElementById('fluo-status');\n  if(!cvs) return;\n  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;\n  const crisis=(typeof gamePhase!=='undefined'&&gamePhase==='crisis');\n  ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);\n  if(st) st.textContent='397 nm 脈衝中，PMT 記錄螢光...';\n  let scanX=0;\n  const peak1=Math.round(W*0.33),peak2=Math.round(W*0.67);\n  const pts=[];\n  const iv=setInterval(()=>{\n    const noise=(Math.random()-0.5)*3;\n    let y=H-2-noise;\n    if(Math.abs(scanX-peak1)<25) y=H-(H-5)*Math.exp(-Math.pow((scanX-peak1)/7,2))*(crisis?0.4:0.92)-noise;\n    if(Math.abs(scanX-peak2)<25) y=H-(H-5)*Math.exp(-Math.pow((scanX-peak2)/7,2))*(crisis?0.38:0.90)-noise;\n    pts.push([scanX,y]);\n    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);\n    // grid\n    ctx.strokeStyle='#0d2240'; ctx.lineWidth=0.5;\n    [0.25,0.5,0.75].forEach(f=>{ctx.beginPath();ctx.moveTo(0,H*f);ctx.lineTo(W,H*f);ctx.stroke();});\n    // filled area\n    ctx.beginPath();\n    ctx.moveTo(0,H);\n    pts.forEach(p=>ctx.lineTo(p[0],p[1]));\n    ctx.lineTo(pts[pts.length-1][0],H);\n    ctx.closePath();\n    const gr=ctx.createLinearGradient(0,0,0,H);\n    gr.addColorStop(0,'rgba(0,200,130,0.2)'); gr.addColorStop(1,'rgba(0,0,0,0)');\n    ctx.fillStyle=gr; ctx.fill();\n    // line\n    ctx.strokeStyle='#00e5a0'; ctx.lineWidth=1.5; ctx.beginPath();\n    pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();\n    // scan cursor\n    ctx.strokeStyle='rgba(255,160,64,0.6)'; ctx.lineWidth=1;\n    ctx.beginPath(); ctx.moveTo(scanX,0); ctx.lineTo(scanX,H); ctx.stroke();\n    // labels\n    ctx.fillStyle='#1a4060'; ctx.font='8px monospace';\n    ctx.fillText('Ion #1',peak1-15,H-5);\n    ctx.fillText('Ion #2',peak2-15,H-5);\n    scanX+=3;\n    if(scanX>=W){\n      clearInterval(iv);\n      if(st) st.textContent='✓ 掃描完成 — 偵測到 2 個螢光峰';\n      const res=document.getElementById('fluo-results');\n      if(res) res.style.display='block';\n      const base=crisis?4.2:23.4;\n      const v1=(base+(Math.random()-0.5)*0.4).toFixed(1);\n      const v2=(base+(Math.random()-0.5)*0.4).toFixed(1);\n      const e1=document.getElementById('fluo-v1'),e2=document.getElementById('fluo-v2');\n      if(e1) e1.textContent=v1+(crisis?' (low)':' ✓');\n      if(e2) e2.textContent=v2+(crisis?' (low)':' ✓');\n      setTimeout(()=>handleAction('readout','scan'),500);\n    }\n  },12);\n};\n<\/script>`;\n  },\n\n  // ── 2: 統計分析 ──\n  ()=>`\n<div class="ip-section"><span class="ip-section-label">BELL STATE STATISTICS</span><div class="ip-section-line"></div></div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">\n<div>\n<div style="background:#040d1e;border:1px solid #0d2240;padding:10px;margin-bottom:8px;text-align:center;">\n  <div style="font-size:9px;color:#1a4060;letter-spacing:1px;margin-bottom:6px;">TARGET STATE</div>\n  <div style="font-size:14px;color:#8aaace;letter-spacing:2px;">|Φ+⟩ = (|00⟩ + |11⟩) / √2</div>\n</div>\n<div class="hist-container">\n  <div class="hist-bars">\n    <div class="hist-col">\n      <div class="hist-bar" style="height:98%;background:#00cc88;"></div>\n      <div class="hist-state" style="color:#00cc88;">|00⟩</div>\n      <div class="hist-pct" style="color:#00cc88;">49.3%</div>\n    </div>\n    <div class="hist-col">\n      <div class="hist-bar" style="height:1.4%;background:#1a4060;"></div>\n      <div class="hist-state" style="color:#1a4060;">|01⟩</div>\n      <div class="hist-pct" style="color:#1a4060;">0.7%</div>\n    </div>\n    <div class="hist-col">\n      <div class="hist-bar" style="height:1.2%;background:#1a4060;"></div>\n      <div class="hist-state" style="color:#1a4060;">|10⟩</div>\n      <div class="hist-pct" style="color:#1a4060;">0.6%</div>\n    </div>\n    <div class="hist-col">\n      <div class="hist-bar" style="height:96%;background:#5aacff;"></div>\n      <div class="hist-state" style="color:#5aacff;">|11⟩</div>\n      <div class="hist-pct" style="color:#5aacff;">49.4%</div>\n    </div>\n  </div>\n</div>\n</div>\n<div>\n  <div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">\n    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:10px;">METRICS</div>\n    <div class="data-row"><span class="data-key">纏結保真度 F</span><span class="data-val ok">98.7%</span></div>\n    <div class="data-row"><span class="data-key">量測次數</span><span class="data-val">1000 shots</span></div>\n    <div class="data-row"><span class="data-key">|00⟩ 計數</span><span class="data-val ok">493</span></div>\n    <div class="data-row"><span class="data-key">|11⟩ 計數</span><span class="data-val ok">494</span></div>\n    <div class="data-row"><span class="data-key">Bell 參數 S</span><span class="data-val ok">2.789</span></div>\n    <div class="data-row"><span class="data-key">古典上限</span><span class="data-val">S ≤ 2.000</span></div>\n    <div class="data-row"><span class="data-key">違反量</span><span class="data-val ok">ΔS = +0.789 (σ=18.8)</span></div>\n    <div class="data-row"><span class="data-key">SPAM 誤差</span><span class="data-val">0.28% corrected</span></div>\n  </div>\n  <div class="alert-box ok" data-label="CONCLUSION">\n    <div class="alert-body">Bell 不等式違反確認。量子纏結成立。纏結保真度 98.7% 超越目標 98%。</div>\n  </div>\n</div>\n</div>\n`,\n\n  // ── 3: 示波器 ──\n  ()=>`\n<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">\n  <button class="act-btn neutral" id="trig-s" onclick="setTrigV5('single')" style="font-size:8px;padding:4px 10px;">SINGLE</button>\n  <button class="act-btn neutral" id="trig-a" onclick="setTrigV5('avg')" style="font-size:8px;padding:4px 10px;">AVG×10</button>\n  <button class="act-btn neutral" id="trig-c" onclick="setTrigV5('cont')" style="font-size:8px;padding:4px 10px;">CONTINUOUS</button>\n  <span style="font-size:8px;color:#1a4060;margin-left:auto;line-height:2.2;">200 ns/div · 1.25 GS/s</span>\n</div>\n<div class="osc-container" style="height:100px;">\n  <canvas id="osc-c" width="700" height="100" style="width:100%;height:100px;display:block;"></canvas>\n  <div class="osc-trig-line" style="top:30%;"></div>\n</div>\n<div style="display:flex;justify-content:space-between;font-size:7px;color:#1a4060;padding:2px 6px;margin-bottom:12px;">\n  <span>0</span><span>200ns</span><span>400ns</span><span>600ns</span><span>800ns</span><span>1000ns</span><span>1200ns</span>\n</div>\n<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">\n  <div>\n    <div class="data-row"><span class="data-key">高態 |0⟩ (bright)</span><span class="data-val ok">~23 counts/120ns</span></div>\n    <div class="data-row"><span class="data-key">低態 |1⟩ (dark)</span><span class="data-val err">&lt; 0.5 counts/120ns</span></div>\n    <div class="data-row"><span class="data-key">判決閾值</span><span class="data-val warn">5 counts/window</span></div>\n  </div>\n  <div>\n    <div class="data-row"><span class="data-key">讀出視窗</span><span class="data-val">120 ns</span></div>\n    <div class="data-row"><span class="data-key">讀出誤差</span><span class="data-val ok">0.28%</span></div>\n    <div class="data-row"><span class="data-key">SNR</span><span class="data-val ok">24.3 dB</span></div>\n  </div>\n</div>\n<\/script>\n<script>\n(function(){\n  const cvs=document.getElementById('osc-c');\n  if(!cvs) return;\n  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;\n  window._trigMode='single';\n  window.setTrigV5=function(m){\n    window._trigMode=m;\n    ['s','a','c'].forEach((k,i)=>{\n      const modes=['single','avg','cont'];\n      const el=document.getElementById('trig-'+k);\n      if(el) el.style.color=modes[i]===m?'#00cc88':'#3a7090';\n    });\n  };\n  let shot=mkShot(),timer=0;\n  function mkShot(){\n    const w=[];for(let i=0;i<9;i++) w.push(Math.random()>0.5?'H':'L'); return w;\n  }\n  function draw(){\n    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);\n    // grid\n    ctx.strokeStyle='#0d2240'; ctx.lineWidth=0.5;\n    for(let x=0;x<=W;x+=100){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}\n    [0.25,0.5,0.75].forEach(f=>{ctx.beginPath();ctx.moveTo(0,H*f);ctx.lineTo(W,H*f);ctx.stroke();});\n    // trigger level\n    ctx.strokeStyle='rgba(255,160,64,0.4)'; ctx.lineWidth=0.5; ctx.setLineDash([3,3]);\n    ctx.beginPath(); ctx.moveTo(0,H*0.3); ctx.lineTo(W,H*0.3); ctx.stroke();\n    ctx.setLineDash([]);\n    ctx.fillStyle='rgba(255,160,64,0.5)'; ctx.font='7px monospace'; ctx.fillText('TRIG',2,H*0.3-3);\n    // waveform\n    ctx.strokeStyle='#00e5a0'; ctx.lineWidth=1.5;\n    ctx.beginPath();\n    const segW=W/shot.length;\n    shot.forEach((w,i)=>{\n      const x0=i*segW,x1=(i+1)*segW;\n      const yH=H*0.12+Math.random()*3,yL=H*0.82+Math.random()*3;\n      const y=w==='H'?yH:yL;\n      const yn=i<shot.length-1?(shot[i+1]==='H'?H*0.12:H*0.82):y;\n      if(i===0) ctx.moveTo(x0,y);\n      ctx.lineTo(x0,y); ctx.lineTo(x1-1,y); ctx.lineTo(x1-1,yn);\n    });\n    ctx.stroke();\n    timer++;\n    if(window._trigMode==='cont'&&timer>45){shot=mkShot();timer=0;}\n    if(window._trigMode==='avg'&&timer>90){shot=mkShot();timer=0;}\n    requestAnimationFrame(draw);\n  }\n  draw();\n})();\n<\/script>`\n  ]\n} // end readout\n\n}; // end DEVICE_PANELS\n\n\n// ══════════════════════════════════════════════════════════\n//  MISSIONS\n// ══════════════════════════════════════════════════════════\nconst MISSIONS = [\n  {\n    id:'m1', title:'緊急：QPU 溫度異常', badge:'ACTIVE',\n    desc:'凌晨 3:07，離子阱溫度從 15mK 飆升至 89mK。必須在超過 100mK 前找出原因並處理。',\n    steps:[\n      {id:'s1a', text:'前往主控台 — 查看警報日誌', target:'console',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'主控台……找日誌。03:04:17，CH-02 斷路——電流歸零。', color:'#c8d8e8'},\n          {who:'警報日誌', msg:'Still Heater CH-02 異常：控制器韌體當機，持續輸出加熱訊號。原本應保持 0A。', color:'#ffa040'},\n          {who:'你', msg:'韌體當機，一直在加熱……這就是原因。要手動 Override 關掉它。但先確認雷射系統沒受影響。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>showAlert('error','⚠ 找到問題','Still Heater CH-02 韌體當機，持續加熱。必須手動 Override。先確認光學系統正常。',5000)\n      },\n      {id:'s1b', text:'前往光學平台 — 確認雷射未受影響', target:'laser',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'光學台……397nm 冷卻雷射，還在鎖定。866nm 補泵浦，正常。729nm qubit 雷射，鎖定中。', color:'#c8d8e8'},\n          {who:'雷射控制器', msg:'所有雷射鎖定正常。功率與波長穩定。AOM 運作中。', color:'#5aacff'},\n          {who:'你', msg:'光學系統沒事。問題只在冷卻端。現在去看 QPU 當前的溫度分布。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>showAlert('info','✓ 光學系統正常','所有雷射鎖定中。問題確認在冷卻系統，非光學端。',4000)\n      },\n      {id:'s1c', text:'走近離子阱 — 查看冷卻層溫度', target:'qpu',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'看一下各層溫度……50K Stage 正常、4K Stage 正常——', color:'#c8d8e8'},\n          {who:'QPU 感測器', msg:'100mK Stage：異常偏高。Mixing Chamber：89.3 mK 且仍在上升。', color:'#cc3333'},\n          {who:'你', msg:'問題就在 100mK Stage，Still Heater 持續加熱讓它沒辦法降下來。要立刻去主控台執行手動 Override。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>{\n          showAlert('warning','⚠ 問題確認','Still Heater 控制器卡死，Mixing Chamber 正在升溫。需立即手動 Override。',5000);\n        }\n      },\n    ]\n  },\n  {\n    id:'m2', title:'手動重啟冷卻序列', badge:'',\n    desc:'已確認 Still Heater 異常。必須手動 Override 關閉加熱器，然後確認離子是否存活。',\n    steps:[\n      {id:'s2a', text:'回到主控台 — 執行 Still Heater Override', target:'console',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'找 Override 指令……CH-02 Still Heater，強制電流歸零。這個操作會繞過安全鎖定。', color:'#c8d8e8'},\n          {who:'主控台', msg:'警告：手動 Override 將停用 Still Heater 自動保護。確認執行？', color:'#ffa040'},\n          {who:'你', msg:'確認。現在沒時間了，執行。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>{\n          showAlert('success','✓ Still Heater 已關閉','CH-02 電流歸零。冷卻迴路壓差恢復。預計 8 分鐘後 Mixing Chamber 回到 15mK。',5500);\n          let t = 89;\n          const iv = setInterval(()=>{\n            t = Math.max(15, t - 1.2);\n            document.getElementById('temp-val').textContent = t.toFixed(1)+' mK'+(t>20?' ↓':'');\n            if(t<=15){\n              clearInterval(iv);\n              document.getElementById('temp-val').style.color='#00cc88';\n              document.getElementById('temp-val').textContent = '15.2 mK';\n            }\n          }, 800);\n          document.getElementById('cryo-bar').style.background='#00cc88';\n          setTimeout(()=>{ document.getElementById('cryo-bar').style.width='85%'; },2000);\n        }\n      },\n      {id:'s2b', text:'前往 Readout — 確認離子是否存活', target:'readout',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'最重要的問題——兩個鈣離子還在陷阱裡嗎？要查 PMT 的螢光訊號。', color:'#c8d8e8'},\n          {who:'Readout 系統', msg:'偵測 397nm 螢光訊號中……掃描……', color:'#5aacff'},\n          {who:'Readout 系統', msg:'偵測到兩個螢光峰值。兩個 ⁴⁰Ca⁺ 離子確認存活。但熱運動偏高（n̄ ≈ 120），需要重新 Doppler 冷卻。', color:'#00cc88'},\n          {who:'你', msg:'兩個都還在！……終於。熱運動高是正常的，只要溫度降下來就可以重新冷卻。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>showAlert('success','✓ 兩個離子存活','⁴⁰Ca⁺ × 2 螢光訊號確認。離子仍在陷阱中。熱運動偏高，需重新 Doppler 冷卻後才能繼續實驗。',5000)\n      },\n    ]\n  },\n  {\n    id:'m3', title:'重新校準並執行 Bell State 纏結', badge:'',\n    desc:'危機解除，QPU 溫度回到 15mK。現在重新校準系統，完成今晚原本排程的實驗——製造兩離子 Bell State 最大纏結態。',\n    steps:[\n      {id:'s3a', text:'在光學平台 — 重新鎖定 729nm qubit 雷射', target:'laser',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'好，溫度回來了。重新鎖 729nm——這是最敏感的雷射，用來操作量子態。', color:'#c8d8e8'},\n          {who:'雷射控制器', msg:'729nm AOM 掃頻中……搜尋 ⁴⁰Ca⁺ S½ → D⁵₂ 躍遷……鎖定！', color:'#00cc88'},\n          {who:'雷射控制器', msg:'Rabi 頻率：12.4 kHz。π pulse 時間：40.3 μs。可以開始執行閘操作。', color:'#5aacff'},\n          {who:'你', msg:'很好。現在可以去 QPU 那邊執行 Bell State 序列了。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>showAlert('success','✓ 729nm 雷射重新鎖定','Rabi 頻率 12.4kHz，π pulse 40.3μs。系統就緒，可執行量子閘操作。',5000)\n      },\n      {id:'s3b', text:'在離子阱 — 執行 Mølmer–Sørensen 纏結閘', target:'qpu',\n        onEnter:()=>showDialogue([\n          {who:'你', msg:'載入 Bell State 序列：先對 ion1 執行 Hadamard 閘，讓它進入疊加態……', color:'#c8d8e8'},\n          {who:'QPU 控制器', msg:'H(ion1) → 疊加態 (|0⟩+|1⟩)/√2 完成。執行 Mølmer–Sørensen 纏結閘中……', color:'#5aacff'},\n          {who:'QPU 控制器', msg:'量測結果：|00⟩ 49.3% / |11⟩ 49.4% / |01⟩ 0.7% / |10⟩ 0.6%', color:'#00cc88'},\n          {who:'你', msg:'……98.7% 保真度。|00⟩ 和 |11⟩ 各佔一半，|01⟩ 和 |10⟩ 幾乎是零。這是完美的 Bell State。', color:'#00cc88'},\n          {who:'你', msg:'凌晨 4:23。從緊急事故到成功纏結，花了一個多小時。今晚的數據……值得發論文。', color:'#c8d8e8'},\n        ]),\n        onComplete:()=>{\n          showAlert('success','🎉 Bell State |Φ+⟩ 達成！','纏結保真度：98.7%。|Φ+⟩ = (|00⟩ + |11⟩)/√2 確認。今晚實驗完成。',7000);\n          document.getElementById('mode-tag').textContent='EXPERIMENT COMPLETE';\n          document.getElementById('mode-tag').style.color='#00cc88';\n          document.getElementById('mode-tag').style.borderColor='#005530';\n        }\n      },\n    ]\n  }\n];\nconst MS = { mIdx:0, sIdx:0, done:[] };\nfunction getCurStep(){ const m=MISSIONS[MS.mIdx]; return m?m.steps[MS.sIdx]:null; }\n\n// ══════════════════════════════════════════════════════════\n//  UI HELPERS\n// ══════════════════════════════════════════════════════════\nlet dlgQueue=[], dlgPlaying=false, dlgOnDone=null, typeTimer=null, currentDlgIdx=0;\n\nfunction showDialogue(lines, onDone){\n  dlgQueue=lines; dlgOnDone=onDone; currentDlgIdx=0; dlgPlaying=true;\n  document.getElementById('dialogue-box').style.display='block';\n  playDlgLine();\n}\nfunction playDlgLine(){\n  if(currentDlgIdx>=dlgQueue.length){ endDialogue(); return; }\n  const line=dlgQueue[currentDlgIdx];\n  document.getElementById('dlg-speaker').textContent=line.who||'SYSTEM';\n  document.getElementById('dlg-speaker').style.color=line.color||'#00cc88';\n  const txt=document.getElementById('dlg-text');\n  txt.textContent='';\n  document.getElementById('dlg-continue').style.display='none';\n  if(typeTimer) clearInterval(typeTimer);\n  let ci=0; const msg=line.msg;\n  typeTimer=setInterval(()=>{\n    txt.textContent+=msg[ci++];\n    if(ci>=msg.length){ clearInterval(typeTimer); typeTimer=null; document.getElementById('dlg-continue').style.display='block'; }\n  },28);\n}\nfunction advanceDialogue(){\n  if(!dlgPlaying) return;\n  if(typeTimer){ clearInterval(typeTimer); typeTimer=null;\n    document.getElementById('dlg-text').textContent=dlgQueue[currentDlgIdx].msg;\n    document.getElementById('dlg-continue').style.display='block'; return;\n  }\n  currentDlgIdx++;\n  if(currentDlgIdx>=dlgQueue.length){ endDialogue(); return; }\n  playDlgLine();\n}\nfunction endDialogue(){ dlgPlaying=false; document.getElementById('dialogue-box').style.display='none'; if(dlgOnDone) dlgOnDone(); }\n\nfunction showAlert(type,title,body,dur=5000){\n  const colors={error:'#cc3333',warning:'#ffa040',success:'#00cc88',info:'#5aacff'};\n  const el=document.getElementById('screen-alert');\n  el.style.borderColor=colors[type]||'#5aacff';\n  document.getElementById('alert-title').style.color=colors[type]||'#5aacff';\n  document.getElementById('alert-title').textContent=title;\n  document.getElementById('alert-body').textContent=body;\n  el.style.display='block';\n  clearTimeout(el._t);\n  el._t=setTimeout(()=>el.style.display='none',dur);\n}\n\nfunction showToast(msg){\n  const el=document.getElementById('toast');\n  el.textContent=msg; el.classList.add('show'); el.style.display='block';\n  clearTimeout(el._t); el._t=setTimeout(()=>{ el.classList.remove('show'); el.style.display='none'; },3000);\n}\nfunction screenFlash(){\n  const el=document.getElementById('flash');\n  el.classList.remove('fire'); void el.offsetWidth; el.classList.add('fire');\n}\n\n// ══════════════════════════════════════════════════════════\n//  LOBBY TOUR\n// ══════════════════════════════════════════════════════════\nfunction startLobby(){\n  document.getElementById('entry').style.display='none';\n  document.getElementById('lobby-overlay').style.display='block';\n  gamePhase='lobby';\n  // start 3D\n  init3D();\n  renderLobbyStep();\n}\n\nfunction renderLobbyStep(){\n  const s = LOBBY_TOUR[lobbyTourIdx];\n  if(!s){ lobbyFinish(); return; }\n\n  // NPC dialogue\n  document.getElementById('npc-dialogue').style.display='block';\n  document.getElementById('npc-icon').textContent = s.icon;\n  document.getElementById('npc-name').textContent = s.name;\n  document.getElementById('npc-role').textContent = s.role;\n  document.getElementById('npc-step').textContent = (lobbyTourIdx+1)+' / '+LOBBY_TOUR.length;\n\n  // Typewriter for NPC msg\n  const msgEl = document.getElementById('npc-msg');\n  msgEl.textContent = '';\n  let ci=0;\n  if(window._tourTypeTimer) clearInterval(window._tourTypeTimer);\n  window._tourTypeTimer = setInterval(()=>{\n    if(ci>=s.msg.length){ clearInterval(window._tourTypeTimer); return; }\n    msgEl.textContent += s.msg[ci++];\n  }, 16);\n\n  // ── 相機平滑轉向目標 ──\n  if(s.camTarget){\n    // 從目前眼睛位置平滑移到 eye，同時看向 look\n    tourCamFrom.copy(pPos);\n    tourCamTo.set(...s.camTarget.eye);\n    tourLookTarget.set(...s.camTarget.look);\n    tourCamProgress = 0;\n    tourCamActive = true;\n  } else {\n    tourCamActive = false;\n  }\n\n  // Spotlight card\n  const sb = document.getElementById('spotlight-box');\n  if(s.spotlight){\n    sb.style.display='block';\n    document.getElementById('sb-title').textContent=s.spotlight.title;\n    document.getElementById('sb-body').style.whiteSpace='pre-line';\n    document.getElementById('sb-body').textContent=s.spotlight.body;\n    document.getElementById('sb-tag').textContent=s.spotlight.tag;\n  } else {\n    sb.style.display='none';\n  }\n\n  document.getElementById('npc-next').textContent =\n    lobbyTourIdx >= LOBBY_TOUR.length-1 ? '開始值班 ▶' : '繼續 →';\n}\n\nfunction lobbyNext(){\n  lobbyTourIdx++;\n  if(lobbyTourIdx >= LOBBY_TOUR.length){ lobbyFinish(); return; }\n  renderLobbyStep();\n}\n\nfunction lobbySkip(){ lobbyFinish(); }\n\nfunction lobbyFinish(){\n  document.getElementById('lobby-overlay').style.display='none';\n  startTutorial();\n\n  // Keep old crisis init code but rename it\n  return; // tutorial will call startCrisis() when done\n}\n\nfunction startCrisis(){\n  gamePhase='crisis';\n\n\n  // Update status to crisis\n  document.getElementById('status-console').textContent='⚠ 警報';\n  document.getElementById('status-console').style.color='#cc3333';\n  document.getElementById('status-qpu').textContent='⚠ 過熱';\n  document.getElementById('status-qpu').style.color='#cc3333';\n  document.getElementById('status-sched').textContent='已暫停';\n  document.getElementById('status-sched').style.color='#2a4a5a';\n  document.getElementById('mode-tag').textContent='EMERGENCY MODE';\n  document.getElementById('mode-tag').style.color='#cc3333';\n  document.getElementById('mode-tag').style.borderColor='#661a1a';\n  document.getElementById('mission-lbl').textContent='▶ ACTIVE MISSION';\n  document.getElementById('mm-status').textContent='CRISIS';\n  document.getElementById('clock-status').textContent='值班工程師在線';\n  document.getElementById('temp-val').textContent='89.3 mK ↑';\n  document.getElementById('temp-val').style.color='#cc3333';\n  document.getElementById('qpu-bar').style.width='32%';\n  document.getElementById('qpu-bar').style.background='#cc3333';\n  document.getElementById('qpu-health-lbl').textContent='異常';\n  document.getElementById('qpu-health-lbl').style.color='#cc3333';\n  document.getElementById('cryo-bar').style.width='10%';\n  document.getElementById('cryo-bar').style.background='#cc3333';\n  document.getElementById('cryo-health-lbl').textContent='失效';\n  document.getElementById('cryo-health-lbl').style.color='#cc3333';\n\n  // Set game clock to 3am\n  gameSeconds = 3*3600+7*60+42;\n\n  // update cur step\n  updateMHUD(); renderMPanel();\n\n  // Show opening\n  setTimeout(()=>{\n    playAlert(); showAlert('error','⚠ QPU TEMPERATURE CRITICAL',\n      '目前溫度：89.3 mK（正常值：15.2 mK）。若超過 100mK，離子將脫陷，所有實驗數據歸零。請立即處理。', 7000);\n    setTimeout(()=>{\n      showDialogue([\n        {who:'系統警報', msg:'⚠ QPU 溫度異常 — 89.3 mK，且持續上升。', color:'#cc3333'},\n        {who:'系統', msg:'凌晨 03:04:17 觸發警報，原因：冷卻迴路 CH-02 電流驟降至 0A。', color:'#ffa040'},\n        {who:'你', msg:'……溫度一直在漲。再不處理，離子就完了。先去主控台看警報日誌，找原因。', color:'#c8d8e8'},\n      ]);\n    }, 1500);\n    // unlock pointer\n    renderer.domElement.requestPointerLock();\n    initAudio();\n  }, 600);\n}\n\n// ══════════════════════════════════════════════════════════\n//  TUTORIAL SYSTEM\n// ══════════════════════════════════════════════════════════\n// Tutorial phases: each has a target device, what to do, auto-complete condition\n// Dr. Chen stays visible as floating guide\n\n// Tutorial steps — each has: intro (Dr Chen talks), then task (player operates)\n// walkTarget: camera flies to this position while Chen talks\nconst TUTORIAL_STEPS = [\n  {\n    id:'t-console',\n    device:'console',\n    tab:1,\n    walkTarget:{ eye:[-1,2,2], look:[-6,1,-6] },\n    introLines:[\n      '這台是主控台——整個實驗室的神經中樞。',\n      '所有警報都在這裡第一時間出現。',\n      '三塊螢幕分別顯示：溫度趨勢、雷射鎖定狀態、以及離子影像。',\n      '現在跟我進去看看。按下方按鈕，或靠近後按 [E] 進入。',\n    ],\n    taskLabel:'進入主控台 → 切換到「警報中心」分頁查看',\n    actionLabel:'▶ 進入主控台',\n    completeOnTab: 0,\n    completionMsg:'好。警報中心平時應該是空的。如果出現紅色條目，就是你今晚要處理的事。\n\n關掉這個，我們去雷射台。'\n  },\n  {\n    id:'t-laser',\n    device:'laser',\n    tab:0,\n    walkTarget:{ eye:[0,2,4], look:[-5,1,5] },\n    introLines:[\n      '這是光學平台。三道雷射從這裡出發，通過光纖送進 QPU 的真空腔。',\n      '397nm 冷卻離子，866nm 確保離子不卡在錯誤的電子態，729nm 是真正執行量子邏輯閘的光。',\n      '你看到右側的 AOM 開關嗎？那是控制每道光的閘門。',\n      '進去之後，把 AOM-2 撥 OFF 再撥回 ON——感受一下開關的感覺。',\n    ],\n    taskLabel:'進入雷射台 → 撥動 AOM-2 開關 → 按「確認雷射狀態」',\n    actionLabel:'▶ 進入雷射台',\n    completeOnAction: 'laser_check',\n    completionMsg:'雷射系統你知道了。緊急時如果雷射失鎖，就來這裡重新確認。\n\n下一台：QPU 本體。'\n  },\n  {\n    id:'t-qpu',\n    device:'qpu',\n    tab:0,\n    walkTarget:{ eye:[4,2,5], look:[0,2,0] },\n    introLines:[\n      '這就是主角——離子阱量子電腦。',\n      '這個金屬圓柱體裡面，有兩個鈣離子被懸浮在 15 毫格耳文的環境中。',\n      '比宇宙背景溫度（2.7K）還低兩百倍。',\n      '進入面板之後，記住那個大數字：15.2 mK，綠色。這是正常的樣子。如果哪天變紅變大，代表出問題了。',\n    ],\n    taskLabel:'進入 QPU 面板 → 切到「離子監控」分頁，看兩個藍色亮點',\n    actionLabel:'▶ 進入 QPU',\n    completeOnTab: 1,\n    completionMsg:'記住那兩個藍點了嗎？那就是兩個被困住的鈣離子。\n\n最後一台，去讀出系統。'\n  },\n  {\n    id:'t-readout',\n    device:'readout',\n    tab:1,\n    walkTarget:{ eye:[2,2,1], look:[6,1,-4] },\n    introLines:[\n      '讀出系統——判斷每個離子是 |0⟩ 還是 |1⟩ 的地方。',\n      '原理很簡單：用 397nm 雷射照離子，發光的是 |0⟩，不發光的是 |1⟩。',\n      '這個 PMT 光子計數器靈敏到能抓到單一顆光子。',\n      '進去之後到「螢光掃描」分頁，按「執行螢光掃描」，看掃描動畫找到兩個離子的位置。',\n    ],\n    taskLabel:'進入讀出系統 → 螢光掃描分頁 → 執行螢光掃描',\n    actionLabel:'▶ 進入讀出系統',\n    completeOnAction: 'readout_scan_tut',\n    completionMsg:'好，四台設備你都摸過了。\n\n現在是晚上 10:57。我要回去了。\n你今晚的工作很簡單：每 30 分鐘確認一次數值正常就好。\n\n有問題的話……今晚沒有別人了。祝你好運。'\n  },\n];\n\nlet tutIdx = 0;\nlet tutorialActive = false;\nlet tutChenVisible = false;\n\nfunction startTutorial(){\n  gamePhase = 'tutorial';\n  tutIdx = 0;\n  tutorialActive = true;\n  initAudio();\n\n  document.getElementById('mode-tag').textContent = 'TRAINING MODE';\n  document.getElementById('mode-tag').style.color = '#5aacff';\n  document.getElementById('mode-tag').style.borderColor = '#1a4a80';\n  document.getElementById('mission-lbl').textContent = '▶ 訓練中';\n\n  setTimeout(()=>{\n    renderer.domElement.requestPointerLock();\n    // Begin first step - show intro, walk camera, then let player enter\n    beginTutorialStep(0);\n  }, 600);\n}\n\n// Show intro dialogue for a tutorial step (camera walks, Chen talks),\n// then reveal the "enter device" button in the Chen panel\nfunction beginTutorialStep(idx){\n  tutIdx = idx;\n  const step = TUTORIAL_STEPS[idx];\n  document.getElementById('cur-step').textContent = step.taskLabel;\n\n  // Walk camera toward device\n  if(step.walkTarget){\n    tourCamFrom.copy(pPos);\n    tourCamTo.set(...step.walkTarget.eye);\n    tourLookTarget.set(...step.walkTarget.look);\n    tourCamProgress = 0;\n    tourCamActive = true;\n  }\n\n  // Show Chen panel with intro lines (typewriter, one line at a time)\n  showChenIntro(step, ()=>{\n    // After intro, show the "enter device" button\n    showChenTaskReady(step);\n  });\n}\n\nlet _introLineIdx = 0;\nfunction showChenIntro(step, onDone){\n  _introLineIdx = 0;\n  let panel = document.getElementById('chen-guide-panel');\n  if(!panel){\n    panel = document.createElement('div');\n    panel.id = 'chen-guide-panel';\n    panel.style.cssText = 'position:fixed;bottom:90px;right:16px;width:360px;'+\n      'background:rgba(2,8,22,0.97);border:1px solid #1a4a80;'+\n      'font-family:"Noto Sans TC",sans-serif;z-index:200;pointer-events:all;'+\n      'box-shadow:0 0 32px rgba(0,100,200,0.25);';\n    document.body.appendChild(panel);\n  }\n\n  function renderIntroPanel(lineIdx, typed){\n    const intro = step.introLines;\n    const isLast = lineIdx >= intro.length - 1;\n    panel.innerHTML =\n      '<div style="background:#040d1e;padding:10px 14px;border-bottom:1px solid #0d2240;'+\n        'display:flex;align-items:center;gap:10px;">' +\n        '<div style="width:34px;height:34px;border-radius:50%;border:2px solid #5aacff;'+\n          'background:rgba(10,30,70,0.9);display:flex;align-items:center;justify-content:center;'+\n          'font-size:18px;flex-shrink:0;">👨‍🔬</div>' +\n        '<div><div style="font-size:11px;color:#e8f4ff;font-weight:bold;letter-spacing:1px;">Dr. Chen</div>'+\n          '<div style="font-size:9px;color:#2a5070;margin-top:1px;">Lab Director · 帶你參觀</div></div>'+\n        '<div style="margin-left:auto;font-size:9px;color:#1a3a60;">'+(tutIdx+1)+' / '+TUTORIAL_STEPS.length+'</div>'+\n      '</div>'+\n      '<div id="chen-speech" style="padding:14px 16px;font-size:12px;color:#c0d8e8;line-height:1.8;min-height:80px;"></div>'+\n      '<div style="padding:0 16px 12px;display:flex;gap:8px;align-items:center;">'+\n        '<button id="chen-next-btn" style="flex:1;padding:9px 0;background:transparent;'+\n          'border:1px solid #1a4a80;color:#5aacff;font-size:10px;cursor:pointer;'+\n          'font-family:sans-serif;letter-spacing:1px;" '+\n          'onclick="chenNextLine()">'+\n          (isLast ? '好，帶我進去 →' : '繼續 →')+\n        '</button>'+\n        '<button onclick="tutSkipStep()" style="padding:9px 14px;background:transparent;'+\n          'border:1px solid #0d2240;color:#2a5070;font-size:9px;cursor:pointer;'+\n          'font-family:sans-serif;">略過</button>'+\n      '</div>';\n    // typewriter current line\n    const speech = document.getElementById('chen-speech');\n    if(speech){\n      speech.textContent = '';\n      let ci = 0;\n      const text = intro[lineIdx];\n      if(window._chenTimer) clearInterval(window._chenTimer);\n      window._chenTimer = setInterval(()=>{\n        if(ci >= text.length){ clearInterval(window._chenTimer); return; }\n        speech.textContent += text[ci++];\n      }, 18);\n    }\n    // store state for next click\n    window._introStep = { step, lineIdx, onDone, render: renderIntroPanel };\n  }\n\n  window.chenNextLine = function(){\n    const st = window._introStep;\n    if(!st) return;\n    if(window._chenTimer) clearInterval(window._chenTimer);\n    const speech = document.getElementById('chen-speech');\n    // If currently typing, complete it first\n    if(speech && speech.textContent.length < st.step.introLines[st.lineIdx].length){\n      speech.textContent = st.step.introLines[st.lineIdx];\n      return;\n    }\n    // Advance to next line\n    const nextIdx = st.lineIdx + 1;\n    if(nextIdx >= st.step.introLines.length){\n      // Done with intro — call onDone (show task button)\n      st.onDone();\n    } else {\n      st.render(nextIdx, false);\n      window._introStep.lineIdx = nextIdx;\n    }\n  };\n\n  renderIntroPanel(0, false);\n}\n\nfunction showChenTaskReady(step){\n  const panel = document.getElementById('chen-guide-panel');\n  if(!panel) return;\n  panel.innerHTML =\n    '<div style="background:#040d1e;padding:10px 14px;border-bottom:1px solid #0d2240;'+\n      'display:flex;align-items:center;gap:10px;">' +\n      '<div style="width:34px;height:34px;border-radius:50%;border:2px solid #5aacff;'+\n        'background:rgba(10,30,70,0.9);display:flex;align-items:center;justify-content:center;'+\n        'font-size:18px;flex-shrink:0;">👨‍🔬</div>'+\n      '<div><div style="font-size:11px;color:#e8f4ff;font-weight:bold;letter-spacing:1px;">Dr. Chen</div>'+\n        '<div style="font-size:9px;color:#2a5070;margin-top:1px;">任務中</div></div>'+\n      '<div style="margin-left:auto;font-size:9px;color:#1a3a60;">'+(tutIdx+1)+' / '+TUTORIAL_STEPS.length+'</div>'+\n    '</div>'+\n    '<div style="padding:12px 16px 6px;">' +\n      '<div style="font-size:9px;color:#ffa040;letter-spacing:2px;margin-bottom:6px;">你現在要做什麼</div>'+\n      '<div style="font-size:12px;color:#e8f4ff;line-height:1.7;">'+step.taskLabel+'</div>'+\n    '</div>'+\n    '<div style="padding:10px 16px 14px;">' +\n      '<button onclick="openTutorialDevice()" style="width:100%;padding:11px 0;'+\n        'background:rgba(0,80,160,0.2);border:1px solid #5aacff;color:#e8f4ff;'+\n        'font-size:11px;cursor:pointer;font-family:sans-serif;letter-spacing:1px;margin-bottom:8px;">'+\n        step.actionLabel+\n      '</button>'+\n      '<div style="display:flex;gap:8px;">' +\n        '<button onclick="tutCallHelp()" style="flex:1;padding:8px 0;background:transparent;'+\n          'border:1px solid #664010;color:#ffa040;font-size:9px;cursor:pointer;'+\n          'font-family:sans-serif;">🆘 不知道怎麼操作</button>'+\n        '<button onclick="tutSkipStep()" style="padding:8px 12px;background:transparent;'+\n          'border:1px solid #0d2240;color:#2a5070;font-size:9px;cursor:pointer;'+\n          'font-family:sans-serif;">略過</button>'+\n      '</div>'+\n    '</div>';\n}\n\nfunction openTutorialDevice(){\n  const step = TUTORIAL_STEPS[tutIdx];\n  openDeviceModal(step.device);\n  // Switch to the tutorial's target tab if specified
-  if(step.tab !== undefined && step.tab !== 0){
-    setTimeout(()=>switchDMTab(step.tab), 300);
+    <div class="gauge-label">TODAY'S RUNS</div>
+    <div class="gauge-val white">4</div>
+    <div class="gauge-unit">排程</div>
+  </div>
+  <div class="gauge-card ${c?'warn':''}">
+    <div class="live-pip ${c?'warn':'ok'}"></div>
+    <div class="gauge-label">NEXT EXPERIMENT</div>
+    <div class="gauge-val ${c?'warn':'blue'}">Bell State</div>
+    <div class="gauge-unit">${c?'PAUSED':'03:00 待機'}</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">TARGET FIDELITY</div>
+    <div class="gauge-val ok">> 98</div>
+    <div class="gauge-unit">% entanglement</div>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">EXPERIMENT QUEUE</span><div class="ip-section-line"></div></div>
+<div style="background:#040d1e;border:1px solid #0d2240;">
+  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;
+    font-size:7px;color:#1a4060;letter-spacing:2px;padding:6px 12px;border-bottom:1px solid #0d2240;">
+    <span>TIME</span><span>EXPERIMENT</span><span>STATUS</span><span>DURATION</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;
+    align-items:center;padding:10px 12px;border-bottom:1px solid #060f20;opacity:0.6;">
+    <span style="font-size:9px;color:#1a4060;">02:30</span>
+    <div>
+      <div style="font-size:10px;color:#4a7090;">系統預冷確認 + 離子裝載</div>
+      <div style="font-size:8px;color:#1a4060;margin-top:2px;">⁴⁰Ca⁺ × 2, Doppler cooled to n̄ ~ 10</div>
+    </div>
+    <span style="font-size:8px;color:#00cc88;padding:2px 6px;border:1px solid #005530;">✓ DONE</span>
+    <span style="font-size:9px;color:#1a4060;">~28 min</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;
+    align-items:center;padding:10px 12px;border-bottom:1px solid #060f20;
+    background:${c?'rgba(80,40,0,0.15)':'rgba(0,30,60,0.1)'};">
+    <span style="font-size:9px;color:#1a4060;">03:00</span>
+    <div>
+      <div style="font-size:10px;color:#e8f4ff;">Bell State |Φ+⟩ 纏結實驗</div>
+      <div style="font-size:8px;color:#1a4060;margin-top:2px;">Mølmer-Sørensen gate · 1000 shots · 目標 F > 98%</div>
+      <div style="height:2px;background:#060f20;margin-top:6px;border-radius:1px;">
+        <div style="height:100%;width:${c?'0':'0'}%;background:#5aacff;border-radius:1px;"></div>
+      </div>
+    </div>
+    <span style="font-size:8px;color:${c?'#ffaa00':'#5aacff'};padding:2px 6px;border:1px solid ${c?'#4a2a00':'#0d3060'};">${c?'PAUSED':'SCHED'}</span>
+    <span style="font-size:9px;color:#1a4060;">~23 min</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;
+    align-items:center;padding:10px 12px;border-bottom:1px solid #060f20;">
+    <span style="font-size:9px;color:#1a4060;">05:00</span>
+    <div>
+      <div style="font-size:10px;color:#4a7090;">量子相位估計 (QPE)</div>
+      <div style="font-size:8px;color:#1a4060;margin-top:2px;">Kitaev QPE · ancilla readout · 精度 π/64</div>
+    </div>
+    <span style="font-size:8px;color:#2a5070;padding:2px 6px;border:1px solid #0d2240;">SCHED</span>
+    <span style="font-size:9px;color:#1a4060;">~45 min</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 80px 90px;
+    align-items:center;padding:10px 12px;">
+    <span style="font-size:9px;color:#1a4060;">06:30</span>
+    <div>
+      <div style="font-size:10px;color:#4a7090;">數據匯出 + 日誌封存</div>
+    </div>
+    <span style="font-size:8px;color:#2a5070;padding:2px 6px;border:1px solid #0d2240;">SCHED</span>
+    <span style="font-size:9px;color:#1a4060;">~10 min</span>
+  </div>
+</div>`;
   }
+  ]
+}, // end console
+
+// ═══════════════════════════════════════════════════════
+// LASER
+// ═══════════════════════════════════════════════════════
+laser:{
+  tag:'STATION 02', title:'LASER SYSTEM',
+  sub:'PDH Frequency Lock · AOM Control · 397/866/729 nm',
+  tabs:['雷射控制台','PDH 鎖定','功率監測','重新鎖定'],
+  render:[
+
+  // ── 0: 控制台 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return `
+<div class="gauge-row cols-4">
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">397 nm</div>
+    <div class="gauge-val blue">LOCKED</div>
+    <div class="gauge-unit">Doppler cooling</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">866 nm</div>
+    <div class="gauge-val blue">LOCKED</div>
+    <div class="gauge-unit">Repumper</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">729 nm</div>
+    <div class="gauge-val ok">LOCKED</div>
+    <div class="gauge-unit">Qubit gate</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">FIBER COUPLING</div>
+    <div class="gauge-val white">87.0</div>
+    <div class="gauge-unit">% efficiency</div>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">LASER CHANNELS</span><div class="ip-section-line"></div></div>
+<div style="background:#040d1e;border:1px solid #0d2240;padding:0;">
+  <div style="display:grid;grid-template-columns:56px 110px 1fr 50px 140px;
+    font-size:7px;color:#1a4060;letter-spacing:2px;padding:6px 12px;border-bottom:1px solid #0d2240;">
+    <span>λ (nm)</span><span>ROLE</span><span>LOCK STATUS</span><span>PWR</span><span>FREQUENCY</span>
+  </div>
+  <div class="laser-channel" style="padding:0 12px;">
+    <span class="laser-nm" style="color:#8888ff;">397</span>
+    <span class="laser-role">Doppler<br>Cooling</span>
+    <div>
+      <div style="font-size:9px;color:#00cc88;margin-bottom:3px;">● PDH LOCKED</div>
+      <div class="bar-track"><div class="bar-fill" style="width:98%;background:#5aacff;"></div></div>
+    </div>
+    <span style="font-size:9px;color:#00cc88;">4.2 mW</span>
+    <span class="laser-freq">755,222.765 GHz<br>err: ±0.3 Hz</span>
+  </div>
+  <div class="laser-channel" style="padding:0 12px;border-top:1px solid #060f20;">
+    <span class="laser-nm" style="color:#cc6666;">866</span>
+    <span class="laser-role">Repumper<br>D3/2→P1/2</span>
+    <div>
+      <div style="font-size:9px;color:#00cc88;margin-bottom:3px;">● PDH LOCKED</div>
+      <div class="bar-track"><div class="bar-fill" style="width:96%;background:#8aaace;"></div></div>
+    </div>
+    <span style="font-size:9px;color:#00cc88;">2.1 mW</span>
+    <span class="laser-freq">346,000.235 GHz<br>err: ±0.8 Hz</span>
+  </div>
+  <div class="laser-channel" style="padding:0 12px;border-top:1px solid #060f20;">
+    <span class="laser-nm" style="color:#cc4400;">729</span>
+    <span class="laser-role">Qubit gate<br>S1/2→D5/2</span>
+    <div>
+      <div style="font-size:9px;color:#00cc88;margin-bottom:3px;" id="l729-lock">● PDH LOCKED</div>
+      <div class="bar-track"><div class="bar-fill" id="l729-bar" style="width:100%;background:#00cc88;"></div></div>
+    </div>
+    <span style="font-size:9px;color:#00cc88;">1.8 mW</span>
+    <span class="laser-freq">411,042.130 GHz<br>err: ±0.1 Hz</span>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">SHUTTER & AOM CONTROL</span><div class="ip-section-line"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+  <div style="background:#040d1e;border:1px solid #0d2240;padding:12px;">
+    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:8px;">SHUTTERS</div>
+    <div class="toggle-group">
+      <span class="toggle-label">397 nm Shutter</span>
+      <div class="toggle-sw" id="sh-397" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">729 nm Shutter</span>
+      <div class="toggle-sw" id="sh-729" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">866 nm Shutter</span>
+      <div class="toggle-sw" id="sh-866" onclick="this.classList.toggle('on')"></div>
+    </div>
+  </div>
+  <div style="background:#040d1e;border:1px solid #0d2240;padding:12px;">
+    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:8px;">AOM SWITCHES</div>
+    <div class="toggle-group">
+      <span class="toggle-label">AOM-1 (397 冷卻)</span>
+      <div class="toggle-sw on" id="aom1" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">AOM-2 (729 qubit)</span>
+      <div class="toggle-sw on" id="aom2" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">AOM-3 (866 pump)</span>
+      <div class="toggle-sw on" id="aom3" onclick="this.classList.toggle('on')"></div>
+    </div>
+  </div>
+</div>
+<div class="act-row">
+  <button class="act-btn primary" onclick="handleAction('laser','check')">✓ 確認雷射系統狀態</button>
+</div>`;
+  },
+
+  // ── 1: PDH 鎖定 ──
+  ()=>`
+<div class="gauge-row cols-3">
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">397 nm ERROR</div>
+    <div class="gauge-val ok" id="pdh-397-val">±0.31</div>
+    <div class="gauge-unit">Hz linewidth</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">729 nm ERROR</div>
+    <div class="gauge-val ok" id="pdh-729-val">±0.09</div>
+    <div class="gauge-unit">Hz linewidth</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">ULE CAVITY DRIFT</div>
+    <div class="gauge-val white">&lt; 0.05</div>
+    <div class="gauge-unit">Hz/s</div>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">PDH ERROR SIGNAL — 729 nm QUBIT LASER</span><div class="ip-section-line"></div></div>
+<div class="chart-wrap" style="height:80px;">
+  <span class="chart-label">PDH ERROR</span>
+  <span class="chart-val" id="pdh-live">± 0.09 Hz</span>
+  <canvas id="pdh-canvas" width="800" height="80" style="width:100%;height:80px;display:block;"></canvas>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">ULE CAVITY PARAMETERS</span><div class="ip-section-line"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div>
+    <div class="data-row"><span class="data-key">腔體材料</span><span class="data-val">ULE 玻璃（超低膨脹）</span></div>
+    <div class="data-row"><span class="data-key">精細度 (Finesse)</span><span class="data-val hi">F = 250,000</span></div>
+    <div class="data-row"><span class="data-key">FSR (自由光譜區)</span><span class="data-val">1.5 GHz</span></div>
+    <div class="data-row"><span class="data-key">腔線寬 FWHM</span><span class="data-val">6.0 kHz</span></div>
+  </div>
+  <div>
+    <div class="data-row"><span class="data-key">零膨脹溫度</span><span class="data-val">17.5 °C ± 2 mK</span></div>
+    <div class="data-row"><span class="data-key">腔長漂移</span><span class="data-val ok">&lt; 0.05 Hz/s</span></div>
+    <div class="data-row"><span class="data-key">AOM 驅動頻率</span><span class="data-val">200.000 MHz</span></div>
+    <div class="data-row"><span class="data-key">鎖定伺服頻寬</span><span class="data-val">500 kHz</span></div>
+  </div>
+</div>
+
+<\/script>
+<script>
+(function(){
+  const cvs=document.getElementById('pdh-canvas');
+  if(!cvs) return;
+  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;
+  let t=0;
+  function draw(){
+    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='#0d2240'; ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
+    for(let x=0;x<W;x+=80){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    ctx.strokeStyle='#00e5a0'; ctx.lineWidth=1.2;
+    ctx.beginPath();
+    for(let x=0;x<=W;x+=2){
+      const y=H/2 + Math.sin(t+x*0.018)*7 + Math.sin(t*1.7+x*0.042)*2.5 + (Math.random()-0.5)*1.2;
+      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    t+=0.04;
+    const err=document.getElementById('pdh-live');
+    const e729=document.getElementById('pdh-729-val');
+    if(err) err.textContent='± '+(0.07+Math.random()*0.05).toFixed(2)+' Hz';
+    if(e729) e729.textContent='±'+(0.07+Math.random()*0.05).toFixed(2);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+<\/script>
+`,
+
+  // ── 2: 功率監測 ──
+  ()=>`
+<div class="ip-section"><span class="ip-section-label">LASER POWER</span><div class="ip-section-line"></div></div>
+<div style="background:#040d1e;border:1px solid #0d2240;padding:16px;margin-bottom:12px;">
+  <div class="bar-row">
+    <span class="bar-label" style="color:#8888ff;">397 nm 冷卻</span>
+    <div class="bar-track"><div class="bar-fill" id="pwr397" style="width:84%;background:#5aacff;"></div></div>
+    <span class="bar-val" id="pwr397-val" style="color:#5aacff;">4.18 mW</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label" style="color:#cc6666;">866 nm Repump</span>
+    <div class="bar-track"><div class="bar-fill" id="pwr866" style="width:62%;background:#8aaace;"></div></div>
+    <span class="bar-val" id="pwr866-val" style="color:#8aaace;">2.09 mW</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label" style="color:#cc6644;">729 nm Qubit</span>
+    <div class="bar-track"><div class="bar-fill" id="pwr729" style="width:72%;background:#00cc88;"></div></div>
+    <span class="bar-val" id="pwr729-val" style="color:#00cc88;">1.82 mW</span>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">OPTICAL ELEMENTS</span><div class="ip-section-line"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+  <div>
+    <div class="data-row"><span class="data-key">PBS-1 偏振分束器 (397)</span><span class="data-val ok">對準 OK</span></div>
+    <div class="data-row"><span class="data-key">PBS-2 偏振分束器 (729)</span><span class="data-val ok">對準 OK</span></div>
+    <div class="data-row"><span class="data-key">HWP-1 半波片 θ=22.5°</span><span class="data-val ok">OK</span></div>
+    <div class="data-row"><span class="data-key">QWP-1 四分之一波片</span><span class="data-val ok">σ+ 極化 OK</span></div>
+  </div>
+  <div>
+    <div class="data-row"><span class="data-key">AOM-1 繞射效率</span><span class="data-val">88.2%</span></div>
+    <div class="data-row"><span class="data-key">AOM-2 繞射效率</span><span class="data-val">91.4%</span></div>
+    <div class="data-row"><span class="data-key">SM 光纖耦合</span><span class="data-val ok">87.0%</span></div>
+    <div class="data-row"><span class="data-key">光隔離器 ISO-1</span><span class="data-val">38 dB</span></div>
+  </div>
+</div>
+<\/script>
+<script>
+(function(){
+  function tick(){
+    const p={397:[4.18,'pwr397','pwr397-val'],866:[2.09,'pwr866','pwr866-val'],729:[1.82,'pwr729','pwr729-val']};
+    Object.values(p).forEach(([base,bid,vid])=>{
+      const v=(base+(Math.random()-0.5)*0.06);
+      const bar=document.getElementById(bid);
+      const val=document.getElementById(vid);
+      if(bar) bar.style.width=(v/base*75).toFixed(0)+'%';
+      if(val) val.textContent=v.toFixed(2)+' mW';
+    });
+    setTimeout(tick,1100);
+  }
+  tick();
+})();
+<\/script>
+`,
+
+  // ── 3: 重新鎖定 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return c?`
+<div class="alert-box warn" data-label="ACTION REQUIRED">
+  <div class="alert-body">溫度異常後，729 nm qubit 雷射需重新掃頻確認鎖定點。<br>Ca+ 的 S½→D5/2 躍遷頻率受溫度擾動影響，每次異常後必須重新搜尋。</div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">RE-LOCK PROCEDURE</span><div class="ip-section-line"></div></div>
+<div class="step-list">
+  <div class="step-item">
+    <div class="step-num" id="rs1n">1</div>
+    <div class="step-body">
+      <div class="step-title">關閉 AOM-2 快門，進入安全掃頻模式</div>
+      <div class="step-desc">避免掃頻過程中意外照射離子，破壞量子態。</div>
+      <div class="act-row"><button class="act-btn neutral" id="rs1b" onclick="rlStep(1)">執行</button></div>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-num" id="rs2n">2</div>
+    <div class="step-body">
+      <div class="step-title">設定掃頻範圍 ±2 GHz @ 411 THz</div>
+      <div class="step-desc">以 Ca+ 理論頻率為中心，搜尋因溫度漂移的鎖定點。</div>
+      <div class="act-row"><button class="act-btn neutral" id="rs2b" onclick="rlStep(2)" disabled>執行</button></div>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-num" id="rs3n">3</div>
+    <div class="step-body">
+      <div class="step-title">啟動掃頻 — PMT 同步偵測螢光峰</div>
+      <div class="sweep-wrap" style="height:60px;" id="sweep-wrap">
+        <canvas id="sweep-c" width="600" height="60" style="width:100%;height:60px;display:block;"></canvas>
+      </div>
+      <div style="font-size:8px;color:#1a4060;margin-bottom:4px;" id="sweep-status">等待步驟 3 執行</div>
+      <div class="act-row"><button class="act-btn neutral" id="rs3b" onclick="rlStep(3)" disabled>啟動掃頻</button></div>
+    </div>
+  </div>
+  <div class="step-item">
+    <div class="step-num" id="rs4n">4</div>
+    <div class="step-body">
+      <div class="step-title">確認鎖定並恢復 AOM-2</div>
+      <div class="step-desc" id="rs4d">等待掃頻完成...</div>
+      <div class="act-row"><button class="act-btn primary" id="rs4b" onclick="rlStep(4)" disabled>確認鎖定</button></div>
+    </div>
+  </div>
+</div>
+
+<\/script>
+<script>
+window.rlStep=function(n){
+  const nb=document.getElementById('rs'+n+'b');
+  const nn=document.getElementById('rs'+n+'n');
+  if(nb) nb.disabled=true;
+  const unlock=function(m){const b=document.getElementById('rs'+m+'b');const nm=document.getElementById('rs'+m+'n');if(b)b.disabled=false;if(nm)nm.className='step-num active';};
+  if(n===1){if(nn){nn.className='step-num done';nn.textContent='✓';}unlock(2);}
+  else if(n===2){if(nn){nn.className='step-num done';nn.textContent='✓';}unlock(3);}
+  else if(n===3){
+    if(nn) nn.className='step-num active';
+    const cvs=document.getElementById('sweep-c');
+    const st=document.getElementById('sweep-status');
+    if(st) st.textContent='掃頻中...';
+    if(!cvs) return;
+    const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;
+    ctx.fillStyle='#000b14';ctx.fillRect(0,0,W,H);
+    const peak=180+Math.floor(Math.random()*200);
+    let x=0;const pts=[];
+    const iv=setInterval(()=>{
+      const noise=Math.random()*4;
+      let y=H-noise-2;
+      if(Math.abs(x-peak)<28) y=H-(H-4)*Math.exp(-Math.pow((x-peak)/7,2))-noise;
+      pts.push([x,y]);
+      ctx.fillStyle='#000b14';ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='#0d2240';ctx.lineWidth=0.5;
+      ctx.beginPath();ctx.moveTo(0,H-1);ctx.lineTo(W,H-1);ctx.stroke();
+      // scan cursor
+      ctx.strokeStyle='rgba(255,160,64,0.5)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
+      // plot
+      ctx.strokeStyle='#00e5a0';ctx.lineWidth=1.5;ctx.beginPath();
+      pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));
+      ctx.stroke();
+      x+=2;
+      if(x>W){
+        clearInterval(iv);
+        if(nn){nn.className='step-num done';nn.textContent='✓';}
+        if(st) st.textContent='✓ 偵測到 Ca+ 螢光峰 @ 411,042.130 GHz';
+        const d4=document.getElementById('rs4d');
+        if(d4) d4.textContent='鎖定點確認：411,042.130 GHz。Rabi 12.4 kHz，π-pulse 40.3 μs。';
+        unlock(4);
+      }
+    },14);
+  }
+  else if(n===4){
+    if(nn){nn.className='step-num done';nn.textContent='✓';}
+    handleAction('laser','relock');
+  }
+};
+<\/script>`
+    :`<div class="alert-box ok" data-label="STATUS"><div class="alert-body">系統正常，729 nm 雷射鎖定中（誤差 ±0.09 Hz）。無需重新掃頻。</div></div>`;
+  }
+  ]
+}, // end laser
+
+// ═══════════════════════════════════════════════════════
+// QPU
+// ═══════════════════════════════════════════════════════
+qpu:{
+  tag:'STATION 03', title:'ION TRAP QPU',
+  sub:'Dilution Refrigerator · ⁴⁰Ca⁺ × 2 · Paul Trap Control',
+  tabs:['溫度控制','離子監控','量子閘','阱參數'],
+  render:[
+
+  // ── 0: 溫度控制 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return `
+<div style="display:grid;grid-template-columns:1fr 280px;gap:16px;">
+<div>
+<div style="text-align:center;padding:20px 0;background:#040d1e;border:1px solid ${c?'#661a1a':'#0d2240'};margin-bottom:14px;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,${c?'rgba(200,50,50,0.08)':'rgba(0,200,130,0.05)'} 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="font-size:7px;color:#1a4060;letter-spacing:4px;margin-bottom:8px;">MIXING CHAMBER TEMPERATURE</div>
+  <div style="font-size:56px;font-weight:bold;color:${c?'#ff4444':'#00e5a0'};line-height:1;font-family:'Courier New',monospace;" id="mc-big">${c?'89.3':'15.2'}</div>
+  <div style="font-size:13px;color:#2a5070;margin-top:4px;">mK</div>
+  <div style="font-size:10px;color:${c?'#ff4444':'#00cc88'};margin-top:6px;" id="mc-trend">${c?'↑ +0.4 mK/s — CRITICAL':'↓ Stable ±0.02 mK'}</div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">COOLING STAGES</span><div class="ip-section-line"></div></div>
+<div class="cryo-stack">
+  <div class="cryo-item ok">
+    <span class="cryo-name">① 室溫外殼 (RT)</span>
+    <span class="cryo-temp ok">300 K</span>
+    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:100%;background:#ffa040;"></div></div>
+    <span class="cryo-note" style="color:#ffa040;">正常</span>
+  </div>
+  <div class="cryo-item ok">
+    <span class="cryo-name">② 50K Stage (LN₂ 預冷)</span>
+    <span class="cryo-temp ok">50.1 K</span>
+    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:16%;background:#5aacff;"></div></div>
+    <span class="cryo-note" style="color:#00cc88;">正常</span>
+  </div>
+  <div class="cryo-item ok">
+    <span class="cryo-name">③ 4K Stage (LHe 液氦)</span>
+    <span class="cryo-temp ok">4.02 K</span>
+    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:1.3%;background:#5aacff;"></div></div>
+    <span class="cryo-note" style="color:#00cc88;">正常</span>
+  </div>
+  <div class="cryo-item ${c?'warn':'ok'}">
+    <span class="cryo-name">④ Still (700 mK 層)</span>
+    <span class="cryo-temp ${c?'warn':'ok'}">${c?'720':'700'} mK</span>
+    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:0.23%;background:${c?'#ffaa00':'#00cc88'};"></div></div>
+    <span class="cryo-note" style="color:${c?'#ffaa00':'#00cc88'};">${c?'偏高':'正常'}</span>
+  </div>
+  <div class="cryo-item ${c?'warn':'ok'}">
+    <span class="cryo-name">⑤ 100 mK Stage</span>
+    <span class="cryo-temp ${c?'warn':'ok'}">${c?'108':'100'} mK</span>
+    <div class="cryo-bar-bg"><div class="cryo-bar-fill" style="width:0.033%;background:${c?'#ffaa00':'#00cc88'};"></div></div>
+    <span class="cryo-note" style="color:${c?'#ffaa00':'#00cc88'};">${c?'偏高':'正常'}</span>
+  </div>
+  <div class="cryo-item ${c?'err':'ok'}">
+    <span class="cryo-name">⑥ Mixing Chamber ★</span>
+    <span class="cryo-temp ${c?'err':'ok'}" id="mc-row-temp">${c?'89.3':'15.2'} mK</span>
+    <div class="cryo-bar-bg"><div class="cryo-bar-fill" id="mc-bar" style="width:${c?'89':'15'}%;background:${c?'#ff4444':'#00e5a0'};"></div></div>
+    <span class="cryo-note" style="color:${c?'#ff4444':'#00cc88'};">${c?'⚠ 危':'正常'}</span>
+  </div>
+</div>
+${c?`<div class="act-row"><button class="act-btn primary" onclick="handleAction('qpu','temp')">▶ 記錄溫度狀態並確認</button></div>`:''}
+</div>
+
+<!-- right: mini fridge diagram -->
+<div>
+<div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">
+  <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:10px;">STILL HEATER CIRCUIT</div>
+  <svg width="100%" viewBox="0 0 200 280" font-family="monospace">
+    <!-- pipes -->
+    <line x1="60" y1="20" x2="60" y2="260" stroke="#0d2240" stroke-width="6" stroke-linecap="round"/>
+    <line x1="140" y1="20" x2="140" y2="260" stroke="#0d2240" stroke-width="6" stroke-linecap="round"/>
+    <!-- stages as horizontal bars -->
+    <rect x="30" y="18" width="140" height="22" rx="2" fill="#060f1c" stroke="#1a3050"/>
+    <text x="100" y="33" text-anchor="middle" font-size="8" fill="#3a6080">300 K — RT</text>
+    <rect x="36" y="48" width="128" height="20" rx="2" fill="#050c18" stroke="#1a3050"/>
+    <text x="100" y="62" text-anchor="middle" font-size="8" fill="#2a5070">50 K Stage</text>
+    <rect x="42" y="76" width="116" height="20" rx="2" fill="#040a14" stroke="#1a3050"/>
+    <text x="100" y="90" text-anchor="middle" font-size="8" fill="#2a5070">4 K Stage</text>
+    <!-- still heater highlight -->
+    <rect x="48" y="104" width="104" height="22" rx="2" fill="${c?'rgba(80,40,0,0.4)':'#030810'}" stroke="${c?'#664010':'#0d2240'}" stroke-width="${c?'1.5':'1'}"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" fill="${c?'#ffaa00':'#1a4060'}">Still  700 mK</text>
+    ${c?`<text x="180" y="119" text-anchor="middle" font-size="10" fill="#ffaa00">⚠</text>`:''}
+    <!-- CH-02 heater element -->
+    <rect x="56" y="132" width="88" height="16" rx="2" fill="${c?'rgba(120,20,20,0.5)':'#020810'}" stroke="${c?'#cc3333':'#0d2240'}"/>
+    <text x="100" y="143" text-anchor="middle" font-size="7" fill="${c?'#ff5555':'#1a4060'}">CH-02 Still Heater ${c?'[STUCK]':''}</text>
+    <!-- current arrow -->
+    ${c?`<line x1="100" y1="132" x2="100" y2="112" stroke="#ff4444" stroke-width="1.5" marker-end="url(#arr)"/>
+    <text x="108" y="126" font-size="7" fill="#ff4444">8.5A</text>`:''}
+    <rect x="50" y="156" width="100" height="22" rx="2" fill="${c?'rgba(80,20,20,0.3)':'#020810'}" stroke="${c?'#661a1a':'#0d2240'}"/>
+    <text x="100" y="171" text-anchor="middle" font-size="8" fill="${c?'#ff4444':'#1a4060'}">100 mK Stage</text>
+    <rect x="54" y="186" width="92" height="24" rx="2" fill="${c?'rgba(100,10,10,0.4)':'#020810'}" stroke="${c?'#cc3333':'#1a4060'}" stroke-width="1.5"/>
+    <text x="100" y="200" text-anchor="middle" font-size="8" fill="${c?'#ff4444':'#00cc88'}">Mixing Chamber</text>
+    <text x="100" y="210" text-anchor="middle" font-size="10" fill="${c?'#ff4444':'#00e5a0'}" font-weight="bold">${c?'89.3 mK':'15.2 mK'}</text>
+    <!-- ion trap -->
+    <ellipse cx="100" cy="244" rx="22" ry="10" fill="none" stroke="${c?'#cc3333':'#005530'}" stroke-width="1"/>
+    <circle cx="93" cy="244" r="3" fill="${c?'rgba(255,80,80,0.6)':'rgba(90,172,255,0.8)'}"/>
+    <circle cx="107" cy="244" r="3" fill="${c?'rgba(255,80,80,0.6)':'rgba(90,172,255,0.8)'}"/>
+    <text x="100" y="260" text-anchor="middle" font-size="7" fill="#1a4060">ION TRAP</text>
+    <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#ff4444"/>
+    </marker></defs>
+  </svg>
+</div>
+</div>
+</div>`;
+  },
+
+  // ── 1: 離子監控 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return `
+<div class="gauge-row cols-4">
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">ION #1</div>
+    <div class="gauge-val blue">|0⟩</div>
+    <div class="gauge-unit">⁴⁰Ca⁺ alive</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">ION #2</div>
+    <div class="gauge-val blue">|0⟩</div>
+    <div class="gauge-unit">⁴⁰Ca⁺ alive</div>
+  </div>
+  <div class="gauge-card ${c?'warn':''}">
+    <div class="live-pip ${c?'warn':'ok'}"></div>
+    <div class="gauge-label">n̄ (COM mode)</div>
+    <div class="gauge-val ${c?'warn':'ok'}">${c?'~120':'0.05'}</div>
+    <div class="gauge-unit">${c?'過熱 — 待冷卻':'phonons (GS)'}</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">ION SPACING</div>
+    <div class="gauge-val white">5.2</div>
+    <div class="gauge-unit">μm</div>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">ION CHAIN — CCD IMAGE (SIMULATION)</span><div class="ip-section-line"></div></div>
+<div class="ion-view">
+  <canvas id="ion-ccd" width="540" height="90" style="display:block;margin:0 auto;width:100%;max-width:540px;height:90px;"></canvas>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">TRAP & ION PARAMETERS</span><div class="ip-section-line"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div>
+    <div class="data-row"><span class="data-key">阱軸向頻率 ωz/2π</span><span class="data-val">1.20 MHz</span></div>
+    <div class="data-row"><span class="data-key">阱徑向頻率 ωr/2π</span><span class="data-val">2.82 MHz</span></div>
+    <div class="data-row"><span class="data-key">Lamb-Dicke η (axial)</span><span class="data-val">0.094</span></div>
+    <div class="data-row"><span class="data-key">D5/2 態壽命</span><span class="data-val">1.168 s</span></div>
+  </div>
+  <div>
+    <div class="data-row"><span class="data-key">Ion #1 螢光</span><span class="data-val ${c?'warn':'ok'}" id="ion1-fl">${c?'偏低 (~4 c/ms)':'23.4 c/ms ✓'}</span></div>
+    <div class="data-row"><span class="data-key">Ion #2 螢光</span><span class="data-val ${c?'warn':'ok'}" id="ion2-fl">${c?'偏低 (~4 c/ms)':'22.9 c/ms ✓'}</span></div>
+    <div class="data-row"><span class="data-key">背景計數</span><span class="data-val">0.31 c/ms</span></div>
+    <div class="data-row"><span class="data-key">判決閾值</span><span class="data-val">5 counts/120ns</span></div>
+  </div>
+</div>
+${c?`<div class="act-row"><button class="act-btn primary" onclick="handleAction('qpu','ions')">▶ 確認離子存活 — 記錄螢光</button></div>`:''}
+
+<\/script>
+<script>
+(function(){
+  const cvs=document.getElementById('ion-ccd');
+  if(!cvs) return;
+  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;
+  const crisis=(typeof gamePhase!=='undefined'&&gamePhase==='crisis');
+  let t=0;
+  function draw(){
+    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);
+    // noise floor
+    for(let i=0;i<60;i++){
+      ctx.fillStyle='rgba(90,172,255,'+(Math.random()*0.04)+')';
+      ctx.fillRect(Math.random()*W,Math.random()*H,1,1);
+    }
+    [[W*0.38,H/2],[W*0.62,H/2]].forEach(([cx,cy],i)=>{
+      const bright=crisis?(0.25+Math.random()*0.2):(0.82+Math.sin(t*2.5+i)*0.1);
+      const r=crisis?7:11;
+      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r*2.5);
+      g.addColorStop(0,'rgba(130,200,255,'+bright+')');
+      g.addColorStop(0.35,'rgba(80,140,220,'+(bright*0.5)+')');
+      g.addColorStop(1,'rgba(0,10,30,0)');
+      ctx.fillStyle=g;
+      ctx.fillRect(cx-r*2.5-2,cy-r*2.5-2,r*5+4,r*5+4);
+    });
+    t+=0.04;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+<\/script>`;
+  },
+
+  // ── 2: 量子閘 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return c?`<div class="alert-box crit" data-label="SUSPENDED"><div class="alert-body">溫度異常中，量子閘序列暫停。待冷卻系統恢復至 &lt; 20 mK 後方可執行。</div></div>`:`
+<div class="ip-section"><span class="ip-section-label">BELL STATE SEQUENCE — |Φ+⟩ = (|00⟩+|11⟩)/√2</span><div class="ip-section-line"></div></div>
+<div style="background:#040d1e;border:1px solid #0d2240;padding:0;margin-bottom:12px;">
+  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;
+    font-size:7px;color:#1a4060;letter-spacing:2px;padding:5px 12px;border-bottom:1px solid #0d2240;">
+    <span>STEP</span><span>OPERATION</span><span>DURATION</span><span>STATUS</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;border-bottom:1px solid #060f20;">
+    <span style="font-size:9px;color:#1a4060;">INIT</span>
+    <span style="font-size:10px;color:#5aacff;">Doppler 冷卻 + Sideband 冷卻</span>
+    <span style="font-size:9px;color:#1a4060;">55 ms</span>
+    <span style="font-size:9px;color:#2a5070;" id="gs1">待機</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;border-bottom:1px solid #060f20;">
+    <span style="font-size:9px;color:#1a4060;">H</span>
+    <span style="font-size:10px;color:#cc8844;">Hadamard — π/2 pulse (729 nm, Ion #1)</span>
+    <span style="font-size:9px;color:#1a4060;">20 μs</span>
+    <span style="font-size:9px;color:#2a5070;" id="gs2">待機</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;border-bottom:1px solid #060f20;">
+    <span style="font-size:9px;color:#1a4060;">MS</span>
+    <span style="font-size:10px;color:#cc8844;">Mølmer–Sørensen gate (bichromatic)</span>
+    <span style="font-size:9px;color:#1a4060;">184 μs</span>
+    <span style="font-size:9px;color:#2a5070;" id="gs3">待機</span>
+  </div>
+  <div style="display:grid;grid-template-columns:60px 1fr 70px 70px;align-items:center;padding:9px 12px;">
+    <span style="font-size:9px;color:#1a4060;">READ</span>
+    <span style="font-size:10px;color:#8aaace;">State detection × 1000 shots (PMT)</span>
+    <span style="font-size:9px;color:#1a4060;">120 ms</span>
+    <span style="font-size:9px;color:#2a5070;" id="gs4">待機</span>
+  </div>
+</div>
+
+<div class="gauge-row cols-2" id="gate-results" style="display:none;">
+  <div>
+    <div class="ip-section"><span class="ip-section-label">MEASUREMENT RESULTS</span><div class="ip-section-line"></div></div>
+    <div class="hist-container">
+      <div class="hist-bars">
+        <div class="hist-col"><div class="hist-bar" id="hb00" style="height:0%;background:#00cc88;transition:height 1s;"></div><div class="hist-state">|00⟩</div><div class="hist-pct" id="hp00" style="color:#00cc88;">-</div></div>
+        <div class="hist-col"><div class="hist-bar" id="hb01" style="height:0%;background:#1a4060;transition:height 1s;"></div><div class="hist-state">|01⟩</div><div class="hist-pct" id="hp01" style="color:#1a4060;">-</div></div>
+        <div class="hist-col"><div class="hist-bar" id="hb10" style="height:0%;background:#1a4060;transition:height 1s;"></div><div class="hist-state">|10⟩</div><div class="hist-pct" id="hp10" style="color:#1a4060;">-</div></div>
+        <div class="hist-col"><div class="hist-bar" id="hb11" style="height:0%;background:#5aacff;transition:height 1s;"></div><div class="hist-state">|11⟩</div><div class="hist-pct" id="hp11" style="color:#5aacff;">-</div></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="ip-section"><span class="ip-section-label">ENTANGLEMENT METRICS</span><div class="ip-section-line"></div></div>
+    <div style="background:#040d1e;border:1px solid #0d2240;padding:12px;">
+      <div class="data-row"><span class="data-key">纏結保真度 F</span><span class="data-val ok" id="fid-val">-</span></div>
+      <div class="data-row"><span class="data-key">Bell 參數 S</span><span class="data-val ok" id="bell-s">-</span></div>
+      <div class="data-row"><span class="data-key">古典上限</span><span class="data-val">S ≤ 2.000</span></div>
+      <div class="data-row"><span class="data-key">量子優勢</span><span class="data-val ok" id="qadv">-</span></div>
+      <div class="data-row"><span class="data-key">量測次數</span><span class="data-val">1000 shots</span></div>
+    </div>
+    <div class="alert-box ok" data-label="RESULT" id="bell-ok-box" style="display:none;">
+      <div class="alert-body">Bell State |Φ+⟩ 確認！Bell 不等式違反 — 量子纏結成功。</div>
+    </div>
+  </div>
+</div>
+
+<div class="act-row">
+  <button class="act-btn primary" id="run-bell-btn" onclick="runBellV5()">▶ 執行 Bell State 序列</button>
+</div>
+
+<\/script>
+<script>
+window.runBellV5=function(){
+  const btn=document.getElementById('run-bell-btn');
+  if(btn) btn.disabled=true;
+  const steps=[{id:'gs1',t:700},{id:'gs2',t:1500},{id:'gs3',t:2400},{id:'gs4',t:3500}];
+  steps.forEach(s=>{
+    const el=document.getElementById(s.id);
+    if(el){el.textContent='執行中';el.style.color='#ffa040';}
+    setTimeout(()=>{
+      if(el){el.textContent='✓ 完成';el.style.color='#00cc88';}
+    },s.t+400);
+  });
+  setTimeout(()=>{
+    const res=document.getElementById('gate-results');
+    if(res) res.style.display='grid';
+    const p00=(48+Math.random()*3).toFixed(1);
+    const p11=(48+Math.random()*3).toFixed(1);
+    const p01=((100-parseFloat(p00)-parseFloat(p11))*0.55).toFixed(1);
+    const p10=(100-parseFloat(p00)-parseFloat(p11)-parseFloat(p01)).toFixed(1);
+    setTimeout(()=>{
+      [['00',p00,'#00cc88'],['01',p01,'#1a4060'],['10',p10,'#1a4060'],['11',p11,'#5aacff']].forEach(([s,v,col])=>{
+        const b=document.getElementById('hb'+s),p=document.getElementById('hp'+s);
+        if(b){b.style.height=parseFloat(v)+'%';b.style.background=col;}
+        if(p){p.textContent=v+'%';p.style.color=col;}
+      });
+      const fid=((parseFloat(p00)+parseFloat(p11))/100*100).toFixed(1);
+      const S=(2.6+Math.random()*0.3).toFixed(3);
+      const fv=document.getElementById('fid-val'),bs=document.getElementById('bell-s'),qa=document.getElementById('qadv'),ob=document.getElementById('bell-ok-box');
+      if(fv){fv.textContent=fid+'%';}
+      if(bs){bs.textContent=S;}
+      if(qa){qa.textContent='S − 2 = +'+(parseFloat(S)-2).toFixed(3);}
+      if(ob) ob.style.display='block';
+      setTimeout(()=>handleAction('qpu','bell'),600);
+    },200);
+  },4000);
+};
+<\/script>`;
+  },
+
+  // ── 3: 阱參數 ──
+  ()=>`
+<div class="gauge-row cols-4">
+  <div class="gauge-card"><div class="gauge-label">RF FREQUENCY</div><div class="gauge-val ok">26.10</div><div class="gauge-unit">MHz LOCKED</div></div>
+  <div class="gauge-card"><div class="gauge-label">RF VOLTAGE V₀</div><div class="gauge-val white">640</div><div class="gauge-unit">V pk-pk</div></div>
+  <div class="gauge-card"><div class="gauge-label">STABILITY q</div><div class="gauge-val ok">0.206</div><div class="gauge-unit">Mathieu param</div></div>
+  <div class="gauge-card"><div class="gauge-label">DC ENDCAP</div><div class="gauge-val white">+8.4</div><div class="gauge-unit">V</div></div>
+</div>
+<div class="ip-section"><span class="ip-section-label">PAUL TRAP GEOMETRY</span><div class="ip-section-line"></div></div>
+<div class="trap-svg-wrap">
+  <svg width="380" height="120" viewBox="0 0 380 120" font-family="monospace">
+    <!-- endcaps -->
+    <rect x="8" y="44" width="60" height="32" rx="3" fill="#c8a020" stroke="#d4b030" stroke-width="1.5"/>
+    <text x="38" y="63" text-anchor="middle" font-size="8" fill="#040d1e" font-weight="bold">+DC</text>
+    <rect x="312" y="44" width="60" height="32" rx="3" fill="#c8a020" stroke="#d4b030" stroke-width="1.5"/>
+    <text x="342" y="63" text-anchor="middle" font-size="8" fill="#040d1e" font-weight="bold">+DC</text>
+    <!-- blade electrodes top -->
+    <rect x="76" y="8" width="228" height="34" rx="2" fill="#1a3050" stroke="#3a6090" stroke-width="1"/>
+    <text x="190" y="29" text-anchor="middle" font-size="8" fill="#5aacff">RF +V₀ (Blade 1)</text>
+    <!-- blade electrodes bottom -->
+    <rect x="76" y="78" width="228" height="34" rx="2" fill="#1a3050" stroke="#3a6090" stroke-width="1"/>
+    <text x="190" y="99" text-anchor="middle" font-size="8" fill="#5aacff">RF −V₀ (Blade 2)</text>
+    <!-- trap axis -->
+    <line x1="68" y1="60" x2="312" y2="60" stroke="#0d2240" stroke-width="0.5" stroke-dasharray="4,4"/>
+    <!-- ions -->
+    <circle cx="174" cy="60" r="7" fill="rgba(90,172,255,0.85)" stroke="#5aacff" stroke-width="1"/>
+    <text x="174" y="63" text-anchor="middle" font-size="6" fill="white">Ca</text>
+    <circle cx="206" cy="60" r="7" fill="rgba(90,172,255,0.85)" stroke="#5aacff" stroke-width="1"/>
+    <text x="206" y="63" text-anchor="middle" font-size="6" fill="white">Ca</text>
+    <!-- spacing label -->
+    <line x1="174" y1="73" x2="206" y2="73" stroke="#1a4060" stroke-width="0.8"/>
+    <text x="190" y="83" text-anchor="middle" font-size="7" fill="#1a4060">5.2 μm</text>
+    <!-- laser beams -->
+    <line x1="76" y1="60" x2="165" y2="60" stroke="rgba(130,100,255,0.5)" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="110" y="56" text-anchor="middle" font-size="7" fill="rgba(130,130,255,0.7)">397nm ↓</text>
+    <line x1="215" y1="60" x2="312" y2="60" stroke="rgba(200,80,0,0.5)" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="265" y="56" text-anchor="middle" font-size="7" fill="rgba(200,100,0,0.7)">729nm →</text>
+  </svg>
+</div>
+<div class="ip-section"><span class="ip-section-label">SECULAR FREQUENCIES</span><div class="ip-section-line"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div>
+    <div class="data-row"><span class="data-key">軸向 COM ωz/2π</span><span class="data-val">1.200 MHz</span></div>
+    <div class="data-row"><span class="data-key">軸向 STR ωz,2/2π</span><span class="data-val">2.078 MHz</span></div>
+    <div class="data-row"><span class="data-key">徑向 x ωx/2π</span><span class="data-val">2.820 MHz</span></div>
+    <div class="data-row"><span class="data-key">徑向 y ωy/2π</span><span class="data-val">2.835 MHz</span></div>
+  </div>
+  <div>
+    <div class="data-row"><span class="data-key">Rabi 頻率 Ω/2π</span><span class="data-val ok">12.4 kHz</span></div>
+    <div class="data-row"><span class="data-key">π pulse 時間</span><span class="data-val ok">40.3 μs</span></div>
+    <div class="data-row"><span class="data-key">單 qubit 閘保真度</span><span class="data-val ok">99.8%</span></div>
+    <div class="data-row"><span class="data-key">MS 纏結閘保真度</span><span class="data-val ok">98.7%</span></div>
+  </div>
+</div>`
+  ]
+}, // end qpu
+
+// ═══════════════════════════════════════════════════════
+// READOUT
+// ═══════════════════════════════════════════════════════
+readout:{
+  tag:'STATION 04', title:'READOUT SYSTEM',
+  sub:'Single-Photon PMT · Fluorescence Analysis · State Discrimination',
+  tabs:['PMT 控制台','螢光掃描','統計分析','示波器'],
+  render:[
+
+  // ── 0: PMT 控制台 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return `
+<div style="display:grid;grid-template-columns:1fr 260px;gap:16px;">
+<div>
+<div class="gauge-row cols-3">
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">PMT HIGH VOLTAGE</div>
+    <div class="gauge-val blue" id="hv-big">-850</div>
+    <div class="gauge-unit">V — ACTIVE</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ok"></div>
+    <div class="gauge-label">DARK COUNT RATE</div>
+    <div class="gauge-val ok" id="dark-big">3.2</div>
+    <div class="gauge-unit">counts / sec</div>
+  </div>
+  <div class="gauge-card">
+    <div class="live-pip ${c?'warn':'ok'}"></div>
+    <div class="gauge-label">LIVE COUNT</div>
+    <div class="gauge-val ${c?'warn':'ok'}" id="live-big">${c?'~8':'~46'}</div>
+    <div class="gauge-unit">counts / ms (2 ions)</div>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">PMT CONTROLS</span><div class="ip-section-line"></div></div>
+<div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">
+  <div class="knob-row">
+    <span class="knob-key">High Voltage (HV)</span>
+    <div class="knob-ctrl">
+      <button class="knob-btn" onclick="adjPMT('hv',-10)">−</button>
+      <span class="knob-disp" id="hv-disp">-850 V</span>
+      <button class="knob-btn" onclick="adjPMT('hv',10)">+</button>
+    </div>
+  </div>
+  <div class="knob-row">
+    <span class="knob-key">積分視窗</span>
+    <div class="knob-ctrl">
+      <button class="knob-btn" onclick="adjPMT('win',-10)">−</button>
+      <span class="knob-disp" id="win-disp">120 ns</span>
+      <button class="knob-btn" onclick="adjPMT('win',10)">+</button>
+    </div>
+  </div>
+  <div class="knob-row">
+    <span class="knob-key">判決閾值</span>
+    <div class="knob-ctrl">
+      <button class="knob-btn" onclick="adjPMT('thr',-1)">−</button>
+      <span class="knob-disp" id="thr-disp">5 cts</span>
+      <button class="knob-btn" onclick="adjPMT('thr',1)">+</button>
+    </div>
+  </div>
+</div>
+
+<div class="ip-section"><span class="ip-section-label">PER-ION FLUORESCENCE</span><div class="ip-section-line"></div></div>
+<div class="bar-row">
+  <span class="bar-label">Ion #1 螢光</span>
+  <div class="bar-track"><div class="bar-fill" id="fl1-bar" style="width:${c?'20':'90'}%;background:${c?'#ffaa00':'#00cc88'};"></div></div>
+  <span class="bar-val" id="fl1-val" style="color:${c?'#ffaa00':'#00cc88'};">${c?'4.2':'23.4'} c/ms</span>
+</div>
+<div class="bar-row">
+  <span class="bar-label">Ion #2 螢光</span>
+  <div class="bar-track"><div class="bar-fill" id="fl2-bar" style="width:${c?'19':'88'}%;background:${c?'#ffaa00':'#00cc88'};"></div></div>
+  <span class="bar-val" id="fl2-val" style="color:${c?'#ffaa00':'#00cc88'};">${c?'4.0':'22.9'} c/ms</span>
+</div>
+<div class="bar-row">
+  <span class="bar-label">背景雜訊</span>
+  <div class="bar-track"><div class="bar-fill" style="width:1.5%;background:#1a4060;"></div></div>
+  <span class="bar-val" style="color:#1a4060;">0.31 c/ms</span>
+</div>
+
+${c?`<div class="act-row"><button class="act-btn primary" onclick="switchDMTab(1)">▶ 前往螢光掃描確認離子</button></div>`:''}
+</div>
+
+<!-- right: detection principle -->
+<div>
+  <div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">
+    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:10px;">STATE DISCRIMINATION</div>
+    <svg width="100%" viewBox="0 0 200 200" font-family="monospace">
+      <!-- bright state -->
+      <rect x="10" y="10" width="80" height="80" rx="2" fill="#040d1e" stroke="#005530"/>
+      <text x="50" y="28" text-anchor="middle" font-size="8" fill="#1a4060">|0⟩ BRIGHT</text>
+      <circle cx="50" cy="58" r="14" fill="rgba(90,172,255,0.8)" stroke="#5aacff"/>
+      <text x="50" y="62" text-anchor="middle" font-size="7" fill="white">Ca⁺</text>
+      <!-- photon arrows -->
+      <line x1="50" y1="44" x2="50" y2="20" stroke="#5aacff" stroke-width="1" marker-end="url(#ph)"/>
+      <line x1="63" y1="50" x2="82" y2="36" stroke="#5aacff" stroke-width="1"/>
+      <line x1="37" y1="50" x2="18" y2="36" stroke="#5aacff" stroke-width="1"/>
+      <text x="50" y="90" text-anchor="middle" font-size="7" fill="#00cc88">~23 c/ms ✓</text>
+      <!-- dark state -->
+      <rect x="110" y="10" width="80" height="80" rx="2" fill="#040d1e" stroke="#661a1a"/>
+      <text x="150" y="28" text-anchor="middle" font-size="8" fill="#1a4060">|1⟩ DARK</text>
+      <circle cx="150" cy="58" r="14" fill="rgba(40,20,40,0.8)" stroke="#3a1a4a"/>
+      <text x="150" y="62" text-anchor="middle" font-size="7" fill="#4a3a5a">Ca⁺</text>
+      <text x="150" y="90" text-anchor="middle" font-size="7" fill="#cc3333">&lt;0.5 c/ms</text>
+      <!-- threshold -->
+      <rect x="10" y="105" width="180" height="50" rx="2" fill="#030a14" stroke="#0d2240"/>
+      <text x="100" y="120" text-anchor="middle" font-size="7" fill="#1a4060">THRESHOLD = 5 counts</text>
+      <line x1="20" y1="132" x2="180" y2="132" stroke="#1a4060" stroke-width="0.5"/>
+      <rect x="20" y="120" width="40" height="24" rx="1" fill="rgba(0,200,130,0.3)" stroke="#005530"/>
+      <text x="40" y="136" text-anchor="middle" font-size="7" fill="#00cc88">≥5 → |0⟩</text>
+      <rect x="140" y="120" width="40" height="24" rx="1" fill="rgba(150,30,30,0.3)" stroke="#661a1a"/>
+      <text x="160" y="136" text-anchor="middle" font-size="7" fill="#cc3333">&lt;5 → |1⟩</text>
+      <!-- readout time -->
+      <text x="100" y="160" text-anchor="middle" font-size="7" fill="#1a4060">讀出視窗: 120 ns</text>
+      <text x="100" y="172" text-anchor="middle" font-size="7" fill="#1a4060">誤差率: 0.28%</text>
+      <defs><marker id="ph" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+        <circle cx="2.5" cy="2.5" r="2" fill="#5aacff"/>
+      </marker></defs>
+    </svg>
+  </div>
+</div>
+</div>
+
+<\/script>
+<script>
+window._pmt={hv:-850,win:120,thr:5};
+window.adjPMT=function(k,d){
+  if(k==='hv'){window._pmt.hv=Math.max(-1000,Math.min(-700,window._pmt.hv+d));const el=document.getElementById('hv-disp');const big=document.getElementById('hv-big');if(el)el.textContent=window._pmt.hv+' V';if(big)big.textContent=window._pmt.hv;}
+  if(k==='win'){window._pmt.win=Math.max(50,Math.min(500,window._pmt.win+d));const el=document.getElementById('win-disp');if(el)el.textContent=window._pmt.win+' ns';}
+  if(k==='thr'){window._pmt.thr=Math.max(1,Math.min(20,window._pmt.thr+d));const el=document.getElementById('thr-disp');if(el)el.textContent=window._pmt.thr+' cts';}
+};
+(function liveTick(){
+  const crisis=(typeof gamePhase!=='undefined'&&gamePhase==='crisis');
+  const base=crisis?4:23;
+  const v1=(base+(Math.random()-0.5)*1.2).toFixed(1);
+  const v2=(base+(Math.random()-0.5)*1.2).toFixed(1);
+  const tot=(parseFloat(v1)+parseFloat(v2)).toFixed(0);
+  const lb=document.getElementById('live-big');const f1=document.getElementById('fl1-val');const f2=document.getElementById('fl2-val');
+  const b1=document.getElementById('fl1-bar');const b2=document.getElementById('fl2-bar');
+  if(lb) lb.textContent='~'+tot;
+  if(f1){f1.textContent=v1+' c/ms';}
+  if(f2){f2.textContent=v2+' c/ms';}
+  if(b1) b1.style.width=(parseFloat(v1)/30*100).toFixed(0)+'%';
+  if(b2) b2.style.width=(parseFloat(v2)/30*100).toFixed(0)+'%';
+  const dark=(3+Math.random()*0.5).toFixed(1);
+  const db=document.getElementById('dark-big');
+  if(db) db.textContent=dark;
+  setTimeout(liveTick,700);
+})();
+<\/script>`;
+  },
+
+  // ── 1: 螢光掃描 ──
+  ()=>{
+    const c=(gamePhase==='crisis');
+    return `
+<div class="ip-section"><span class="ip-section-label">397 nm FLUORESCENCE SCAN</span><div class="ip-section-line"></div></div>
+<div class="sweep-wrap" style="height:100px;">
+  <canvas id="fluo-c" width="700" height="100" style="width:100%;height:100px;display:block;"></canvas>
+</div>
+<div style="font-size:9px;color:#1a4060;text-align:center;margin:4px 0;" id="fluo-status">按下方按鈕開始掃描</div>
+
+<div style="display:none;" id="fluo-results">
+  <div class="gauge-row cols-3" style="margin-top:12px;">
+    <div class="gauge-card">
+      <div class="live-pip ok"></div>
+      <div class="gauge-label">ION #1</div>
+      <div class="gauge-val ok" id="fluo-v1">-</div>
+      <div class="gauge-unit">counts/ms</div>
+    </div>
+    <div class="gauge-card">
+      <div class="live-pip ok"></div>
+      <div class="gauge-label">ION #2</div>
+      <div class="gauge-val ok" id="fluo-v2">-</div>
+      <div class="gauge-unit">counts/ms</div>
+    </div>
+    <div class="gauge-card">
+      <div class="live-pip ok"></div>
+      <div class="gauge-label">SURVIVAL</div>
+      <div class="gauge-val ok">2 / 2</div>
+      <div class="gauge-unit">confirmed</div>
+    </div>
+  </div>
+  <div class="alert-box ok" data-label="SCAN RESULT">
+    <div class="alert-body">
+      兩個 ⁴⁰Ca⁺ 離子螢光峰確認。離子仍在陷阱中。<br>
+      ${c?'熱運動偏高（n̄≈120），溫度恢復後需重新 Doppler 冷卻再繼續實驗。':'系統狀態正常。'}
+    </div>
+  </div>
+</div>
+
+<div class="act-row">
+  <button class="act-btn primary" id="scan-btn" onclick="runFluoV5()">▶ 執行螢光掃描</button>
+</div>
+
+<\/script>
+<script>
+window.runFluoV5=function(){
+  const btn=document.getElementById('scan-btn');
+  if(btn) btn.disabled=true;
+  const cvs=document.getElementById('fluo-c');
+  const st=document.getElementById('fluo-status');
+  if(!cvs) return;
+  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;
+  const crisis=(typeof gamePhase!=='undefined'&&gamePhase==='crisis');
+  ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);
+  if(st) st.textContent='397 nm 脈衝中，PMT 記錄螢光...';
+  let scanX=0;
+  const peak1=Math.round(W*0.33),peak2=Math.round(W*0.67);
+  const pts=[];
+  const iv=setInterval(()=>{
+    const noise=(Math.random()-0.5)*3;
+    let y=H-2-noise;
+    if(Math.abs(scanX-peak1)<25) y=H-(H-5)*Math.exp(-Math.pow((scanX-peak1)/7,2))*(crisis?0.4:0.92)-noise;
+    if(Math.abs(scanX-peak2)<25) y=H-(H-5)*Math.exp(-Math.pow((scanX-peak2)/7,2))*(crisis?0.38:0.90)-noise;
+    pts.push([scanX,y]);
+    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='#0d2240'; ctx.lineWidth=0.5;
+    [0.25,0.5,0.75].forEach(f=>{ctx.beginPath();ctx.moveTo(0,H*f);ctx.lineTo(W,H*f);ctx.stroke();});
+    // filled area
+    ctx.beginPath();
+    ctx.moveTo(0,H);
+    pts.forEach(p=>ctx.lineTo(p[0],p[1]));
+    ctx.lineTo(pts[pts.length-1][0],H);
+    ctx.closePath();
+    const gr=ctx.createLinearGradient(0,0,0,H);
+    gr.addColorStop(0,'rgba(0,200,130,0.2)'); gr.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gr; ctx.fill();
+    // line
+    ctx.strokeStyle='#00e5a0'; ctx.lineWidth=1.5; ctx.beginPath();
+    pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+    // scan cursor
+    ctx.strokeStyle='rgba(255,160,64,0.6)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(scanX,0); ctx.lineTo(scanX,H); ctx.stroke();
+    // labels
+    ctx.fillStyle='#1a4060'; ctx.font='8px monospace';
+    ctx.fillText('Ion #1',peak1-15,H-5);
+    ctx.fillText('Ion #2',peak2-15,H-5);
+    scanX+=3;
+    if(scanX>=W){
+      clearInterval(iv);
+      if(st) st.textContent='✓ 掃描完成 — 偵測到 2 個螢光峰';
+      const res=document.getElementById('fluo-results');
+      if(res) res.style.display='block';
+      const base=crisis?4.2:23.4;
+      const v1=(base+(Math.random()-0.5)*0.4).toFixed(1);
+      const v2=(base+(Math.random()-0.5)*0.4).toFixed(1);
+      const e1=document.getElementById('fluo-v1'),e2=document.getElementById('fluo-v2');
+      if(e1) e1.textContent=v1+(crisis?' (low)':' ✓');
+      if(e2) e2.textContent=v2+(crisis?' (low)':' ✓');
+      setTimeout(()=>handleAction('readout','scan'),500);
+    }
+  },12);
+};
+<\/script>`;
+  },
+
+  // ── 2: 統計分析 ──
+  ()=>`
+<div class="ip-section"><span class="ip-section-label">BELL STATE STATISTICS</span><div class="ip-section-line"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+<div>
+<div style="background:#040d1e;border:1px solid #0d2240;padding:10px;margin-bottom:8px;text-align:center;">
+  <div style="font-size:9px;color:#1a4060;letter-spacing:1px;margin-bottom:6px;">TARGET STATE</div>
+  <div style="font-size:14px;color:#8aaace;letter-spacing:2px;">|Φ+⟩ = (|00⟩ + |11⟩) / √2</div>
+</div>
+<div class="hist-container">
+  <div class="hist-bars">
+    <div class="hist-col">
+      <div class="hist-bar" style="height:98%;background:#00cc88;"></div>
+      <div class="hist-state" style="color:#00cc88;">|00⟩</div>
+      <div class="hist-pct" style="color:#00cc88;">49.3%</div>
+    </div>
+    <div class="hist-col">
+      <div class="hist-bar" style="height:1.4%;background:#1a4060;"></div>
+      <div class="hist-state" style="color:#1a4060;">|01⟩</div>
+      <div class="hist-pct" style="color:#1a4060;">0.7%</div>
+    </div>
+    <div class="hist-col">
+      <div class="hist-bar" style="height:1.2%;background:#1a4060;"></div>
+      <div class="hist-state" style="color:#1a4060;">|10⟩</div>
+      <div class="hist-pct" style="color:#1a4060;">0.6%</div>
+    </div>
+    <div class="hist-col">
+      <div class="hist-bar" style="height:96%;background:#5aacff;"></div>
+      <div class="hist-state" style="color:#5aacff;">|11⟩</div>
+      <div class="hist-pct" style="color:#5aacff;">49.4%</div>
+    </div>
+  </div>
+</div>
+</div>
+<div>
+  <div style="background:#040d1e;border:1px solid #0d2240;padding:14px;">
+    <div style="font-size:7px;color:#1a4060;letter-spacing:2px;margin-bottom:10px;">METRICS</div>
+    <div class="data-row"><span class="data-key">纏結保真度 F</span><span class="data-val ok">98.7%</span></div>
+    <div class="data-row"><span class="data-key">量測次數</span><span class="data-val">1000 shots</span></div>
+    <div class="data-row"><span class="data-key">|00⟩ 計數</span><span class="data-val ok">493</span></div>
+    <div class="data-row"><span class="data-key">|11⟩ 計數</span><span class="data-val ok">494</span></div>
+    <div class="data-row"><span class="data-key">Bell 參數 S</span><span class="data-val ok">2.789</span></div>
+    <div class="data-row"><span class="data-key">古典上限</span><span class="data-val">S ≤ 2.000</span></div>
+    <div class="data-row"><span class="data-key">違反量</span><span class="data-val ok">ΔS = +0.789 (σ=18.8)</span></div>
+    <div class="data-row"><span class="data-key">SPAM 誤差</span><span class="data-val">0.28% corrected</span></div>
+  </div>
+  <div class="alert-box ok" data-label="CONCLUSION">
+    <div class="alert-body">Bell 不等式違反確認。量子纏結成立。纏結保真度 98.7% 超越目標 98%。</div>
+  </div>
+</div>
+</div>
+`,
+
+  // ── 3: 示波器 ──
+  ()=>`
+<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+  <button class="act-btn neutral" id="trig-s" onclick="setTrigV5('single')" style="font-size:8px;padding:4px 10px;">SINGLE</button>
+  <button class="act-btn neutral" id="trig-a" onclick="setTrigV5('avg')" style="font-size:8px;padding:4px 10px;">AVG×10</button>
+  <button class="act-btn neutral" id="trig-c" onclick="setTrigV5('cont')" style="font-size:8px;padding:4px 10px;">CONTINUOUS</button>
+  <span style="font-size:8px;color:#1a4060;margin-left:auto;line-height:2.2;">200 ns/div · 1.25 GS/s</span>
+</div>
+<div class="osc-container" style="height:100px;">
+  <canvas id="osc-c" width="700" height="100" style="width:100%;height:100px;display:block;"></canvas>
+  <div class="osc-trig-line" style="top:30%;"></div>
+</div>
+<div style="display:flex;justify-content:space-between;font-size:7px;color:#1a4060;padding:2px 6px;margin-bottom:12px;">
+  <span>0</span><span>200ns</span><span>400ns</span><span>600ns</span><span>800ns</span><span>1000ns</span><span>1200ns</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div>
+    <div class="data-row"><span class="data-key">高態 |0⟩ (bright)</span><span class="data-val ok">~23 counts/120ns</span></div>
+    <div class="data-row"><span class="data-key">低態 |1⟩ (dark)</span><span class="data-val err">&lt; 0.5 counts/120ns</span></div>
+    <div class="data-row"><span class="data-key">判決閾值</span><span class="data-val warn">5 counts/window</span></div>
+  </div>
+  <div>
+    <div class="data-row"><span class="data-key">讀出視窗</span><span class="data-val">120 ns</span></div>
+    <div class="data-row"><span class="data-key">讀出誤差</span><span class="data-val ok">0.28%</span></div>
+    <div class="data-row"><span class="data-key">SNR</span><span class="data-val ok">24.3 dB</span></div>
+  </div>
+</div>
+<\/script>
+<script>
+(function(){
+  const cvs=document.getElementById('osc-c');
+  if(!cvs) return;
+  const ctx=cvs.getContext('2d'),W=cvs.width,H=cvs.height;
+  window._trigMode='single';
+  window.setTrigV5=function(m){
+    window._trigMode=m;
+    ['s','a','c'].forEach((k,i)=>{
+      const modes=['single','avg','cont'];
+      const el=document.getElementById('trig-'+k);
+      if(el) el.style.color=modes[i]===m?'#00cc88':'#3a7090';
+    });
+  };
+  let shot=mkShot(),timer=0;
+  function mkShot(){
+    const w=[];for(let i=0;i<9;i++) w.push(Math.random()>0.5?'H':'L'); return w;
+  }
+  function draw(){
+    ctx.fillStyle='#000b14'; ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='#0d2240'; ctx.lineWidth=0.5;
+    for(let x=0;x<=W;x+=100){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    [0.25,0.5,0.75].forEach(f=>{ctx.beginPath();ctx.moveTo(0,H*f);ctx.lineTo(W,H*f);ctx.stroke();});
+    // trigger level
+    ctx.strokeStyle='rgba(255,160,64,0.4)'; ctx.lineWidth=0.5; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(0,H*0.3); ctx.lineTo(W,H*0.3); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(255,160,64,0.5)'; ctx.font='7px monospace'; ctx.fillText('TRIG',2,H*0.3-3);
+    // waveform
+    ctx.strokeStyle='#00e5a0'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    const segW=W/shot.length;
+    shot.forEach((w,i)=>{
+      const x0=i*segW,x1=(i+1)*segW;
+      const yH=H*0.12+Math.random()*3,yL=H*0.82+Math.random()*3;
+      const y=w==='H'?yH:yL;
+      const yn=i<shot.length-1?(shot[i+1]==='H'?H*0.12:H*0.82):y;
+      if(i===0) ctx.moveTo(x0,y);
+      ctx.lineTo(x0,y); ctx.lineTo(x1-1,y); ctx.lineTo(x1-1,yn);
+    });
+    ctx.stroke();
+    timer++;
+    if(window._trigMode==='cont'&&timer>45){shot=mkShot();timer=0;}
+    if(window._trigMode==='avg'&&timer>90){shot=mkShot();timer=0;}
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+<\/script>`
+  ]
+} // end readout
+
+}; // end DEVICE_PANELS
+
+
+// ══════════════════════════════════════════════════════════
+//  MISSIONS
+// ══════════════════════════════════════════════════════════
+const MISSIONS = [
+  {
+    id:'m1', title:'緊急：QPU 溫度異常', badge:'ACTIVE',
+    desc:'凌晨 3:07，離子阱溫度從 15mK 飆升至 89mK。必須在超過 100mK 前找出原因並處理。',
+    steps:[
+      {id:'s1a', text:'前往主控台 — 查看警報日誌', target:'console',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'主控台……找日誌。03:04:17，CH-02 斷路——電流歸零。', color:'#c8d8e8'},
+          {who:'警報日誌', msg:'Still Heater CH-02 異常：控制器韌體當機，持續輸出加熱訊號。原本應保持 0A。', color:'#ffa040'},
+          {who:'你', msg:'韌體當機，一直在加熱……這就是原因。要手動 Override 關掉它。但先確認雷射系統沒受影響。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('error','⚠ 找到問題','Still Heater CH-02 韌體當機，持續加熱。必須手動 Override。先確認光學系統正常。',5000)
+      },
+      {id:'s1b', text:'前往光學平台 — 確認雷射未受影響', target:'laser',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'光學台……397nm 冷卻雷射，還在鎖定。866nm 補泵浦，正常。729nm qubit 雷射，鎖定中。', color:'#c8d8e8'},
+          {who:'雷射控制器', msg:'所有雷射鎖定正常。功率與波長穩定。AOM 運作中。', color:'#5aacff'},
+          {who:'你', msg:'光學系統沒事。問題只在冷卻端。現在去看 QPU 當前的溫度分布。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('info','✓ 光學系統正常','所有雷射鎖定中。問題確認在冷卻系統，非光學端。',4000)
+      },
+      {id:'s1c', text:'走近離子阱 — 查看冷卻層溫度', target:'qpu',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'看一下各層溫度……50K Stage 正常、4K Stage 正常——', color:'#c8d8e8'},
+          {who:'QPU 感測器', msg:'100mK Stage：異常偏高。Mixing Chamber：89.3 mK 且仍在上升。', color:'#cc3333'},
+          {who:'你', msg:'問題就在 100mK Stage，Still Heater 持續加熱讓它沒辦法降下來。要立刻去主控台執行手動 Override。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>{
+          showAlert('warning','⚠ 問題確認','Still Heater 控制器卡死，Mixing Chamber 正在升溫。需立即手動 Override。',5000);
+        }
+      },
+    ]
+  },
+  {
+    id:'m2', title:'手動重啟冷卻序列', badge:'',
+    desc:'已確認 Still Heater 異常。必須手動 Override 關閉加熱器，然後確認離子是否存活。',
+    steps:[
+      {id:'s2a', text:'回到主控台 — 執行 Still Heater Override', target:'console',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'找 Override 指令……CH-02 Still Heater，強制電流歸零。這個操作會繞過安全鎖定。', color:'#c8d8e8'},
+          {who:'主控台', msg:'警告：手動 Override 將停用 Still Heater 自動保護。確認執行？', color:'#ffa040'},
+          {who:'你', msg:'確認。現在沒時間了，執行。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>{
+          showAlert('success','✓ Still Heater 已關閉','CH-02 電流歸零。冷卻迴路壓差恢復。預計 8 分鐘後 Mixing Chamber 回到 15mK。',5500);
+          let t = 89;
+          const iv = setInterval(()=>{
+            t = Math.max(15, t - 1.2);
+            document.getElementById('temp-val').textContent = t.toFixed(1)+' mK'+(t>20?' ↓':'');
+            if(t<=15){
+              clearInterval(iv);
+              document.getElementById('temp-val').style.color='#00cc88';
+              document.getElementById('temp-val').textContent = '15.2 mK';
+            }
+          }, 800);
+          document.getElementById('cryo-bar').style.background='#00cc88';
+          setTimeout(()=>{ document.getElementById('cryo-bar').style.width='85%'; },2000);
+        }
+      },
+      {id:'s2b', text:'前往 Readout — 確認離子是否存活', target:'readout',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'最重要的問題——兩個鈣離子還在陷阱裡嗎？要查 PMT 的螢光訊號。', color:'#c8d8e8'},
+          {who:'Readout 系統', msg:'偵測 397nm 螢光訊號中……掃描……', color:'#5aacff'},
+          {who:'Readout 系統', msg:'偵測到兩個螢光峰值。兩個 ⁴⁰Ca⁺ 離子確認存活。但熱運動偏高（n̄ ≈ 120），需要重新 Doppler 冷卻。', color:'#00cc88'},
+          {who:'你', msg:'兩個都還在！……終於。熱運動高是正常的，只要溫度降下來就可以重新冷卻。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('success','✓ 兩個離子存活','⁴⁰Ca⁺ × 2 螢光訊號確認。離子仍在陷阱中。熱運動偏高，需重新 Doppler 冷卻後才能繼續實驗。',5000)
+      },
+    ]
+  },
+  {
+    id:'m3', title:'重新校準並執行 Bell State 纏結', badge:'',
+    desc:'危機解除，QPU 溫度回到 15mK。現在重新校準系統，完成今晚原本排程的實驗——製造兩離子 Bell State 最大纏結態。',
+    steps:[
+      {id:'s3a', text:'在光學平台 — 重新鎖定 729nm qubit 雷射', target:'laser',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'好，溫度回來了。重新鎖 729nm——這是最敏感的雷射，用來操作量子態。', color:'#c8d8e8'},
+          {who:'雷射控制器', msg:'729nm AOM 掃頻中……搜尋 ⁴⁰Ca⁺ S½ → D⁵₂ 躍遷……鎖定！', color:'#00cc88'},
+          {who:'雷射控制器', msg:'Rabi 頻率：12.4 kHz。π pulse 時間：40.3 μs。可以開始執行閘操作。', color:'#5aacff'},
+          {who:'你', msg:'很好。現在可以去 QPU 那邊執行 Bell State 序列了。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>showAlert('success','✓ 729nm 雷射重新鎖定','Rabi 頻率 12.4kHz，π pulse 40.3μs。系統就緒，可執行量子閘操作。',5000)
+      },
+      {id:'s3b', text:'在離子阱 — 執行 Mølmer–Sørensen 纏結閘', target:'qpu',
+        onEnter:()=>showDialogue([
+          {who:'你', msg:'載入 Bell State 序列：先對 ion1 執行 Hadamard 閘，讓它進入疊加態……', color:'#c8d8e8'},
+          {who:'QPU 控制器', msg:'H(ion1) → 疊加態 (|0⟩+|1⟩)/√2 完成。執行 Mølmer–Sørensen 纏結閘中……', color:'#5aacff'},
+          {who:'QPU 控制器', msg:'量測結果：|00⟩ 49.3% / |11⟩ 49.4% / |01⟩ 0.7% / |10⟩ 0.6%', color:'#00cc88'},
+          {who:'你', msg:'……98.7% 保真度。|00⟩ 和 |11⟩ 各佔一半，|01⟩ 和 |10⟩ 幾乎是零。這是完美的 Bell State。', color:'#00cc88'},
+          {who:'你', msg:'凌晨 4:23。從緊急事故到成功纏結，花了一個多小時。今晚的數據……值得發論文。', color:'#c8d8e8'},
+        ]),
+        onComplete:()=>{
+          showAlert('success','🎉 Bell State |Φ+⟩ 達成！','纏結保真度：98.7%。|Φ+⟩ = (|00⟩ + |11⟩)/√2 確認。今晚實驗完成。',7000);
+          document.getElementById('mode-tag').textContent='EXPERIMENT COMPLETE';
+          document.getElementById('mode-tag').style.color='#00cc88';
+          document.getElementById('mode-tag').style.borderColor='#005530';
+        }
+      },
+    ]
+  }
+];
+const MS = { mIdx:0, sIdx:0, done:[] };
+function getCurStep(){ const m=MISSIONS[MS.mIdx]; return m?m.steps[MS.sIdx]:null; }
+
+// ══════════════════════════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════════════════════════
+let dlgQueue=[], dlgPlaying=false, dlgOnDone=null, typeTimer=null, currentDlgIdx=0;
+
+function showDialogue(lines, onDone){
+  dlgQueue=lines; dlgOnDone=onDone; currentDlgIdx=0; dlgPlaying=true;
+  document.getElementById('dialogue-box').style.display='block';
+  playDlgLine();
+}
+function playDlgLine(){
+  if(currentDlgIdx>=dlgQueue.length){ endDialogue(); return; }
+  const line=dlgQueue[currentDlgIdx];
+  document.getElementById('dlg-speaker').textContent=line.who||'SYSTEM';
+  document.getElementById('dlg-speaker').style.color=line.color||'#00cc88';
+  const txt=document.getElementById('dlg-text');
+  txt.textContent='';
+  document.getElementById('dlg-continue').style.display='none';
+  if(typeTimer) clearInterval(typeTimer);
+  let ci=0; const msg=line.msg;
+  typeTimer=setInterval(()=>{
+    txt.textContent+=msg[ci++];
+    if(ci>=msg.length){ clearInterval(typeTimer); typeTimer=null; document.getElementById('dlg-continue').style.display='block'; }
+  },28);
+}
+function advanceDialogue(){
+  if(!dlgPlaying) return;
+  if(typeTimer){ clearInterval(typeTimer); typeTimer=null;
+    document.getElementById('dlg-text').textContent=dlgQueue[currentDlgIdx].msg;
+    document.getElementById('dlg-continue').style.display='block'; return;
+  }
+  currentDlgIdx++;
+  if(currentDlgIdx>=dlgQueue.length){ endDialogue(); return; }
+  playDlgLine();
+}
+function endDialogue(){ dlgPlaying=false; document.getElementById('dialogue-box').style.display='none'; if(dlgOnDone) dlgOnDone(); }
+
+function showAlert(type,title,body,dur=5000){
+  const colors={error:'#cc3333',warning:'#ffa040',success:'#00cc88',info:'#5aacff'};
+  const el=document.getElementById('screen-alert');
+  el.style.borderColor=colors[type]||'#5aacff';
+  document.getElementById('alert-title').style.color=colors[type]||'#5aacff';
+  document.getElementById('alert-title').textContent=title;
+  document.getElementById('alert-body').textContent=body;
+  el.style.display='block';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.style.display='none',dur);
 }
 
-function showChenGuide(step){ /* replaced by showChenIntro */ }
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show'); el.style.display='block';
+  clearTimeout(el._t); el._t=setTimeout(()=>{ el.classList.remove('show'); el.style.display='none'; },3000);
+}
+function screenFlash(){
+  const el=document.getElementById('flash');
+  el.classList.remove('fire'); void el.offsetWidth; el.classList.add('fire');
+}
 
-function tutCallHelp(){
-  const step = TUTORIAL_STEPS[tutIdx];
-  const helpMsgs = {
-    't-console': ['切換到左側「警報中心（01）」分頁。\n平時應該是空的——如果有紅色條目出現，就是需要你按 ACK 確認的警報。\n看完後可以略過這一站，我們去下一台。',
-                  ()=>{if(curDeviceId!=='console') openDeviceModal('console'); setTimeout(()=>switchDMTab(0),400);}],
-    't-laser':   ['看到右側「AOM 控制」區塊了嗎？\n找到「AOM-2（729 qubit）」那一行的黑色方塊開關，點它讓它變成 OFF（顏色會變暗）。\n再點一次讓它 ON 回來。\n然後按下方綠色的「確認雷射系統狀態」按鈕。',
-                  ()=>{if(curDeviceId!=='laser') openDeviceModal('laser');}],
-    't-qpu':     ['看那個大數字「15.2 mK」——這是 Mixing Chamber 的溫度，現在是綠色，代表正常。\n然後點左側「離子監控（02）」分頁，看那裡的兩個藍色亮點，就是兩個被困住的鈣離子。\n看完之後這一站就完成了。',
-                  ()=>{if(curDeviceId!=='qpu') openDeviceModal('qpu');}],
-    't-readout': ['你現在應該在「螢光掃描」分頁。如果不是，先點左側第 02 個分頁。\n然後你會看到一個空白的掃描區域，和一個「▶ 執行螢光掃描」的綠色按鈕。\n按那個按鈕，看橘色游標從左掃到右，出現兩個峰就完成了。',
-                  ()=>{if(curDeviceId!=='readout') openDeviceModal('readout'); setTimeout(()=>switchDMTab(1),400);}],
-  };
-  const [msg, action] = helpMsgs[step.id] || ['按照面板底部的操作說明進行。', ()=>{}];
-  if(action) action();
+// ══════════════════════════════════════════════════════════
+//  LOBBY TOUR
+// ══════════════════════════════════════════════════════════
+function startLobby(){
+  document.getElementById('entry').style.display='none';
+  document.getElementById('lobby-overlay').style.display='block';
+  gamePhase='lobby';
+  // start 3D
+  init3D();
+  renderLobbyStep();
+}
 
-  // Show help overlay inside device modal
-  let helpOverlay = document.getElementById('tut-help-overlay');
-  if(!helpOverlay){
-    helpOverlay = document.createElement('div');
-    helpOverlay.id = 'tut-help-overlay';
-    helpOverlay.style.cssText =
-      'position:fixed;top:70px;left:50%;transform:translateX(-50%);'+
-      'width:420px;background:rgba(2,8,22,0.98);border:1px solid #ffa040;'+
-      'padding:16px 20px;z-index:300;font-family:sans-serif;'+
-      'box-shadow:0 0 30px rgba(255,160,64,0.25);';
-    document.body.appendChild(helpOverlay);
+function renderLobbyStep(){
+  const s = LOBBY_TOUR[lobbyTourIdx];
+  if(!s){ lobbyFinish(); return; }
+
+  // NPC dialogue
+  document.getElementById('npc-dialogue').style.display='block';
+  document.getElementById('npc-icon').textContent = s.icon;
+  document.getElementById('npc-name').textContent = s.name;
+  document.getElementById('npc-role').textContent = s.role;
+  document.getElementById('npc-step').textContent = (lobbyTourIdx+1)+' / '+LOBBY_TOUR.length;
+
+  // Typewriter for NPC msg
+  const msgEl = document.getElementById('npc-msg');
+  msgEl.textContent = '';
+  let ci=0;
+  if(window._tourTypeTimer) clearInterval(window._tourTypeTimer);
+  window._tourTypeTimer = setInterval(()=>{
+    if(ci>=s.msg.length){ clearInterval(window._tourTypeTimer); return; }
+    msgEl.textContent += s.msg[ci++];
+  }, 16);
+
+  // ── 相機平滑轉向目標 ──
+  if(s.camTarget){
+    // 從目前眼睛位置平滑移到 eye，同時看向 look
+    tourCamFrom.copy(pPos);
+    tourCamTo.set(...s.camTarget.eye);
+    tourLookTarget.set(...s.camTarget.look);
+    tourCamProgress = 0;
+    tourCamActive = true;
+  } else {
+    tourCamActive = false;
   }
-  helpOverlay.innerHTML =
-    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
-      '<div style="font-size:20px;">👨‍🔬</div>'+
-      '<div style="font-size:11px;color:#ffa040;font-weight:bold;letter-spacing:1px;">Dr. Chen 的提示</div>'+
-      '<button onclick="document.getElementById('tut-help-overlay').remove()" '+
-        'style="margin-left:auto;background:transparent;border:none;color:#2a5070;font-size:16px;cursor:pointer;">✕</button>'+
-    '</div>'+
-    '<div id="help-msg" style="font-size:12px;color:#c0d8e8;line-height:1.9;white-space:pre-line;"></div>';
-  const msgEl = document.getElementById('help-msg');
+
+  // Spotlight card
+  const sb = document.getElementById('spotlight-box');
+  if(s.spotlight){
+    sb.style.display='block';
+    document.getElementById('sb-title').textContent=s.spotlight.title;
+    document.getElementById('sb-body').style.whiteSpace='pre-line';
+    document.getElementById('sb-body').textContent=s.spotlight.body;
+    document.getElementById('sb-tag').textContent=s.spotlight.tag;
+  } else {
+    sb.style.display='none';
+  }
+
+  document.getElementById('npc-next').textContent =
+    lobbyTourIdx >= LOBBY_TOUR.length-1 ? '開始值班 ▶' : '繼續 →';
+}
+
+function lobbyNext(){
+  lobbyTourIdx++;
+  if(lobbyTourIdx >= LOBBY_TOUR.length){ lobbyFinish(); return; }
+  renderLobbyStep();
+}
+
+function lobbySkip(){ lobbyFinish(); }
+
+function lobbyFinish(){
+  document.getElementById('lobby-overlay').style.display='none';
+  startTutorial();
+
+  // Keep old crisis init code but rename it
+  return; // tutorial will call startCrisis() when done
+}
+
+function startCrisis(){
+  gamePhase='crisis';
+
+
+  // Update status to crisis
+  document.getElementById('status-console').textContent='⚠ 警報';
+  document.getElementById('status-console').style.color='#cc3333';
+  document.getElementById('status-qpu').textContent='⚠ 過熱';
+  document.getElementById('status-qpu').style.color='#cc3333';
+  document.getElementById('status-sched').textContent='已暫停';
+  document.getElementById('status-sched').style.color='#2a4a5a';
+  document.getElementById('mode-tag').textContent='EMERGENCY MODE';
+  document.getElementById('mode-tag').style.color='#cc3333';
+  document.getElementById('mode-tag').style.borderColor='#661a1a';
+  document.getElementById('mission-lbl').textContent='▶ ACTIVE MISSION';
+  document.getElementById('mm-status').textContent='CRISIS';
+  document.getElementById('clock-status').textContent='值班工程師在線';
+  document.getElementById('temp-val').textContent='89.3 mK ↑';
+  document.getElementById('temp-val').style.color='#cc3333';
+  document.getElementById('qpu-bar').style.width='32%';
+  document.getElementById('qpu-bar').style.background='#cc3333';
+  document.getElementById('qpu-health-lbl').textContent='異常';
+  document.getElementById('qpu-health-lbl').style.color='#cc3333';
+  document.getElementById('cryo-bar').style.width='10%';
+  document.getElementById('cryo-bar').style.background='#cc3333';
+  document.getElementById('cryo-health-lbl').textContent='失效';
+  document.getElementById('cryo-health-lbl').style.color='#cc3333';
+
+  // Set game clock to 3am
+  gameSeconds = 3*3600+7*60+42;
+
+  // update cur step
+  updateMHUD(); renderMPanel();
+
+  // Show opening
+  setTimeout(()=>{
+    playAlert(); showAlert('error','⚠ QPU TEMPERATURE CRITICAL',
+      '目前溫度：89.3 mK（正常值：15.2 mK）。若超過 100mK，離子將脫陷，所有實驗數據歸零。請立即處理。', 7000);
+    setTimeout(()=>{
+      showDialogue([
+        {who:'系統警報', msg:'⚠ QPU 溫度異常 — 89.3 mK，且持續上升。', color:'#cc3333'},
+        {who:'系統', msg:'凌晨 03:04:17 觸發警報，原因：冷卻迴路 CH-02 電流驟降至 0A。', color:'#ffa040'},
+        {who:'你', msg:'……溫度一直在漲。再不處理，離子就完了。先去主控台看警報日誌，找原因。', color:'#c8d8e8'},
+      ]);
+    }, 1500);
+    // unlock pointer
+    renderer.domElement.requestPointerLock();
+    initAudio();
+  }, 600);
+}
+
+// ══════════════════════════════════════════════════════════
+//  TUTORIAL SYSTEM
+// ══════════════════════════════════════════════════════════
+// Tutorial phases: each has a target device, what to do, auto-complete condition
+// Dr. Chen stays visible as floating guide
+
+const TUTORIAL_STEPS = [
+  {
+    id:'t-console',
+    device:'console',
+    tab:1,
+    chenMsg:`好，這是主控台。\n\n你現在看到的是「系統儀表」——每個方塊都是一個子系統的即時數值。\n綠色代表正常，紅色代表異常。\n\n先看一眼這些數字，感受一下正常狀態下的樣子。\n然後點左側「警報中心」分頁，我會告訴你警報系統怎麼運作。`,
+    taskLabel:'查看主控台系統儀表 → 切換到警報中心分頁',
+    completeOnTab: 0,
+    completionMsg:'好。警報中心是你最重要的資訊來源。現在關閉這個面板，我帶你去雷射台。'
+  },
+  {
+    id:'t-laser',
+    device:'laser',
+    tab:0,
+    chenMsg:`這是雷射系統控制台。\n\n你看到三道雷射：397nm、866nm、729nm。每一道都顯示 LOCKED，代表頻率鎖定正常。\n\n試試看：把「AOM-2（729 qubit）」的開關撥成 OFF，再撥回 ON。\n這就是你在緊急情況時可能需要做的操作——切斷或恢復某道光。\n\n操作完後按「確認雷射系統狀態」按鈕。`,
+    taskLabel:'在雷射控制台撥動 AOM-2 開關，再按「確認」按鈕',
+    completeOnAction: 'laser_check',
+    completionMsg:'很好。雷射系統你知道了。我們去看 QPU——離子阱本體。'
+  },
+  {
+    id:'t-qpu',
+    device:'qpu',
+    tab:0,
+    chenMsg:`這是離子阱 QPU 的溫度控制面板。\n\n最上面那個大數字是 Mixing Chamber 的溫度——目前 15.2 mK，正常。\n\n下面是各冷卻層的堆疊圖。每一層都必須維持在對應溫度，否則下層會跟著升溫。\n\n你不需要按任何東西，只要看清楚這些數值的正常狀態。記住這個樣子。`,
+    taskLabel:'查看 QPU 各冷卻層溫度，記住正常數值',
+    completeOnTab: 1,
+    completionMsg:'記住了嗎？15.2 mK，所有層都是綠色。待會如果有任何一層變紅，就是出問題了。最後去看讀出系統。'
+  },
+  {
+    id:'t-readout',
+    device:'readout',
+    tab:0,
+    chenMsg:`最後一台——讀出系統。\n\n右側那張圖說明了量子態讀出的原理：離子在 |0⟩ 態會發光（bright），在 |1⟩ 態不發光（dark）。\n\nPMT 偵測到光子數超過閾值就判定 |0⟩，否則 |1⟩。\n\n按「執行螢光掃描」，你可以看到掃描動畫——那兩個亮峰就是兩個離子的位置。`,
+    taskLabel:'在讀出系統執行螢光掃描',
+    completeOnAction: 'readout_scan_tut',
+    completionMsg:'好，四台設備你都操作過了。\n\n現在是晚上 10:57。我要回去了。你今晚的工作很簡單：每 30 分鐘確認一次數值正常就好。\n\n有問題的話……我說過，今晚沒有別人了。\n\n祝你好運，工程師。'
+  },
+];
+
+let tutIdx = 0;
+let tutorialActive = false;
+let tutChenVisible = false;
+
+function startTutorial(){
+  gamePhase = 'tutorial';
+  tutIdx = 0;
+  tutorialActive = true;
+  initAudio();
+
+  // show the floating Dr. Chen guide panel
+  showChenGuide(TUTORIAL_STEPS[0]);
+  // update HUD
+  document.getElementById('mode-tag').textContent = 'TRAINING MODE';
+  document.getElementById('mode-tag').style.color = '#5aacff';
+  document.getElementById('mode-tag').style.borderColor = '#1a4a80';
+  document.getElementById('mission-lbl').textContent = '▶ 訓練中';
+  document.getElementById('cur-step').textContent = TUTORIAL_STEPS[0].taskLabel;
+
+  // Auto-open first device after a moment
+  setTimeout(()=>{
+    renderer.domElement.requestPointerLock();
+    setTimeout(()=>{
+      openDeviceModal(TUTORIAL_STEPS[0].device);
+    }, 1500);
+  }, 800);
+}
+
+function showChenGuide(step){
+  let panel = document.getElementById('chen-guide-panel');
+  if(!panel){
+    panel = document.createElement('div');
+    panel.id = 'chen-guide-panel';
+    panel.style.cssText = 'position:fixed;bottom:100px;right:20px;width:340px;background:rgba(2,8,22,0.98);border:1px solid #1a4a80;font-family:"Courier New",monospace;z-index:200;pointer-events:all;box-shadow:0 0 30px rgba(0,100,180,0.2);';
+    document.body.appendChild(panel);
+  }
+  const hn = '<div style="background:#040d1e;padding:10px 14px;border-bottom:1px solid #0d2240;display:flex;align-items:center;gap:10px;">'
+    +'<div style="width:32px;height:32px;border-radius:50%;border:1px solid #5aacff;background:rgba(10,30,70,0.8);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">👨\u200d🔬</div>'
+    +'<div><div style="font-size:8px;color:#5aacff;letter-spacing:2px;">DR. CHEN</div>'
+    +'<div style="font-size:7px;color:#1a3a60;">Laboratory Director · 訓練中</div></div>'
+    +'<div style="margin-left:auto;font-size:8px;color:#1a3a60;">'+(tutIdx+1)+'/'+TUTORIAL_STEPS.length+'</div></div>'
+    +'<div style="padding:12px 14px;">'
+    +'<div id="chen-msg" style="font-size:10px;color:#8aaace;line-height:1.9;white-space:pre-line;min-height:60px;"></div>'
+    +'<div style="margin-top:12px;padding:8px 10px;background:rgba(255,160,64,0.08);border-left:2px solid #ffa040;">'
+    +'<div style="font-size:7px;color:#ffa040;letter-spacing:2px;margin-bottom:3px;">你現在要做什麼</div>'
+    +'<div style="font-size:10px;color:#c8d8e8;">'+step.taskLabel+'</div></div>'
+    +'<div style="margin-top:10px;display:flex;gap:8px;">'
+    +'<button onclick="tutCallHelp()" style="flex:1;padding:7px;background:transparent;border:1px solid #1a4a80;color:#5aacff;font-size:9px;cursor:pointer;font-family:monospace;letter-spacing:1px;">🆘 求助工程師</button>'
+    +'<button onclick="tutSkipStep()" style="padding:7px 12px;background:transparent;border:1px solid #1a3050;color:#2a5070;font-size:9px;cursor:pointer;font-family:monospace;">略過</button>'
+    +'</div></div>';
+  panel.innerHTML = hn;
+  // typewriter
+  const msgEl = document.getElementById('chen-msg');
   if(msgEl){
     msgEl.textContent='';
     let ci=0;
     if(window._chenTimer) clearInterval(window._chenTimer);
     window._chenTimer = setInterval(()=>{
-      if(ci>=msg.length){ clearInterval(window._chenTimer); return; }
-      msgEl.textContent+=msg[ci++];
+      if(ci>=step.chenMsg.length){ clearInterval(window._chenTimer); return; }
+      msgEl.textContent+=step.chenMsg[ci++];
     }, 14);
+  }
+}
+
+function tutCallHelp(){
+  // Dr. Chen takes over and does the step automatically
+  const step = TUTORIAL_STEPS[tutIdx];
+  const helpMsgs = {
+    't-console': '好，我來示範。看這個「警報中心」分頁——你只要看到警報就按 ACK 確認。現在切到那個分頁看看。',
+    't-laser':   '沒關係。你看到右邊的 AOM 開關區域嗎？找到「AOM-2（729 qubit）」那一行，點那個黑色方塊就是開關。撥一次 OFF 再撥回 ON，然後按「確認雷射系統狀態」。',
+    't-qpu':     '這個最簡單——你什麼都不用按。只要看那個大數字「15.2 mK」，記住它是綠色的，然後點左側「離子監控」分頁，看看那兩個藍色亮點就好。',
+    't-readout': '你看到最下面有個「執行螢光掃描」按鈕嗎？按那個，會有掃描動畫。看到兩個峰出現就完成了。',
+  };
+  const msg = helpMsgs[step.id] || '按照面板底部的按鈕操作就可以了。';
+  const msgEl = document.getElementById('chen-msg');
+  if(msgEl){
+    msgEl.textContent='';
+    let ci=0;
+    if(window._chenTimer) clearInterval(window._chenTimer);
+    const fullMsg = '💬 ' + msg;
+    window._chenTimer = setInterval(()=>{
+      if(ci>=fullMsg.length){ clearInterval(window._chenTimer); return; }
+      msgEl.textContent+=fullMsg[ci++];
+    }, 12);
+  }
+  // Also open the right device if not open
+  if(curDeviceId !== step.device){
+    setTimeout(()=>openDeviceModal(step.device), 600);
   }
 }
 
@@ -1390,52 +2939,39 @@ function tutSkipStep(){
 
 function completeTutorialStep(skipped){
   const step = TUTORIAL_STEPS[tutIdx];
-  closeDeviceModal();
   if(!skipped && step.completionMsg){
-    // Show completion message in chen panel
-    const panel = document.getElementById('chen-guide-panel');
-    if(panel){
-      panel.innerHTML =
-        '<div style="background:#040d1e;padding:10px 14px;border-bottom:1px solid #005530;'+
-          'display:flex;align-items:center;gap:10px;">' +
-          '<div style="width:34px;height:34px;border-radius:50%;border:2px solid #00cc88;'+
-            'background:rgba(0,30,10,0.9);display:flex;align-items:center;justify-content:center;'+
-            'font-size:18px;flex-shrink:0;">👨‍🔬</div>'+
-          '<div><div style="font-size:11px;color:#00e5a0;font-weight:bold;">Dr. Chen</div>'+
-            '<div style="font-size:9px;color:#1a5030;margin-top:1px;">✓ 完成</div></div></div>'+
-        '<div id="chen-done-msg" style="padding:14px 16px;font-size:12px;color:#8acca8;line-height:1.8;white-space:pre-line;min-height:60px;"></div>'+
-        '<div style="padding:0 16px 14px;">'+
-          '<button id="chen-continue-btn" style="width:100%;padding:10px 0;background:rgba(0,60,30,0.3);'+
-            'border:1px solid #005530;color:#00cc88;font-size:10px;cursor:pointer;'+
-            'font-family:sans-serif;letter-spacing:1px;" '+
-            'onclick="advanceTutorial()">繼續下一站 →</button>'+
-        '</div>';
-      // Typewriter the completion msg
-      const msgEl = document.getElementById('chen-done-msg');
-      if(msgEl){
-        msgEl.textContent='';
-        let ci=0;
-        const txt='✓ '+step.completionMsg;
-        if(window._chenTimer) clearInterval(window._chenTimer);
-        window._chenTimer = setInterval(()=>{
-          if(ci>=txt.length){ clearInterval(window._chenTimer); return; }
-          msgEl.textContent+=txt[ci++];
-        }, 14);
-      }
+    // show completion message then advance
+    const msgEl = document.getElementById('chen-msg');
+    if(msgEl){
+      msgEl.textContent='';
+      let ci=0;
+      if(window._chenTimer) clearInterval(window._chenTimer);
+      const msg = '✓ ' + step.completionMsg;
+      window._chenTimer = setInterval(()=>{
+        if(ci>=msg.length){ clearInterval(window._chenTimer); return; }
+        msgEl.textContent+=msg[ci++];
+      }, 12);
     }
+    // Close device modal, then advance after reading
+    closeDeviceModal();
+    setTimeout(()=>advanceTutorial(), 3500);
   } else {
+    closeDeviceModal();
     advanceTutorial();
   }
 }
 
 function advanceTutorial(){
-  const nextIdx = tutIdx + 1;
-  if(nextIdx >= TUTORIAL_STEPS.length){
+  tutIdx++;
+  if(tutIdx >= TUTORIAL_STEPS.length){
     endTutorial();
     return;
   }
-  // Show completion message, then begin next step
-  setTimeout(()=> beginTutorialStep(nextIdx), 600);
+  const step = TUTORIAL_STEPS[tutIdx];
+  document.getElementById('cur-step').textContent = step.taskLabel;
+  showChenGuide(step);
+  // auto-navigate to next device
+  setTimeout(()=>openDeviceModal(step.device), 2000);
 }
 
 function endTutorial(){
@@ -1646,14 +3182,6 @@ function closeDeviceModal(){
 function handleAction(deviceId, actionType){
   playInteract();
   const s=getCurStep();
-
-  if(gamePhase==='tutorial'){
-    // Tutorial: only check hooks, no mission steps
-    if(deviceId==='laser' && actionType==='check') checkTutorialAction('laser_check');
-    if(deviceId==='readout' && actionType==='scan') checkTutorialAction('readout_scan_tut');
-    // Let scan animation run regardless
-    return;
-  }
 
   if(gamePhase==='crisis'){
     // console actions
