@@ -7,6 +7,7 @@ interface ListPageLayoutProps {
   description?: string;
   filters?: ReactNode;
   resultCount?: number;
+  resultCountClassName?: string;
   children: ReactNode;
   /** Canonical path for this page, e.g. "/research". */
   path: string;
@@ -18,6 +19,7 @@ export default function ListPageLayout({
   description,
   filters,
   resultCount,
+  resultCountClassName,
   children,
   path,
 }: ListPageLayoutProps) {
@@ -28,14 +30,14 @@ export default function ListPageLayout({
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-12">
         <div className="lg:sticky lg:top-24 lg:col-span-4 lg:self-start">
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-          <h1 className={`${eyebrow ? "mt-4" : ""} text-h2 text-text-primary`}>{title}</h1>
+          <h1 className={`${eyebrow ? "mt-4" : ""} text-h2 md:text-h2-lg text-text-primary`}>{title}</h1>
           {description && <p className="mt-4 text-body-lg text-text-secondary">{description}</p>}
           {filters && <div className="mt-8">{filters}</div>}
         </div>
 
         <div className="lg:col-span-7 lg:col-start-6">
           {typeof resultCount === "number" && (
-            <p className="mb-6 font-mono text-mono-label uppercase text-text-muted">
+            <p className={`mb-6 ${resultCountClassName ?? "font-mono text-mono-label uppercase text-text-muted"}`}>
               {resultCount} {resultCount === 1 ? "Result" : "Results"}
             </p>
           )}

@@ -2,6 +2,12 @@ import { Link } from "react-router-dom";
 import ListPageLayout from "../../components/ListPageLayout.tsx";
 import { researchAreas } from "../../data/research.ts";
 
+const GROUP_HEADING_STYLES: Record<string, string> = {
+  "Quantum Computing": "!text-white",
+  "Quantum Systems": "!text-white",
+  "Quantum Science": "!text-white",
+};
+
 function groupResearchAreas() {
   const groups = new Map<string | null, typeof researchAreas>();
 
@@ -22,11 +28,11 @@ export default function ResearchPage() {
 
   return (
     <ListPageLayout
-      eyebrow="Research Directory"
       title="Research Areas"
       description="Browse the institute's research program by theme, from quantum foundations to applied intelligence."
       path="/research"
       resultCount={researchAreas.length}
+      resultCountClassName="font-sans text-[13px] font-medium tracking-[0.08em] text-text-secondary"
       filters={
         <Link
           to="/projects"
@@ -39,8 +45,12 @@ export default function ResearchPage() {
       <div className="space-y-10 border-t border-border pt-2">
         {groupedAreas.map(({ group, areas }) => (
           <section key={group ?? "ungrouped"} className="space-y-4">
-            {group && (
-              <p className="font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-text-muted/80">
+            {group && group !== "Quantum Foundations" && (
+              <p
+                className={`section-kicker !font-display !text-[clamp(1.65rem,2.3vw,2.5rem)] !font-semibold !leading-none !tracking-[-0.025em] ${
+                  GROUP_HEADING_STYLES[group] ?? "text-text-primary"
+                }`}
+              >
                 {group}
               </p>
             )}
