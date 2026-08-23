@@ -57,6 +57,47 @@ const exploreGroups: ExploreGroup[] = [
   },
 ];
 
+const directoryGroups: ExploreGroup[] = [
+  {
+    title: "Research",
+    accent: "rgba(56, 189, 248, 0.38)",
+    description: "Research Areas and ongoing work across quantum science and intelligent systems.",
+    items: [
+      { title: "Research Areas", href: "/research" },
+      { title: "Ongoing Research", href: "/research#ongoing" },
+    ],
+  },
+  {
+    title: "Lab",
+    accent: "rgba(167, 139, 250, 0.36)",
+    description: "Interactive experiments and an immersive 3D laboratory for hands-on exploration.",
+    items: [
+      { title: "Interactive Experiments", href: "/lab" },
+      { title: "3D Laboratory", href: "/quantum-lab.html", external: true },
+    ],
+  },
+  {
+    title: "Publications",
+    accent: "rgba(45, 212, 191, 0.36)",
+    description: "Papers and conference contributions from the institute's research program.",
+    items: [
+      { title: "Papers", href: "/publications#publication" },
+      { title: "Conferences", href: "/publications#conferences" },
+    ],
+  },
+  {
+    title: "Solutions",
+    accent: "rgba(251, 146, 60, 0.34)",
+    description: "Quantum software and applied research shaped for practical systems.",
+    items: [
+      { title: "Quantum Software", href: "/solutions" },
+      { title: "Applied Research", href: "/solutions#applied-research" },
+    ],
+  },
+];
+
+void exploreGroups;
+
 function ExploreCard({
   group,
   index,
@@ -151,26 +192,14 @@ export default function HomeExploreLinks() {
       <div className="relative mx-auto w-full max-w-content px-6 py-24 md:px-12 md:py-32">
         <div className="border-t border-white/10 pt-14">
           <div className="grid gap-8">
-            <div className="grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-end">
-              <div>
-                <ScrollReveal variant="fade-up" duration={1} delay={0.3}>
-                  <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-white/48">
-                    LAB
-                  </p>
-                </ScrollReveal>
-                <ScrollReveal variant="fade-up" duration={1} delay={0.45}>
-                  <h2 className="mt-4 text-h2 text-white">Lab directory.</h2>
-                </ScrollReveal>
-              </div>
-              <ScrollReveal variant="fade-right" duration={1} delay={0.6}>
-                <p className="max-w-prose text-body-lg text-white/78">
-                  Choose a lab path. Keep the homepage light.
-                </p>
-              </ScrollReveal>
-            </div>
+            <ScrollReveal variant="fade-up" duration={1} delay={0.45}>
+              <h2 className="font-display text-[clamp(3rem,7vw,7rem)] font-medium leading-[0.82] tracking-[-0.05em] text-white">
+                Lab directory.
+              </h2>
+            </ScrollReveal>
 
             <div className="grid gap-4 lg:grid-cols-2">
-              {exploreGroups.map((group, index) => (
+              {directoryGroups.map((group, index) => (
                 <ExploreCard key={group.title} group={group} index={index} />
               ))}
             </div>

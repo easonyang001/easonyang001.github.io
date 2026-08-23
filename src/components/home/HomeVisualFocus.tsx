@@ -27,7 +27,7 @@ export default function HomeVisualFocus() {
       <div className="mx-auto w-full max-w-content px-6 py-24 md:px-12 md:py-32">
         <div className="grid gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:items-end">
           <ScrollReveal variant="fade-up" duration={1} delay={0}>
-            <h2 className="text-h2 text-text-primary">Quantum Systems</h2>
+            <h2 className="text-[clamp(3.2rem,6vw,6.5rem)] leading-[0.92] text-text-primary">Quantum Systems</h2>
           </ScrollReveal>
         </div>
 
@@ -43,11 +43,12 @@ export default function HomeVisualFocus() {
                 className="home-visual-card__image h-full min-h-[460px] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
               />
               <div className="home-visual-card__panel flex flex-col justify-center p-8 md:p-10">
-                <h3 className="mt-5 text-h2 text-text-primary">
-                  A clear signal for the future.
-                </h3>
+                <h3 className="mt-5 text-h2 text-text-primary">Step inside the quantum lab.</h3>
+                <p className="mt-5 max-w-md text-body-lg text-text-secondary">
+                  Explore the hardware. Diagnose the system. Run the experiment.
+                </p>
                 <span className="home-cta-link mt-8 w-fit text-small font-medium text-accent transition-colors duration-150 group-hover:text-accent-hover">
-                  <span className="home-cta-link__label">Open the lab</span>
+                  <span className="home-cta-link__label">Enter the lab</span>
                   <ArrowRight
                     size={15}
                     strokeWidth={1.7}

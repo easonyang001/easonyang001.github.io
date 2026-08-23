@@ -9,11 +9,11 @@ export default function HomeAbout() {
       <div className="mx-auto grid min-h-screen w-full max-w-content content-center gap-12 px-6 py-24 md:px-12 md:py-32">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.72fr)] lg:items-end">
           <div>
-            <ScrollReveal variant="fade-up" duration={1} delay={0}>
-              <p className="font-mono text-mono-label uppercase text-slate-500">About the Institute</p>
-            </ScrollReveal>
-            <h2 className="mt-5 max-w-[780px] font-sans text-[clamp(2.6rem,5.6vw,6.5rem)] font-medium leading-none text-slate-950">
-              Quantum Research, Made Visible.
+            <h2 className="max-w-[780px] font-sans text-[clamp(2.35rem,4.4vw,5.2rem)] font-medium leading-[0.92] text-slate-950">
+              <span className="block">Quantum</span>
+              <span className="block">Research,</span>
+              <span className="block">Made</span>
+              <span className="block">Visible.</span>
             </h2>
           </div>
 

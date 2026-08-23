@@ -260,7 +260,7 @@ export default function Hero() {
         className="relative z-10 w-full px-6 md:px-12"
       >
         <div className="mx-auto max-w-content md:flex md:justify-end">
-          <div className="w-full max-w-[1040px] overflow-visible md:translate-x-28">
+          <div className="w-full max-w-[1040px] overflow-visible md:translate-x-36">
             <div className="flex flex-col gap-4 md:gap-5">
               <motion.h1
                 initial={false}
@@ -273,7 +273,7 @@ export default function Hero() {
                   duration: HERO_CONTENT_DURATION_MS / 1000,
                   ease: [0.25, 1, 0.5, 1],
                 }}
-                className="whitespace-normal overflow-visible text-[clamp(3.25rem,9.2vw,8rem)] font-medium leading-[0.9] tracking-[-0.05em] text-text-primary md:whitespace-nowrap"
+                className="whitespace-normal overflow-visible text-[clamp(3rem,8.2vw,7rem)] font-medium leading-[0.9] tracking-[-0.05em] text-text-primary md:whitespace-nowrap"
               >
                 {site.name}
               </motion.h1>
@@ -290,7 +290,7 @@ export default function Hero() {
                   delay: 0.18,
                   ease: [0.25, 1, 0.5, 1],
                 }}
-                className="max-w-none whitespace-normal text-[clamp(1.38rem,1.05rem_+_0.5vw,2rem)] font-normal leading-[1.04] text-text-primary md:whitespace-nowrap"
+                className="max-w-none whitespace-normal text-[clamp(1.28rem,1rem_+_0.45vw,1.75rem)] font-normal leading-[1.04] text-text-primary md:whitespace-nowrap"
               >
                 {site.tagline}
               </motion.p>
