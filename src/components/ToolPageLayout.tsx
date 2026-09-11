@@ -33,7 +33,7 @@ export default function ToolPageLayout({
       </div>
 
       <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
-        <div className="order-2 w-full min-w-0 shrink-0 rounded-lg border border-panel-border bg-panel-bg p-6 lg:order-1 lg:w-[320px]">
+        <div className="order-2 w-full min-w-0 shrink-0 rounded-lg border border-panel-border bg-panel-bg p-6 lg:order-1 lg:sticky lg:top-32 lg:w-[320px] lg:max-h-[calc(100vh-8rem)] lg:self-start lg:overflow-y-auto">
           {panel}
         </div>
         <div className="order-1 min-w-0 flex-1 lg:order-2">{children}</div>

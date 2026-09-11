@@ -60,19 +60,20 @@ export default function CircuitPage() {
 
   const handleCellClick = (column: number, qubit: number) => {
     const existing = gateAtCell(circuit, column, qubit);
-    if (existing) {
-      setPlacementMessage("That cell is occupied. Select the existing gate to remove it first.");
-      return;
-    }
 
     if (selectedGate === "CNOT") {
       if (!pendingControl) {
+        setCircuit((c) => (existing ? removeGate(c, existing.id) : c));
         setPendingControl({ column, qubit });
         setPlacementMessage("Control selected. Choose a different qubit in the same column for the target.");
         return;
       }
       if (pendingControl.column === column && pendingControl.qubit !== qubit) {
-        setCircuit((c) => addGate(c, { name: "CNOT", control: pendingControl.qubit, qubit, column }));
+        const target = gateAtCell(circuit, column, qubit);
+        setCircuit((c) => {
+          const cleared = target ? removeGate(c, target.id) : c;
+          return addGate(cleared, { name: "CNOT", control: pendingControl.qubit, qubit, column });
+        });
         setPlacementMessage("CNOT placed.");
       } else {
         setPlacementMessage("Invalid CNOT target: control and target must be different qubits in the same column.");
@@ -82,19 +83,26 @@ export default function CircuitPage() {
     }
 
     const isRotation = ROTATION_GATES.includes(selectedGate);
-    setCircuit((c) =>
-      addGate(c, {
-        name: selectedGate,
-        qubit,
-        column,
-        param: isRotation ? (rotationAngleDeg * Math.PI) / 180 : undefined,
-      })
-    );
-    setPlacementMessage(`${selectedGate} placed in column ${column + 1}.`);
-  };
+    const currentParam = isRotation ? (rotationAngleDeg * Math.PI) / 180 : undefined;
+    const isSameGate =
+      existing &&
+      existing.name === selectedGate &&
+      existing.control === undefined &&
+      (currentParam === undefined || Math.abs((existing.param ?? 0) - currentParam) < 1e-9);
 
-  const handleGateClick = (id: string) => {
-    setCircuit((c) => removeGate(c, id));
+    if (isSameGate) {
+      setCircuit((c) => removeGate(c, existing.id));
+      setPlacementMessage(`${selectedGate} removed.`);
+      return;
+    }
+
+    setCircuit((c) => {
+      const cleared = existing ? removeGate(c, existing.id) : c;
+      return addGate(cleared, { name: selectedGate, qubit, column, param: currentParam });
+    });
+    setPlacementMessage(
+      existing ? `${selectedGate} updated in column ${column + 1}.` : `${selectedGate} placed in column ${column + 1}.`
+    );
   };
 
   const handleClear = () => {
@@ -221,7 +229,6 @@ export default function CircuitPage() {
             circuit={circuit}
             pendingControl={pendingControl}
             onCellClick={handleCellClick}
-            onGateClick={handleGateClick}
           />
           <div className="mt-4" data-lab-control="inspect-column">
             <div className="mb-2 flex items-center justify-between gap-4">
