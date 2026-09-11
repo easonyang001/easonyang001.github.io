@@ -6,6 +6,7 @@ import ControlPanel from "../../components/bloch/ControlPanel.tsx";
 import {
   anglesToState,
   applySingleQubitGate,
+  gateAxisAngle,
   probabilityFromState,
   stateToAngles,
 } from "../../lib/quantum/bloch.ts";
@@ -18,6 +19,7 @@ export default function BlochSpherePage() {
   const [rotationAngleDeg, setRotationAngleDeg] = useState(90);
   const [previousAngles, setPreviousAngles] = useState<{ theta: number; phi: number } | null>(null);
   const [gateRevision, setGateRevision] = useState(0);
+  const [lastGate, setLastGate] = useState<{ axis: [number, number, number]; angle: number } | null>(null);
 
   const state = useMemo(() => anglesToState({ theta, phi }), [theta, phi]);
   const probabilities = useMemo(() => probabilityFromState(state), [state]);
@@ -25,12 +27,14 @@ export default function BlochSpherePage() {
 
   const handleAnglesChange = (nextTheta: number, nextPhi: number) => {
     setPreviousAngles({ theta, phi });
+    setLastGate(null);
     setTheta(nextTheta);
     setPhi(nextPhi);
   };
 
   const handlePreset = (presetTheta: number, presetPhi: number) => {
     setPreviousAngles({ theta, phi });
+    setLastGate(null);
     setTheta(presetTheta);
     setPhi(presetPhi);
   };
@@ -38,10 +42,12 @@ export default function BlochSpherePage() {
   const handleGate = (gate: GateName) => {
     setPreviousAngles({ theta, phi });
     const isRotation = gate === "Rx" || gate === "Ry" || gate === "Rz";
-    const nextState = applySingleQubitGate(state, gate, isRotation ? degToRad(rotationAngleDeg) : 0);
+    const param = isRotation ? degToRad(rotationAngleDeg) : 0;
+    const nextState = applySingleQubitGate(state, gate, param);
     const angles = stateToAngles(nextState);
     setTheta(angles.theta);
     setPhi(angles.phi);
+    setLastGate(gateAxisAngle(gate, param));
     setGateRevision((value) => value + 1);
   };
 
@@ -80,6 +86,7 @@ export default function BlochSpherePage() {
             previousTheta={previousAngles?.theta}
             previousPhi={previousAngles?.phi}
             gateRevision={gateRevision}
+            lastGate={lastGate}
           />
         </div>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-y border-border py-3" aria-live="polite">

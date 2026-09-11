@@ -1,5 +1,5 @@
 import type { GateName, Qubit1State } from "../../lib/quantum/types.ts";
-import { formatAngleDegrees, formatComplex, formatProbability, radToDeg, degToRad } from "../../lib/quantum/format.ts";
+import { formatAngleDegrees, formatComplex, formatKet, formatProbability, radToDeg, degToRad } from "../../lib/quantum/format.ts";
 import { Segmented, SegmentedButton } from "../Segmented.tsx";
 
 interface Preset {
@@ -69,7 +69,7 @@ export default function ControlPanel({
       <div className="space-y-6">
         <div data-lab-control="theta">
           <div className="mb-2 flex items-center justify-between">
-            <label className="font-mono text-mono-label uppercase text-text-muted">Theta</label>
+            <label className="font-mono text-mono-label uppercase text-text-muted">Theta (Polar)</label>
             <span className="readout font-mono text-small text-text-primary">
               {formatAngleDegrees(theta)}
             </span>
@@ -83,11 +83,15 @@ export default function ControlPanel({
             onChange={(e) => onAnglesChange(degToRad(Number(e.target.value)), phi)}
             className="slider"
           />
+          <div className="mt-3 rounded-panel border border-panel-border bg-accent-subtle px-4 py-3">
+            <p className="mb-1 font-mono text-mono-label uppercase text-text-muted">|ψ⟩</p>
+            <p className="readout break-words font-mono text-small text-text-primary">{formatKet(state)}</p>
+          </div>
         </div>
 
         <div data-lab-control="phi">
           <div className="mb-2 flex items-center justify-between">
-            <label className="font-mono text-mono-label uppercase text-text-muted">Phi</label>
+            <label className="font-mono text-mono-label uppercase text-text-muted">Phi (Azimuthal)</label>
             <span className="readout font-mono text-small text-text-primary">
               {formatAngleDegrees(phi)}
             </span>

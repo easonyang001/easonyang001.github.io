@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
 
 export interface NarrativeHook {
   analogy: string;
@@ -129,6 +130,8 @@ function ModeSwitch({
   mode: LabMode;
   onModeChange: (mode: LabMode) => void;
 }) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
       <p className="font-mono text-mono-label uppercase text-text-muted">Learning mode</p>
@@ -140,10 +143,17 @@ function ModeSwitch({
             role="tab"
             aria-selected={mode === value}
             onClick={() => onModeChange(value)}
-            className={`rounded px-3 py-1.5 text-small font-medium transition-colors duration-150 ${
-              mode === value ? "bg-accent text-text-primary" : "text-text-secondary hover:text-text-primary"
+            className={`relative z-0 rounded px-3 py-1.5 text-small font-medium transition-colors duration-150 ${
+              mode === value ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
             }`}
           >
+            {mode === value && (
+              <motion.span
+                layoutId="lab-mode-switch-pill"
+                className="absolute inset-0 -z-10 rounded bg-accent"
+                transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 34 }}
+              />
+            )}
             {MODE_LABELS[value]}
           </button>
         ))}

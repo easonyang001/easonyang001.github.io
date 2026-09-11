@@ -10,12 +10,18 @@ const ACCENT_COLOR = "#8B5CF6";
 const AXIS_EXTENT = 1.3;
 const LABEL_EXTENT = 1.45;
 
+interface GateAxisAngle {
+  axis: [number, number, number];
+  angle: number;
+}
+
 interface BlochCanvasProps {
   theta: number;
   phi: number;
   previousTheta?: number;
   previousPhi?: number;
   gateRevision?: number;
+  lastGate?: GateAxisAngle | null;
 }
 
 /** Maps quantum (theta, phi) to a three.js coordinate with the |0>/|1> axis pointing up. */
@@ -112,42 +118,42 @@ function GhostVector({ theta, phi }: { theta: number; phi: number }) {
   return <Line points={[[0, 0, 0], tip]} color="#94A3B8" lineWidth={1.5} transparent opacity={0.45} dashed dashSize={0.05} gapSize={0.04} />;
 }
 
-function greatCirclePoints(from: THREE.Vector3, to: THREE.Vector3): [number, number, number][] {
-  const start = from.clone().normalize();
-  const end = to.clone().normalize();
-  const dot = THREE.MathUtils.clamp(start.dot(end), -1, 1);
-  const angle = Math.acos(dot);
-  if (angle < 0.001) return [start.toArray(), end.toArray()];
-  let axis = start.clone().cross(end);
-  if (axis.lengthSq() < 0.0001) {
-    axis = start.clone().cross(new THREE.Vector3(1, 0, 0));
-    if (axis.lengthSq() < 0.0001) axis = start.clone().cross(new THREE.Vector3(0, 0, 1));
-  }
-  axis.normalize();
-  return Array.from({ length: 25 }, (_, index) => {
-    const point = start.clone().applyAxisAngle(axis, angle * (index / 24)).multiplyScalar(1.03);
-    return point.toArray();
+/**
+ * Traces the actual physical path a gate sweeps on the sphere, rather than the shortest
+ * path between the before/after points -- important because for a generic starting state
+ * those are different curves. A gate's Bloch-space rotation is by `angle` about physical
+ * axis `axis` (right-hand rule); the physical->three.js axis remap ((x,y,z) -> (x,z,y))
+ * flips handedness, so the equivalent three.js-space rotation is by `-angle` about the
+ * same-remapped axis. See gateAxisAngle in lib/quantum/bloch.ts for the per-gate values.
+ */
+function gateArcPoints(fromTheta: number, fromPhi: number, axis: [number, number, number], angle: number): [number, number, number][] {
+  const start = new THREE.Vector3(...blochToThree(fromTheta, fromPhi));
+  const threeAxis = new THREE.Vector3(axis[0], axis[2], axis[1]).normalize();
+  const steps = 32;
+  return Array.from({ length: steps + 1 }, (_, index) => {
+    const t = index / steps;
+    return start.clone().applyAxisAngle(threeAxis, -angle * t).multiplyScalar(1.03).toArray();
   });
 }
 
 function RotationArc({
   fromTheta,
   fromPhi,
-  toTheta,
-  toPhi,
+  axis,
+  angle,
   revision,
 }: {
   fromTheta: number;
   fromPhi: number;
-  toTheta: number;
-  toPhi: number;
+  axis: [number, number, number];
+  angle: number;
   revision: number;
 }) {
   const lineRef = useRef<Line2 | LineSegments2>(null);
   const elapsed = useRef(0);
   const points = useMemo(
-    () => greatCirclePoints(new THREE.Vector3(...blochToThree(fromTheta, fromPhi)), new THREE.Vector3(...blochToThree(toTheta, toPhi))),
-    [fromPhi, fromTheta, toPhi, toTheta]
+    () => gateArcPoints(fromTheta, fromPhi, axis, angle),
+    [fromTheta, fromPhi, axis, angle]
   );
 
   useEffect(() => {
@@ -167,7 +173,7 @@ function RotationArc({
   );
 }
 
-export default function BlochCanvas({ theta, phi, previousTheta, previousPhi, gateRevision = 0 }: BlochCanvasProps) {
+export default function BlochCanvas({ theta, phi, previousTheta, previousPhi, gateRevision = 0, lastGate }: BlochCanvasProps) {
   return (
     <Canvas camera={{ position: [2.2, 1.6, 2.2], fov: 40 }}>
       <WireframeSphere />
@@ -176,8 +182,14 @@ export default function BlochCanvas({ theta, phi, previousTheta, previousPhi, ga
       {previousTheta !== undefined && previousPhi !== undefined && (
         <>
           <GhostVector theta={previousTheta} phi={previousPhi} />
-          {gateRevision > 0 && (
-            <RotationArc fromTheta={previousTheta} fromPhi={previousPhi} toTheta={theta} toPhi={phi} revision={gateRevision} />
+          {gateRevision > 0 && lastGate && (
+            <RotationArc
+              fromTheta={previousTheta}
+              fromPhi={previousPhi}
+              axis={lastGate.axis}
+              angle={lastGate.angle}
+              revision={gateRevision}
+            />
           )}
         </>
       )}

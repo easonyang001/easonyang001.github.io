@@ -91,3 +91,28 @@ export function applySingleQubitGate(state: Qubit1State, gate: GateName, param =
   const beta = C.add(C.mul(m[1][0], state.alpha), C.mul(m[1][1], state.beta));
   return { alpha, beta };
 }
+
+/**
+ * The physical Bloch-sphere axis (x, y, z) and angle a gate rotates around, using the
+ * convention that U = e^(-i*angle*(n.sigma)/2) rotates the Bloch vector by `angle` about
+ * unit axis `n` via the right-hand rule. X/Y/Z/H are all pi rotations about their named
+ * (or, for H, diagonal) axis; Rx/Ry/Rz sweep the requested `param` angle about that axis.
+ */
+export function gateAxisAngle(gate: GateName, param: number): { axis: [number, number, number]; angle: number } {
+  switch (gate) {
+    case "X":
+      return { axis: [1, 0, 0], angle: Math.PI };
+    case "Y":
+      return { axis: [0, 1, 0], angle: Math.PI };
+    case "Z":
+      return { axis: [0, 0, 1], angle: Math.PI };
+    case "H":
+      return { axis: [SQRT1_2, 0, SQRT1_2], angle: Math.PI };
+    case "Rx":
+      return { axis: [1, 0, 0], angle: param };
+    case "Ry":
+      return { axis: [0, 1, 0], angle: param };
+    case "Rz":
+      return { axis: [0, 0, 1], angle: param };
+  }
+}

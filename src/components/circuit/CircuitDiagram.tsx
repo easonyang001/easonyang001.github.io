@@ -14,14 +14,12 @@ interface CircuitDiagramProps {
   circuit: Circuit;
   pendingControl: { column: number; qubit: number } | null;
   onCellClick: (column: number, qubit: number) => void;
-  onGateClick: (id: string) => void;
 }
 
 export default function CircuitDiagram({
   circuit,
   pendingControl,
   onCellClick,
-  onGateClick,
 }: CircuitDiagramProps) {
   const width = LABEL_W + NUM_COLUMNS * CELL_W;
   const height = circuit.numQubits * ROW_H;
@@ -90,9 +88,7 @@ export default function CircuitDiagram({
           if (gate.name === "CNOT" && gate.control !== undefined) {
             const controlY = cy(gate.control);
             return (
-              <g key={gate.id} className="cursor-pointer" role="button" tabIndex={0} aria-label={`Remove CNOT in column ${gate.column + 1}`} onClick={() => onGateClick(gate.id)} onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") onGateClick(gate.id);
-              }}>
+              <g key={gate.id} pointerEvents="none">
                 <line x1={x} y1={controlY} x2={x} y2={y} stroke={colors.fill} strokeWidth="1.5" />
                 <circle cx={x} cy={controlY} r="5" fill={colors.fill} />
                 <circle cx={x} cy={y} r="10" fill="none" stroke={colors.fill} strokeWidth="1.5" />
@@ -103,9 +99,7 @@ export default function CircuitDiagram({
           }
 
           return (
-            <g key={gate.id} className="cursor-pointer" role="button" tabIndex={0} aria-label={`Remove ${gate.name} from qubit ${gate.qubit}, column ${gate.column + 1}`} onClick={() => onGateClick(gate.id)} onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") onGateClick(gate.id);
-            }}>
+            <g key={gate.id} pointerEvents="none">
               <rect
                 x={x - GATE_SIZE / 2}
                 y={y - GATE_SIZE / 2}
