@@ -194,7 +194,7 @@ export default function BlochCanvas({ theta, phi, previousTheta, previousPhi, ga
         </>
       )}
       <StateVector theta={theta} phi={phi} />
-      <OrbitControls enableDamping={false} enableZoom={false} />
+      <OrbitControls enableDamping={false} />
     </Canvas>
   );
 }
