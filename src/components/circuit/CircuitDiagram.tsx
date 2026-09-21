@@ -1,5 +1,6 @@
 import { CATEGORY_COLORS, gateCategory } from "../../lib/quantum/gates.ts";
 import { NUM_COLUMNS, type Circuit } from "../../lib/quantum/circuit.ts";
+import type { Measurement } from "../../lib/quantum/simulator.ts";
 
 const WIRE_COLOR = "#1E293B";
 const LABEL_COLOR = "#64748B";
@@ -14,12 +15,14 @@ interface CircuitDiagramProps {
   circuit: Circuit;
   pendingControl: { column: number; qubit: number } | null;
   onCellClick: (column: number, qubit: number) => void;
+  measurements?: Measurement[];
 }
 
 export default function CircuitDiagram({
   circuit,
   pendingControl,
   onCellClick,
+  measurements = [],
 }: CircuitDiagramProps) {
   const width = LABEL_W + NUM_COLUMNS * CELL_W;
   const height = circuit.numQubits * ROW_H;
@@ -98,6 +101,11 @@ export default function CircuitDiagram({
             );
           }
 
+          const measurement =
+            gate.name === "M"
+              ? measurements.find((m) => m.qubit === gate.qubit && m.column === gate.column)
+              : undefined;
+
           return (
             <g key={gate.id} pointerEvents="none">
               <rect
@@ -112,12 +120,12 @@ export default function CircuitDiagram({
                 x={x}
                 y={y + 4}
                 textAnchor="middle"
-                fontSize="12"
+                fontSize={measurement ? "10" : "12"}
                 fontWeight="500"
                 fill={colors.text}
                 className="font-mono"
               >
-                {gate.name}
+                {measurement ? `${gate.name}→${measurement.outcome}` : gate.name}
               </text>
             </g>
           );

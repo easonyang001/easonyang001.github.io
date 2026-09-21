@@ -229,6 +229,7 @@ export default function CircuitPage() {
             circuit={circuit}
             pendingControl={pendingControl}
             onCellClick={handleCellClick}
+            measurements={result.measurements}
           />
           <div className="mt-4" data-lab-control="inspect-column">
             <div className="mb-2 flex items-center justify-between gap-4">
@@ -239,6 +240,15 @@ export default function CircuitPage() {
             </div>
             <input id="circuit-column" className="slider" type="range" min={0} max={7} value={inspectColumn} onChange={(event) => setInspectColumn(Number(event.target.value))} />
           </div>
+
+          {result.measurements.length > 0 && (
+            <div className="mt-4 rounded-panel border border-panel-border bg-accent-subtle px-4 py-3" aria-live="polite">
+              <p className="mb-1 font-mono text-mono-label uppercase text-text-muted">Measured</p>
+              <p className="readout font-mono text-small text-text-primary">
+                {result.measurements.map((m) => `q${m.qubit} → |${m.outcome}⟩`).join("   ")}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-2">

@@ -15,6 +15,12 @@ export interface PlacedGate {
   column: number;
   /** Rotation angle in radians, Rx/Ry/Rz only. */
   param?: number;
+  /**
+   * Fixed random draw in [0, 1), M only. Resolved against the live P(0) at simulation
+   * time so the collapse outcome stays stable across re-renders instead of re-rolling
+   * on every simulate() call, while still responding if upstream gates change P(0).
+   */
+  measurementRoll?: number;
 }
 
 export interface Circuit {
@@ -33,7 +39,8 @@ export function emptyCircuit(numQubits: number): Circuit {
 }
 
 export function addGate(circuit: Circuit, gate: Omit<PlacedGate, "id">): Circuit {
-  return { ...circuit, gates: [...circuit.gates, { ...gate, id: newGateId() }] };
+  const measurementRoll = gate.name === "M" ? (gate.measurementRoll ?? Math.random()) : gate.measurementRoll;
+  return { ...circuit, gates: [...circuit.gates, { ...gate, measurementRoll, id: newGateId() }] };
 }
 
 export function removeGate(circuit: Circuit, id: string): Circuit {

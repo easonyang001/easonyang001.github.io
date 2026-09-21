@@ -3,10 +3,18 @@ import type { Complex } from "./types.ts";
 import { singleGateMatrix, type Matrix2, type SingleGateName } from "./gates.ts";
 import type { Circuit, PlacedGate } from "./circuit.ts";
 
+export interface Measurement {
+  qubit: number;
+  column: number;
+  outcome: 0 | 1;
+  probability: number;
+}
+
 export interface SimulationResult {
   statevector: Complex[];
   probabilities: number[];
   basisLabels: string[];
+  measurements: Measurement[];
 }
 
 /** Qubit 0 is the top wire and the most significant bit of the basis label. */
@@ -47,8 +55,32 @@ function applyPlacedGate(state: Complex[], gate: PlacedGate, numQubits: number):
     return applyCnot(state, gate.control, gate.qubit, numQubits);
   }
   const matrix = singleGateMatrix(gate.name as SingleGateName, gate.param ?? 0);
-  if (!matrix) return state; // M is a marker, not an operation
+  if (!matrix) return state;
   return applySingleQubit(state, matrix, gate.qubit, numQubits);
+}
+
+/** Projects onto the outcome its fixed roll lands in against the live P(0), then renormalizes. */
+function measureQubit(
+  state: Complex[],
+  qubit: number,
+  numQubits: number,
+  roll: number
+): { state: Complex[]; outcome: 0 | 1; probability: number } {
+  const stride = 1 << bitPosition(qubit, numQubits);
+  let probabilityOfZero = 0;
+  for (let i = 0; i < state.length; i++) {
+    if ((i & stride) === 0) probabilityOfZero += C.magnitudeSquared(state[i]);
+  }
+
+  const outcome: 0 | 1 = roll < probabilityOfZero ? 0 : 1;
+  const probability = outcome === 0 ? probabilityOfZero : 1 - probabilityOfZero;
+  const norm = Math.sqrt(Math.max(probability, 1e-12));
+  const keepBit = outcome === 0 ? 0 : stride;
+  const nextState = state.map((amplitude, i) =>
+    (i & stride) === keepBit ? C.scale(amplitude, 1 / norm) : { re: 0, im: 0 }
+  );
+
+  return { state: nextState, outcome, probability };
 }
 
 export function simulate(circuit: Circuit): SimulationResult {
@@ -56,9 +88,16 @@ export function simulate(circuit: Circuit): SimulationResult {
   let state: Complex[] = Array.from({ length: size }, (_, i) =>
     i === 0 ? { re: 1, im: 0 } : { re: 0, im: 0 }
   );
+  const measurements: Measurement[] = [];
 
   const ordered = [...circuit.gates].sort((a, b) => a.column - b.column);
   for (const gate of ordered) {
+    if (gate.name === "M") {
+      const result = measureQubit(state, gate.qubit, circuit.numQubits, gate.measurementRoll ?? Math.random());
+      state = result.state;
+      measurements.push({ qubit: gate.qubit, column: gate.column, outcome: result.outcome, probability: result.probability });
+      continue;
+    }
     state = applyPlacedGate(state, gate, circuit.numQubits);
   }
 
@@ -67,5 +106,5 @@ export function simulate(circuit: Circuit): SimulationResult {
     i.toString(2).padStart(circuit.numQubits, "0")
   );
 
-  return { statevector: state, probabilities, basisLabels };
+  return { statevector: state, probabilities, basisLabels, measurements };
 }
