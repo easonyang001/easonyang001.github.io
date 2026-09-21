@@ -77,15 +77,18 @@ const labLinks: NavGroup[] = [
   },
 ];
 
-const publicationLinks: NavGroup[] = [
-  {
-    heading: "Directory",
-    items: [
-      { label: "Publication", href: "/publications#publication" },
-      { label: "Preprint", href: "/publications#preprint" },
-    ],
-  },
-];
+// Publications is temporarily unlinked from nav (pages still live at their routes).
+// To restore: add back { label: "Publications", href: "/publications", groups: publicationLinks }
+// and { label: "Solutions", href: "/solutions" } to `links` below.
+// const publicationLinks: NavGroup[] = [
+//   {
+//     heading: "Directory",
+//     items: [
+//       { label: "Publication", href: "/publications#publication" },
+//       { label: "Preprint", href: "/publications#preprint" },
+//     ],
+//   },
+// ];
 
 const aboutLinks: NavGroup[] = [
   {
@@ -110,9 +113,7 @@ const aboutLinks: NavGroup[] = [
 
 const links: NavLink[] = [
   { label: "Research", href: "/research", groups: researchGroups },
-  { label: "Solutions", href: "/solutions" },
   { label: "Lab", href: "/lab", groups: labLinks },
-  { label: "Publications", href: "/publications", groups: publicationLinks },
   { label: "About", href: "/about", groups: aboutLinks },
   { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
