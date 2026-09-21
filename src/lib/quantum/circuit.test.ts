@@ -74,21 +74,53 @@ describe("circuit simulator", () => {
     expect(Math.abs(sum - 1)).toBeLessThan(1e-10);
   });
 
-  it("measure marker does not change the state", () => {
-    const withM: Circuit = {
+  it("M collapses the state to the outcome its fixed roll lands in", () => {
+    const rollsToZero: Circuit = {
       numQubits: 1,
       gates: [
         { id: "t1", name: "H", qubit: 0, column: 0 },
-        { id: "t2", name: "M", qubit: 0, column: 1 },
+        { id: "t2", name: "M", qubit: 0, column: 1, measurementRoll: 0.1 },
       ],
     };
-    const withoutM: Circuit = {
+    const rollsToOne: Circuit = {
       numQubits: 1,
-      gates: [{ id: "t1", name: "H", qubit: 0, column: 0 }],
+      gates: [
+        { id: "t1", name: "H", qubit: 0, column: 0 },
+        { id: "t2", name: "M", qubit: 0, column: 1, measurementRoll: 0.9 },
+      ],
     };
-    const a = simulate(withM);
-    const b = simulate(withoutM);
-    expect(a.statevector[0].re).toBeCloseTo(b.statevector[0].re, 12);
-    expect(a.statevector[1].re).toBeCloseTo(b.statevector[1].re, 12);
+
+    const zero = simulate(rollsToZero);
+    expect(zero.measurements).toHaveLength(1);
+    expect(zero.measurements[0]).toMatchObject({ qubit: 0, column: 1, outcome: 0 });
+    expect(zero.measurements[0].probability).toBeCloseTo(0.5, 10);
+    expect(zero.probabilities[0]).toBeCloseTo(1, 10);
+    expect(zero.probabilities[1]).toBeCloseTo(0, 10);
+
+    const one = simulate(rollsToOne);
+    expect(one.measurements).toHaveLength(1);
+    expect(one.measurements[0]).toMatchObject({ qubit: 0, column: 1, outcome: 1 });
+    expect(one.measurements[0].probability).toBeCloseTo(0.5, 10);
+    expect(one.probabilities[0]).toBeCloseTo(0, 10);
+    expect(one.probabilities[1]).toBeCloseTo(1, 10);
+  });
+
+  it("measuring one qubit of a Bell pair collapses both (entanglement)", () => {
+    const circuit: Circuit = {
+      numQubits: 2,
+      gates: [
+        { id: "t1", name: "H", qubit: 0, column: 0 },
+        { id: "t2", name: "CNOT", control: 0, qubit: 1, column: 1 },
+        { id: "t3", name: "M", qubit: 0, column: 2, measurementRoll: 0.9 },
+      ],
+    };
+    const result = simulate(circuit);
+    expect(result.measurements).toHaveLength(1);
+    expect(result.measurements[0]).toMatchObject({ qubit: 0, column: 2, outcome: 1 });
+    expect(result.measurements[0].probability).toBeCloseTo(0.5, 10);
+    expect(result.probabilities[0]).toBeCloseTo(0, 10);
+    expect(result.probabilities[1]).toBeCloseTo(0, 10);
+    expect(result.probabilities[2]).toBeCloseTo(0, 10);
+    expect(result.probabilities[3]).toBeCloseTo(1, 10);
   });
 });
