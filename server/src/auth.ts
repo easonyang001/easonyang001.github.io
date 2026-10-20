@@ -9,7 +9,7 @@ if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not set");
 }
 
-const TOKEN_EXPIRY = "12h";
+const TOKEN_EXPIRY = "2h";
 const MAX_USERNAME_LENGTH = 100;
 const MAX_PASSWORD_LENGTH = 1024;
 const MAX_BEARER_TOKEN_LENGTH = 4096;
